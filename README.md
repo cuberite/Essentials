@@ -5,18 +5,16 @@ This is a long-term plugin that aims to port CommandBook to MCServer. Commands a
 
 Current commands:
 ---
+/more
 
+/spawnmob
 
 Planned commands:
 ---
 
 GENERAL
 
-/more
-
 /kit
-
-/spawnmob
 
 /biome
 
