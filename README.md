@@ -20,7 +20,7 @@ AFK
 /away
 
 TELEPORTATION
-/bring (ot /tphere)
+/bring (or /tphere)
 /place
 
 HOMES
