@@ -19,9 +19,9 @@ function HandleMoreCommand(Split,Player)
                 HoldedItem.m_ItemCount = 64
                 Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HoldedItem)
                 OtherPlayer:SendMessageSuccess("Item amount set to 64")
-                Player:SendMessageSuccess(OtherPlayer:GetName() .. " held item amount was set to 64")
+                Player:SendMessageSuccess(Split[2] .. " held item amount was set to 64")
             else
-                Player:SendMessageFailure(OtherPlayer:GetName() .. " isn't holding an item")
+                Player:SendMessageFailure(Split[2] .. " isn't holding an item")
             end
         else
             Player:SendMessageFailure("Player not found")
@@ -39,16 +39,26 @@ function HandleSpawnMobCommand(Split,Player)
         Player:SendMessageInfo("Usage: /spawnmob [mobtype] [player]")
     end
     Mob = StringToMobType(Split[2])
-    if Mob == mtInvalidType then
+    if Mob == -1 then
         Player:SendMessageFailure("Unknown mob type")
     else
         if Split[3] == nil then
-            Player:GetWorld():SpawnMob(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ(), Mob)
+            pos = GetPlayerLookPos(Player)
+            if pos.x == 0 and pos.y == 0 and pos.z == 0 then
+                Player:GetWorld():SpawnMob(Player:GetPosX() + 5, Player:GetPosY(), Player:GetPosZ() + 5, Mob)
+            else
+                Player:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob)
+            end
             Player:SendMessageSuccess("Mob spawned")
         elseif Player:HasPermission("cb.spawnmob.other") then
             local SpawnMob = function(OtherPlayer)
                 if (OtherPlayer:GetName() == Split[3]) then
-                    OtherPlayer:GetWorld():SpawnMob(OtherPlayer:GetPosX(), OtherPlayer:GetPosY(), OtherPlayer:GetPosZ(), Mob)
+                    pos = GetPlayerLookPos(OtherPlayer)
+                    if pos.x == 0 and pos.y == 0 and pos.z == 0 then
+                        OtherPlayer:GetWorld():SpawnMob(OtherPlayer:GetPosX() + 5, OtherPlayer:GetPosY(), OtherPlayer:GetPosZ(), Mob)
+                    else
+                        OtherPlayer:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob)
+                    end
                     Player:SendMessageSuccess("Spawned mob near "..Split[3])
                 else
                     Player:SendMessageFailure("Player not found")
