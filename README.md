@@ -1,7 +1,7 @@
-CommandBook
+Essentials
 ===========
 
-This is a long-term plugin that aims to port CommandBook to MCServer. Commands already implemented in Core won't be implemented.
+This is a long-term plugin that aims to port most used essentials commands to MCServer. Commands already implemented in Core won't be implemented.
 
 Current commands:
 ---
