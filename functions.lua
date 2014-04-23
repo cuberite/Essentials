@@ -18,5 +18,89 @@ function GetPlayerLookPos(OtherPlayer)
 	return Tracer.BlockHitPosition
 end
 
+function GetStringFromBiome(Biome)
+	if Biome == 0 then
+		return "ocean"
+	elseif Biome == 1 then
+		return "plains"
+	elseif Biome == 2 then
+		return "desert"
+	elseif Biome == 3 then
+		return "extreme hills"
+	elseif Biome == 4 then
+		return "forest"
+	elseif Biome == 5 then
+		return "taiga"
+	elseif Biome == 6 then
+		return "swampland"
+	elseif Biome == 7 then
+		return "river"
+	elseif Biome == 8 then
+		return "hell"
+	elseif Biome == 9 then
+		return "sky"
+	elseif Biome == 10 then
+		return "frozen ocean"
+	elseif Biome == 11 then
+		return "frozen river"
+	elseif Biome == 12 then
+		return "ice plains"
+	elseif Biome == 13 then
+		return "ice mountains"
+	elseif Biome == 14 then
+		return "mushroom island"
+	elseif Biome == 15 then
+		return "mushroom island shore"
+	elseif Biome == 16 then
+		return "beach"
+	elseif Biome == 17 then
+		return "desert hills"
+	elseif Biome == 18 then
+		return "forest hills"
+	elseif Biome == 19 then
+		return "taiga hills"
+	elseif Biome == 20 then
+		return "extreme hills edge"
+	elseif Biome == 21 then
+		return "jungle"
+	elseif Biome == 22 then
+		return "jungle hills"
+	elseif Biome == 23 then
+		return "jungle edge"
+	elseif Biome == 24 then
+		return "deep ocean"
+	elseif Biome == 25 then
+		return "stone beach"
+	elseif Biome == 26 then
+		return "cold beach"
+	elseif Biome == 27 then
+		return "birch forest"
+	elseif Biome == 28 then
+		return "birch forest hills"
+	elseif Biome == 29 then
+		return "roofed forest"
+	elseif Biome == 30 then
+		return "cold taiga"
+	elseif Biome == 31 then
+		return "cold taiga hills"
+	elseif Biome == 32 then
+		return "mega taiga"
+	elseif Biome == 33 then
+		return "mega taiga hills"
+	elseif Biome == 34 then
+		return "extreme hills+"
+	elseif Biome == 35 then
+		return "savanna"
+	elseif Biome == 36 then
+		return "savanna plateau"
+	elseif Biome == 37 then
+		return "mesa"
+	elseif Biome == 38 then
+		return "mesa plateau f"
+	elseif Biome == 39 then
+		return "mesa plateau"
+	end
+end
+
 
 
