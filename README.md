@@ -9,14 +9,14 @@ Current commands:
 
 /spawnmob
 
+/biome
+
 Planned commands:
 ---
 
 GENERAL
 
 /kit
-
-/biome
 
 AFK
 
