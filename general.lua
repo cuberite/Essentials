@@ -27,7 +27,7 @@ function HandleMoreCommand(Split,Player)
             Player:SendMessageFailure("Player not found")
         end
     end
-    if(Player:HasPermission("cb.more.other")) then
+    if(Player:HasPermission("es.more.other")) then
         cRoot:Get():FindAndDoWithPlayer(Split[2], More);
     end
     return true
@@ -50,7 +50,7 @@ function HandleSpawnMobCommand(Split,Player)
                 Player:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob)
             end
             Player:SendMessageSuccess("Mob spawned")
-        elseif Player:HasPermission("cb.spawnmob.other") then
+        elseif Player:HasPermission("es.spawnmob.other") then
             local SpawnMob = function(OtherPlayer)
                 if (OtherPlayer:GetName() == Split[3]) then
                     pos = GetPlayerLookPos(OtherPlayer)
@@ -74,7 +74,7 @@ function HandleBiomeCommand(Split,Player)
     if Split[2] == nil then
         biome = GetStringFromBiome(Player:GetWorld():GetBiomeAt(Player:GetPosX(), Player:GetPosZ()))
         Player:SendMessageInfo("You're in ".. biome)
-    elseif Player:HasPermission("cb.spawnmob.other") then
+    elseif Player:HasPermission("es.spawnmob.other") then
         local GetBiome = function(OtherPlayer)
             if (OtherPlayer:GetName() == Split[2]) then
                 biome = GetStringFromBiome(OtherPlayer:GetWorld():GetBiomeAt(OtherPlayer:GetPosX(), OtherPlayer:GetPosZ()))
