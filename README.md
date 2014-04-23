@@ -14,29 +14,20 @@ Current commands:
 Planned commands:
 ---
 
-GENERAL
 
 /kit
-
-AFK
 
 /afk
 
 /away
 
-TELEPORTATION
-
 /bring (or /tphere)
 
 /place
 
-HOMES
-
 /home
 
 /sethome
-
-WARPS
 
 /warp
 
@@ -44,13 +35,9 @@ WARPS
 
 /warps
 
-FLIGHT
-
 /fly
 
 /speed
-
-MESSAGING
 
 /broadcast
 
@@ -60,16 +47,38 @@ MESSAGING
 
 /unmute
 
-PLAYER
-
 /whereami
 
 /shock
-
-MISCELLANEOUS
 
 /ping
 
 /whois
 
-/cmdbook version
+/repair
+
+/exp (or /xp)
+
+/feed
+
+/hat
+
+/itemdb
+
+/msg (and /r)
+
+/burn
+
+/jail
+
+/setjail
+
+/deljail
+
+/jails
+
+/lightning
+
+
+
+
