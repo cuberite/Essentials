@@ -12,6 +12,9 @@ function Initialize(Plugin)
     cPluginManager.BindCommand( "/heal",          "es.heal",      HandleHealCommand,   " Heals a player." )
     cPluginManager.BindCommand( "/enchant",          "es.enchant",      HandleEnchantCommand,   " Enchants the item you are holding." )
     cPluginManager.BindCommand( "/xp",          "es.xp",      HandleXPCommand,   " Give, set, or look xp from a player." )
+    cPluginManager.BindCommand( "/burn",          "es.burn",      HandleBurnCommand,   " Set a player on fire." )
+    cPluginManager.BindCommand( "/ping",          "es.ping",      HandlePingCommand,   " Check if the server is alive." )
+    cPluginManager.BindCommand( "/vanish",          "es.vanish",      HandleVanishCommand,   " Be invisible!." )
 	LOG("Initialized " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 end

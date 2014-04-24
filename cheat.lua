@@ -23,12 +23,13 @@ function HandleMoreCommand(Split,Player)
             else
                 Player:SendMessageFailure(Split[2] .. " isn't holding an item")
             end
-        else
-            Player:SendMessageFailure("Player not found")
+            return true
         end
     end
     if(Player:HasPermission("es.more.other")) then
-        cRoot:Get():FindAndDoWithPlayer(Split[2], More);
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], More))) then
+            Player:SendMessageFailure("Player not found")
+        end
     end
     return true
 end
@@ -54,11 +55,12 @@ function HandleFeedCommand(Split, Player)
             if (OtherPlayer:GetName() == Split[2]) then
                 OtherPlayer:SetFoodLevel(20)
                 Player:SendMessageSuccess(Split[2].." has no more hunger")
-            else
-                Player:SendMessageFailure("Player not found")
+                return true
             end
         end
-        cRoot:Get():FindAndDoWithPlayer(Split[2], Feed);
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], Feed))) then
+            Player:SendMessageFailure("Player not found")
+        end
     end
     return true
 end
@@ -74,11 +76,12 @@ function HandleHealCommand(Split, Player)
                 OtherPlayer:SetFoodLevel(20)
                 OtherPlayer:Heal(20)
                 Player:SendMessageSuccess(Split[2].." has been healed")
-            else
-                Player:SendMessageFailure("Player not found")
+                return true
             end
         end
-        cRoot:Get():FindAndDoWithPlayer(Split[2], Heal);
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], Heal))) then
+            Player:SendMessageFailure("Player not found")
+        end
     end
     return true
 end
