@@ -33,7 +33,113 @@ function HandleMoreCommand(Split,Player)
     return true
 end
 
+function HandleRepairCommand(Split, Player)
+    Item = Player:GetEquippedItem()
+    if(Item:IsDamageable()) then
+        Item.m_ItemDamage = 0
+        Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), Item)
+        Player:SendMessageSuccess("Item repaired")
+    else
+        Player:SendMessageFailure("Please hold an item to repair")
+    end
+    return true
+end
 
+function HandleFeedCommand(Split, Player)
+    if Split[2] == nil then
+        Player:SetFoodLevel(20)
+        Player:SendMessageSuccess("You have no more hunger!")
+    elseif(Player:HasPermission("es.feed.other")) then
+        local Feed = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[2]) then
+                OtherPlayer:SetFoodLevel(20)
+                Player:SendMessageSuccess(Split[2].." has no more hunger")
+            else
+                Player:SendMessageFailure("Player not found")
+            end
+        end
+        cRoot:Get():FindAndDoWithPlayer(Split[2], Feed);
+    end
+    return true
+end
+
+function HandleHealCommand(Split, Player)
+    if Split[2] == nil then
+        Player:SetFoodLevel(20)
+        Player:Heal(20)
+        Player:SendMessageSuccess("You have been healed")
+    elseif(Player:HasPermission("es.heal.other")) then
+        local Heal = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[2]) then
+                OtherPlayer:SetFoodLevel(20)
+                OtherPlayer:Heal(20)
+                Player:SendMessageSuccess(Split[2].." has been healed")
+            else
+                Player:SendMessageFailure("Player not found")
+            end
+        end
+        cRoot:Get():FindAndDoWithPlayer(Split[2], Heal);
+    end
+    return true
+end
+
+function HandleEnchantCommand(Split, Player)
+    if( #Split ~= 3 ) then
+        Player:SendMessageInfo("Usage: /enchant [enchantment] [level]")
+    else 
+        Item = Player:GetEquippedItem()
+        if(not(Item:IsEmpty())) then
+            Item.m_Enchantments:SetLevel(cEnchantments:StringToEnchantmentID(Split[2]), Split[3])
+            Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), Item)
+            Player:SendMessageSuccess("Item enchanted")
+        else
+            Player:SendMessageFailure("Please hold an item to enchant")
+        end
+    end
+    return true
+end
+
+function HandleXPCommand(Split, Player)
+    if( #Split <= 2 ) then
+        Player:SendMessageInfo("Usage: /xp <show|set|give> [playername] [amount]")
+    elseif Split[2] == "show" and Player:HasPermission("es.xp.show") then 
+        local GetXP = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[3]) then
+                xp = OtherPlayer:GetCurrentXp()
+                level = xp/17
+                Player:SendMessageSuccess(Split[3].." current xp is "..xp)
+            else
+                Player:SendMessageFailure("Player not found")
+            end    
+        end
+        cRoot:Get():FindAndDoWithPlayer(Split[3],GetXP);
+    elseif Split[2] == "set" and Split[4] ~= nil and Player:HasPermission("es.xp.set") then 
+        local SetXP = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[3]) then
+                OtherPlayer:SetCurrentExperience(Split[4])
+                Player:SendMessageSuccess("Set "..Split[3].." xp to "..Split[4])
+            else
+                Player:SendMessageFailure("Player not found")
+            end    
+        end
+        cRoot:Get():FindAndDoWithPlayer(Split[3],SetXP);
+    elseif Split[2] == "set" and Split[4] == nil and Player:HasPermission("es.xp.set") then 
+        Player:SendMessageFailure("You must specify the experience to set")
+    elseif Split[2] == "give" and Split[4] ~= nil and Player:HasPermission("es.xp.set") then 
+        local GiveXP = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[3]) then
+                OtherPlayer:SetCurrentExperience(Player:GetCurrentXp() + Split[4])
+                Player:SendMessageSuccess("Gave "..Split[4].." xp to "..Split[3])
+            else
+                Player:SendMessageFailure("Player not found")
+            end    
+        end
+        cRoot:Get():FindAndDoWithPlayer(Split[3],GiveXP);
+    elseif Split[2] == "give" and Split[4] == nil and Player:HasPermission("es.xp.set") then 
+        Player:SendMessageFailure("You must specify the experience to give to the player")
+    end
+    return true
+end
 
 
 

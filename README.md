@@ -1,7 +1,7 @@
 Essentials
 ===========
 
-This is a long-term plugin that aims to port most used essentials commands to MCServer. Commands already implemented in Core won't be implemented.
+This is a long-term plugin that aims to port most used Essentials commands to MCServer. Commands already implemented in Core won't be implemented.
 
 Current commands:
 ---
@@ -10,6 +10,16 @@ Current commands:
 /spawnmob
 
 /biome
+
+/repair
+
+/feed
+
+/heal
+
+/enchant
+
+/xp
 
 Planned commands:
 ---
@@ -54,12 +64,6 @@ Planned commands:
 /ping
 
 /whois
-
-/repair
-
-/exp (or /xp)
-
-/feed
 
 /hat
 
