@@ -21,6 +21,12 @@ Current commands:
 
 /xp
 
+/ping
+
+/burn
+
+/vanish
+
 Planned commands:
 ---
 
