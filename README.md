@@ -31,6 +31,22 @@ Current commands:
 
 /hat
 
+/warp
+
+/warps
+
+/setwarp
+
+/delwarp
+
+/jail
+
+/jails
+
+/setjail
+
+/deljail
+
 Planned commands:
 ---
 
@@ -48,12 +64,6 @@ Planned commands:
 /home
 
 /sethome
-
-/warp
-
-/setwarp
-
-/warps
 
 /speed
 
@@ -75,14 +85,6 @@ Planned commands:
 /itemdb
 
 /msg (and /r)
-
-/jail
-
-/setjail
-
-/deljail
-
-/jails
 
 /lightning
 

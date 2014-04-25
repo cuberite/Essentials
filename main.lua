@@ -1,4 +1,5 @@
-local Fly = {}
+warps = {}
+jails = {}
 
 
 function Initialize(Plugin)
@@ -19,10 +20,56 @@ function Initialize(Plugin)
     cPluginManager.BindCommand( "/vanish",          "es.vanish",      HandleVanishCommand,   " Be invisible!." )
     cPluginManager.BindCommand( "/hat",          "es.hat",      HandleHatCommand,   " Use your equipped item as helmet." )
     cPluginManager.BindCommand( "/fly",          "es.fly",      HandleFlyCommand,   " Enable or disable flying." )
-    
+	cPluginManager:BindCommand("/warp",        	  	  "warp.warp",      	      HandleWarpCommand,      		      " - Moves player to location of warp [Tag].");
+	cPluginManager:BindCommand("/setwarp",     	      "warp.setwarp",     	      HandleSetWarpCommand,   		      " - Creates a warp at players location.");
+	cPluginManager:BindCommand("/delwarp",            "warp.dropwarp",            HandleDelWarpCommand,        	  " - Deletes a warp.");
+	cPluginManager:BindCommand("/warps",         	  "warp.listwarp",            HandleListWarpCommand,              " - Lists all warps.");
+	cPluginManager:BindCommand("/jail",           	 "jail.jail",      	    HandleJailCommand,      		  " - Jails a player.");
+	cPluginManager:BindCommand("/unjail",           	 "jail.unjail",      	    HandleUnJailCommand,      	  " - unjails a player.");
+	cPluginManager:BindCommand("/setjail",            "jail.setjail",     	    HandleSetJailCommand,   		  " - Creates a jail at players location.");
+	cPluginManager:BindCommand("/deljail",            "jail.deljail",            HandleDelJailCommand,        	  " - Deletes a jail.");
+	cPluginManager:BindCommand("/jails",         	 "jail.listjail",           HandleListJailCommand,            " - Lists all jails.");
+
     cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
+	cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
+	cPluginManager.AddHook(cPluginManager.HOOK_UPDATING_SIGN, OnUpdatingSign);
+	cPluginManager:AddHook(cPluginManager.HOOK_CHAT, OnChat)
+	cPluginManager:AddHook(cPluginManager.HOOK_EXECUTE_COMMAND, OnExecuteCommand)
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
 	LOG("Initialized " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
-	return true
+		
+	local WarpsINI = cIniFile()
+	if (WarpsINI:ReadFile("warps.ini") == true ) then
+		warpNum = WarpsINI:GetNumKeys();
+		for i=0, warpNum do
+			local Tag = WarpsINI:GetKeyName(i)
+			warps[Tag] = {}
+			warps[Tag]["w"] = WarpsINI:GetValue( Tag , "w")
+			warps[Tag]["x"] = WarpsINI:GetValueI( Tag , "x")
+			warps[Tag]["y"] = WarpsINI:GetValueI( Tag , "y")
+			warps[Tag]["z"] = WarpsINI:GetValueI( Tag , "z")
+		end
+    end
+
+	localdir = Plugin:GetLocalDirectory()
+    
+	local jailsINI = cIniFile()
+	if ( jailsINI:ReadFile("jails.ini") == true ) then
+		jailNum = jailsINI:GetNumKeys();
+		for i=0, jailNum do
+			local Tag = jailsINI:GetKeyName(i)
+			jails[Tag] = {}
+			jails[Tag]["w"] = jailsINI:GetValue( Tag , "w")
+			jails[Tag]["x"] = jailsINI:GetValueI( Tag , "x")
+			jails[Tag]["y"] = jailsINI:GetValueI( Tag , "y")
+			jails[Tag]["z"] = jailsINI:GetValueI( Tag , "z")
+		end
+      end
+    UsersIni = cIniFile()
+    UsersIni:ReadFile("users.ini")
+    LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
+    return true
 end
 
 
