@@ -13,7 +13,7 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
             local Tag = Line2
             
             if warps[Tag] == nil then 
-                Player:SendMessage(cChatColor.Red .. 'Warp "' .. Tag .. '" is invalid.')
+                Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
                 return true
             end
             if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
@@ -25,7 +25,7 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
             end
             
             Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-            Player:SendMessage(cChatColor.Green .. 'Warped to "' .. Tag .. '".')
+            Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
             if change_gm_when_changing_world == true then
                 Player:SetGameMode(Player:GetWorld():GetGameMode())
                 return true
@@ -40,7 +40,7 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
         if (not(Player:HasPermission("warp.createsign") == true)) then
             return true
         elseif (Line2 == "") then
-            Player:SendMessage(cChatColor.Red .. 'Must supply a tag for the warp.')
+            Player:SendMessageFailure('Must supply a tag for the warp.')
             return true
         end
     end
@@ -48,7 +48,7 @@ end
 
 function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
       if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsDiggingEnabled == false) then 
-             Player:SendMessage(cChatColor.Red .. "You are jailed")
+             Player:SendMessageWarning("You are jailed")
              return true
       else
              return false
@@ -57,7 +57,7 @@ end
 
 function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType)
       if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsPlaceEnabled == false) then 
-             Player:SendMessage(cChatColor.Red .. "You are jailed")
+             Player:SendMessageWarning("You are jailed")
              return true
       else 
              return false
@@ -66,7 +66,7 @@ end
 
 function OnExecuteCommand(Player, CommandSplit)
       if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (AreCommandsEnabled == false) then
-             Player:SendMessage(cChatColor.Red .. "You are jailed") 
+             Player:SendMessageWarning("You are jailed") 
              return true
       else 
              return false
@@ -75,7 +75,7 @@ end
 
 function OnChat(Player, Message)
       if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsChatEnabled == false) then 
-             Player:SendMessage(cChatColor.Red .. "You are jailed")
+             Player:SendMessageWarning("You are jailed")
              return true
       else 
              return false

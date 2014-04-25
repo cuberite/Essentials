@@ -7,7 +7,7 @@ function HandleWarpCommand( Split, Player )
 	local Tag = Split[2]
 	
 	if warps[Tag] == nil then 
-		Player:SendMessage(cChatColor.Red .. 'Warp "' .. Tag .. '" is invalid.')
+		Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
 		return true
 	end
 	if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
@@ -19,7 +19,7 @@ function HandleWarpCommand( Split, Player )
 	end
 	
 	Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-	Player:SendMessage(cChatColor.Green .. 'Warped to "' .. Tag .. '".')
+	Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
 	if change_gm_when_changing_world == true then
 	    Player:SetGameMode(Player:GetWorld():GetGameMode())
 	    return true
@@ -35,7 +35,7 @@ function HandleSetWarpCommand( Split, Player)
 	local pZ = math.floor(Player:GetPosZ())
 	
 	if #Split < 2 then
-		Player:SendMessage(cChatColor.Red .. 'Must supply a tag for the warp.')
+		Player:SendMessageFailure('Must supply a tag for the warp.')
 		return true
 	end
 	local Tag = Split[2]
@@ -64,9 +64,9 @@ function HandleSetWarpCommand( Split, Player)
 		WarpsINI:SetValue( Tag , "z" , pZ)
 		WarpsINI:WriteFile("warps.ini");
 	
-		Player:SendMessage("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
+		Player:SendMessageSuccess("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
 	else
-		cRoot:Get():BroadcastChat(cChatColor.Red .. 'Warp "' .. Tag .. '" already exist')
+		Player:SendMessageFailure('Warp "' .. Tag .. '" already exists')
 	end
 return true
 end
@@ -75,7 +75,7 @@ function HandleDelWarpCommand( Split, Player)
 	local Server = cRoot:Get():GetServer()
 	
 	if #Split < 2 then
-		Player:SendMessage(cChatColor.Red .. 'Must supply a tag for the warp.')
+		Player:SendMessageFailure('Must supply a tag for the warp.')
 		return true
 	end
 	local Tag = Split[2]
@@ -88,11 +88,11 @@ function HandleDelWarpCommand( Split, Player)
 		WarpsINI:DeleteKey(Tag);
 		WarpsINI:WriteFile("warps.ini");
 	else
-		Player:SendMessage(cChatColor.Red .. "Warp \"" .. Tag .. "\" was not found.")
+		Player:SendMessageFailure("Warp \"" .. Tag .. "\" was not found.")
 		return true
 	end
 	
-	Player:SendMessage(cChatColor.Green .. "Warp \"" .. Tag .. "\" was removed.")
+	Player:SendMessageSuccess("Warp \"" .. Tag .. "\" was removed.")
 	return true
 end
 
@@ -103,9 +103,7 @@ function HandleListWarpCommand( Split, Player)
 		inc = inc + 1
 		warpStr = warpStr .. k .. ", "
 	end
-	Player:SendMessage(cChatColor.Green .. 'Warps: ' ..  cChatColor.LightGreen ..  warpStr)
+	Player:SendMessageinfo('Warps: ' ..  cChatColor.LightGreen ..  warpStr)
 	return true
 end
-
-
 
