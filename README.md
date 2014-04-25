@@ -3,6 +3,12 @@ Essentials
 
 This is a long-term plugin that aims to port most used Essentials commands to MCServer. Commands already implemented in Core won't be implemented.
 
+Features
+---
+-Over 20 commands.
+-Warps
+-Jails
+
 Current commands:
 ---
 /more
