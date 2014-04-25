@@ -8,7 +8,7 @@ function HandleJailCommand( Split, Player )
 		return true
 	end
 	if #Split < 2 or #Split < 3  then
-		Player:SendMessage('Usage:/jail [player] [jail]')
+		Player:SendMessageInfo('Usage: /jail [player] [jail]')
 		return true
 	end
 	local Tag = Split[3]
@@ -23,7 +23,7 @@ function HandleJailCommand( Split, Player )
                 end
 
 	          OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
-	          OtherPlayer:SendMessage(cChatColor.Red .. 'You have been jailed')
+	          OtherPlayer:SendMessageWarning('You have been jailed')
                 UsersIni:DeleteValue(OtherPlayer:GetName(),   "Jailed")
                 UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
                 UsersIni:WriteFile("users.ini")
@@ -34,12 +34,12 @@ function HandleJailCommand( Split, Player )
 	end
       cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
 	if (Jailed) then
-          Player:SendMessage("Player "..Split[2].." is jailed")
+          Player:SendMessageSuccess("Player "..Split[2].." is jailed")
           return true
       else
-          Player:SendMessage(cChatColor.Red .. "Player not found")
+          Player:SendMessageFailure("Player not found")
 	if jails[Tag] == nil then 
-		Player:SendMessage(cChatColor.Red .. 'Jail "' .. Tag .. '" is invalid.')
+		Player:SendMessageFailure('Jail "' .. Tag .. '" is invalid.')
 		return true
       end
 end
@@ -53,7 +53,7 @@ function HandleUnJailCommand( Split, Player )
 	end
 
 	if #Split < 2 then
-            Player:SendMessage('Usage:/unjail [player] [jail]')
+            Player:SendMessageInfo('Usage: /unjail [player] [jail]')
             return true
       end
 
@@ -62,7 +62,7 @@ function HandleUnJailCommand( Split, Player )
 		if (OtherPlayer:GetName() == Split[2]) then
                 World = OtherPlayer:GetWorld()
 	          OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
-	          OtherPlayer:SendMessage(cChatColor.Green .. 'You have been unjailed')
+	          OtherPlayer:SendMessageSuccess('You have been unjailed')
                 UsersIni:DeleteValue(OtherPlayer:GetName(),   "Jailed")
                 UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
                 UsersIni:WriteFile("users.ini")
@@ -73,10 +73,10 @@ function HandleUnJailCommand( Split, Player )
 	end
       cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
 	if (UnJailed) then
-          Player:SendMessage("You unjailed "..Split[2])
+          Player:SendMessageSuccess("You unjailed "..Split[2])
           return true
       else
-          Player:SendMessage(cChatColor.Red .. "Player not found")
+          Player:SendMessageFailure("Player not found")
           return true
 end
 end
@@ -89,7 +89,7 @@ function HandleSetJailCommand( Split, Player)
 	local pZ = math.floor(Player:GetPosZ())
 
 	if #Split < 2 then
-		Player:SendMessage(cChatColor.Red .. 'Must supply a tag for the jail.')
+		Player:SendMessageFailure('Must supply a tag for the jail.')
 		return true
 	end
 	local Tag = Split[2]
@@ -118,10 +118,10 @@ function HandleSetJailCommand( Split, Player)
 		jailsINI:SetValue( Tag , "z" , pZ)
 		jailsINI:WriteFile("jails.ini");
 
-		Player:SendMessage("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
+		Player:SendMessageSuccess("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
             return true
 	else
-		Player:SendMessage(cChatColor.Red .. 'Jail "' .. Tag .. '" already exist')
+		Player:SendMessageFailure('Jail "' .. Tag .. '" already exist')
             return true
 	end
 return true
@@ -131,7 +131,7 @@ function HandleDelJailCommand( Split, Player)
 	local Server = cRoot:Get():GetServer()
 
 	if #Split < 2 then
-		Player:SendMessage(cChatColor.Red .. 'Usage: /deljail [jail]')
+		Player:SendMessageInfo('Usage: /deljail [jail]')
 		return true
 	end
 	local Tag = Split[2]
@@ -144,11 +144,11 @@ function HandleDelJailCommand( Split, Player)
 		jailsINI:DeleteKey(Tag);
 		jailsINI:WriteFile("jails.ini");
 	else
-		Player:SendMessage(cChatColor.Red .. "Jail \"" .. Tag .. "\" was not found.")
+		Player:SendMessageFailure("Jail \"" .. Tag .. "\" was not found.")
 		return true
 	end
 
-	Player:SendMessage(cChatColor.Green .. "Jail \"" .. Tag .. "\" was removed.")
+	Player:SendMessageSuccess("Jail \"" .. Tag .. "\" was removed.")
 	return true
 end
 
@@ -159,6 +159,6 @@ function HandleListJailCommand( Split, Player)
 		inc = inc + 1
 		jailStr = jailStr .. k .. ", "
 	end
-	Player:SendMessage(cChatColor.Green .. 'Jail: ' ..  cChatColor.LightGreen ..  jailStr)
+	Player:SendMessageInfo('Jail: ' ..  cChatColor.LightGreen ..  jailStr)
 	return true
 end
