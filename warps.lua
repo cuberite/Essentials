@@ -66,7 +66,7 @@ function HandleSetWarpCommand( Split, Player)
 	
 		Player:SendMessageSuccess("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
 	else
-		Player:SendMessageFailure('Warp "' .. Tag .. '" already exist')
+		Player:SendMessageFailure('Warp "' .. Tag .. '" already exists')
 	end
 return true
 end
