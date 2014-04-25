@@ -92,3 +92,34 @@ function HandleVanishCommand(Split, Player)
  	return true
 end
 
+function HandleFlyCommand(Split, Player)
+ 	if (Split[2] == nil) then
+ 	    if Player:CanFly() == false then
+            Player:SetCanFly(true)
+            Player:SendMessageInfo("You can fly")
+        else
+            Player:SetCanFly(false)
+            Player:SendMessageInfo("You can't fly anymore")
+        end
+    elseif Player:HasPermission("es.fly.other") then
+        local FlyPlayer = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[2]) then
+                if OtherPlayer:CanFly() == false then
+                    OtherPlayer:SetCanFly(true)
+                    OtherPlayer:SendMessageInfo("You can fly")
+                    Player:SendMessageSuccess( "Player " .. Split[2] .. " can fly" )
+                else
+                    OtherPlayer:SetCanFly(false)
+                    OtherPlayer:SendMessageInfo("You can't fly anymore")
+                    Player:SendMessageSuccess( "Player " .. Split[2] .. " can't fly anymore" )
+                end    
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], FlyPlayer))) then
+            Player:SendMessageFailure("Player not found")
+        end
+ 	end
+ 	return true
+end
+

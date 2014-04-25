@@ -144,5 +144,17 @@ function HandleXPCommand(Split, Player)
     return true
 end
 
+function HandleHatCommand(Split, Player)
+    hat = cItem(Player:GetEquippedItem())
+    hat.m_ItemCount = 1
+    armorslot = Player:GetInventory():GetArmorSlot(0)
+    if (not(armorslot:IsEmpty())) then
+        Player:GetInventory():AddItem(armorslot)
+    end
+    Player:GetInventory():SetArmorSlot(0, hat)
+    Player:GetInventory():RemoveOneEquippedItem()
+    Player:SendMessageSuccess("Enjoy your new helmet!")
+    return true
+end
 
 

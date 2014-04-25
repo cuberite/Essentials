@@ -1,3 +1,5 @@
+local Fly = {}
+
 
 function Initialize(Plugin)
 	Plugin:SetName("Essentials")
@@ -15,6 +17,10 @@ function Initialize(Plugin)
     cPluginManager.BindCommand( "/burn",          "es.burn",      HandleBurnCommand,   " Set a player on fire." )
     cPluginManager.BindCommand( "/ping",          "es.ping",      HandlePingCommand,   " Check if the server is alive." )
     cPluginManager.BindCommand( "/vanish",          "es.vanish",      HandleVanishCommand,   " Be invisible!." )
+    cPluginManager.BindCommand( "/hat",          "es.hat",      HandleHatCommand,   " Use your equipped item as helmet." )
+    cPluginManager.BindCommand( "/fly",          "es.fly",      HandleFlyCommand,   " Enable or disable flying." )
+    
+    cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
 	LOG("Initialized " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 end
