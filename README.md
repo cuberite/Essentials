@@ -27,6 +27,10 @@ Current commands:
 
 /vanish
 
+/fly
+
+/hat
+
 Planned commands:
 ---
 
@@ -51,8 +55,6 @@ Planned commands:
 
 /warps
 
-/fly
-
 /speed
 
 /broadcast
@@ -67,17 +69,12 @@ Planned commands:
 
 /shock
 
-/ping
 
 /whois
-
-/hat
 
 /itemdb
 
 /msg (and /r)
-
-/burn
 
 /jail
 
