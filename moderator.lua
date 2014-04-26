@@ -123,3 +123,24 @@ function HandleFlyCommand(Split, Player)
  	return true
 end
 
+function HandleLightningCommand(Split, Player)
+ 	if (Split[3] == nil) then
+ 	    Player:SendMessageInfo("Usage: "..Split[1].." [player] [damage] [-b}")
+    elseif Player:HasPermission("es.vanish.other") then
+        local ShockPlayer = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[2]) then
+                OtherPlayer:GetWorld():CastThunderbolt(OtherPlayer:GetPosX(), OtherPlayer:GetPosY(), OtherPlayer:GetPosZ())
+                OtherPlayer:TakeDamage(dtPlugin, nil, Split[3], Split[3], 0)
+                Player:SendMessageSucces("A lightning damaged "..Split[2])
+                if Split[4] == "-b" then
+                    OtherPlayer:StartBurning(200)
+                end
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], ShockPlayer))) then
+            Player:SendMessageFailure("Player not found")
+        end
+ 	end
+ 	return true
+end

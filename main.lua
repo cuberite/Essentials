@@ -31,6 +31,9 @@ function Initialize(Plugin)
 	cPluginManager:BindCommand("/home",          "es.home",                HandleHomeCommand,                " - Go Home")
 	cPluginManager:BindCommand("/sethome",       "es.sethome",            HandleSetHomeCommand,           " - Set your home!")
 	cPluginManager:BindCommand("/delhome",       "es.delhome",            HandleDelHomeCommand,           " - Delete a home!")
+	cPluginManager:BindCommand("/lightning",       "es.lightning",            HandleLightningCommand,           " - Get a lightning damage the specified player")
+	cPluginManager:BindCommand("/shock",       "es.lightning",            HandleLightningCommand,           " - Get a lightning damage the specified player")
+
 
 	cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
 	cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
