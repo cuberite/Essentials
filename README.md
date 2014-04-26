@@ -11,6 +11,8 @@ Features
 
 -Jails
 
+-Homes
+
 Current commands:
 ---
 /more
@@ -55,6 +57,12 @@ Current commands:
 
 /deljail
 
+/sethome
+
+/delhome
+
+/home
+
 Planned commands:
 ---
 
@@ -69,10 +77,6 @@ Planned commands:
 
 /place
 
-/home
-
-/sethome
-
 /speed
 
 /broadcast
@@ -86,7 +90,6 @@ Planned commands:
 /whereami
 
 /shock
-
 
 /whois
 

@@ -4,7 +4,7 @@ jails = {}
 
 function Initialize(Plugin)
 	Plugin:SetName("Essentials")
-	Plugin:SetVersion(2)
+	Plugin:SetVersion(0)
 	
 	cPluginManager.BindCommand( "/more",        "es.more",      HandleMoreCommand,   " Changes the held stack to have 64 items." )
 	cPluginManager.BindCommand( "/spawnmob",    "es.spawnmob",      HandleSpawnMobCommand,   " Spawn a mob." )
@@ -28,6 +28,9 @@ function Initialize(Plugin)
 	cPluginManager:BindCommand("/setjail",      "jail.setjail",     	    HandleSetJailCommand,   		  " - Creates a jail at players location.");
 	cPluginManager:BindCommand("/deljail",      "jail.deljail",            HandleDelJailCommand,        	  " - Deletes a jail.");
 	cPluginManager:BindCommand("/jails",        "jail.listjail",           HandleListJailCommand,            " - Lists all jails.");
+	cPluginManager:BindCommand("/home",          "es.home",                HandleHomeCommand,                " - Go Home")
+	cPluginManager:BindCommand("/sethome",       "es.sethome",            HandleSetHomeCommand,           " - Set your home!")
+	cPluginManager:BindCommand("/delhome",       "es.delhome",            HandleDelHomeCommand,           " - Delete a home!")
 
 	cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
 	cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
@@ -51,6 +54,7 @@ function Initialize(Plugin)
 	end
 
 	localdir = Plugin:GetLocalDirectory()
+	homeDir = Plugin:GetLocalDirectory().."/homes"
     
 	local jailsINI = cIniFile()
 	if (jailsINI:ReadFile("jails.ini")) then
@@ -67,6 +71,7 @@ function Initialize(Plugin)
 
 	UsersIni = cIniFile()
 	UsersIni:ReadFile("users.ini")
+
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 end

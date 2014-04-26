@@ -103,7 +103,7 @@ function HandleListWarpCommand( Split, Player)
 		inc = inc + 1
 		warpStr = warpStr .. k .. ", "
 	end
-	Player:SendMessageinfo('Warps: ' ..  cChatColor.LightGreen ..  warpStr)
+	Player:SendMessageInfo('Warps: ' ..  cChatColor.LightGreen ..  warpStr)
 	return true
 end
 
