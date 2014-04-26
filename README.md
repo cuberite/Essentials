@@ -63,9 +63,10 @@ Current commands:
 
 /home
 
+/lightning (or /shock)
+
 Planned commands:
 ---
-
 
 /kit
 
@@ -89,16 +90,8 @@ Planned commands:
 
 /whereami
 
-/shock
-
 /whois
 
 /itemdb
 
 /msg (and /r)
-
-/lightning
-
-
-
-

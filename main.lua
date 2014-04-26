@@ -75,6 +75,10 @@ function Initialize(Plugin)
 	UsersIni = cIniFile()
 	UsersIni:ReadFile("users.ini")
 
+    if cFile:IsFolder(homeDir) ~= true then
+        cFile:CreateFolder(homeDir)
+    end
+        
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 end
