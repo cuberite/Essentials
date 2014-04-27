@@ -57,6 +57,8 @@ GENERAL
 
 /biome
 
+/getpos (or /whereami)
+
 TELEPORT
 
 /warp
@@ -95,8 +97,6 @@ Planned commands:
 /mute
 
 /unmute
-
-/whereami
 
 /whois
 

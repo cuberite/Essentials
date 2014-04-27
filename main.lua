@@ -36,6 +36,8 @@ function Initialize(Plugin)
 	cPluginManager:BindCommand("/bring",       "es.tphere",             HandleTPHereCommand,           " - Get a lightning damage the specified player")
     cPluginManager:BindCommand("/tphere",      "es.tphere",            HandleTPHereCommand,           " - Teleports a player to you")
     cPluginManager:BindCommand("/place",       "es.place",             HandlePlaceCommand,            " - Teleports a player where you are looking")
+    cPluginManager:BindCommand("/getpos",      "es.getpos",             HandleGetPosCommand,            " - Get your current location in the world")
+    cPluginManager:BindCommand("/whereami",    "es.getpos",             HandleGetPosCommand,            " - Get your current location in the world")
 
 
 
