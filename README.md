@@ -15,39 +15,27 @@ Features
 
 Current commands:
 ---
-/more
-
-/spawnmob
-
-/biome
-
-/repair
-
-/feed
-
-/heal
+CHEAT
 
 /enchant
 
-/xp
-
-/ping
-
-/burn
-
-/vanish
-
-/fly
+/feed
 
 /hat
 
-/warp
+/heal
 
-/warps
+/more
 
-/setwarp
+/repair
 
-/delwarp
+/xp
+
+MODERATOR
+
+/burn
+
+/fly
 
 /jail
 
@@ -57,13 +45,37 @@ Current commands:
 
 /deljail
 
+/lightning (or /shock)
+
+/ping
+
+/vanish
+
+/spawnmob
+
+GENERAL
+
+/biome
+
+TELEPORT
+
+/warp
+
+/warps
+
+/setwarp
+
+/delwarp
+
+/home
+
 /sethome
 
 /delhome
 
-/home
+/place
 
-/lightning (or /shock)
+/tphere (or /bring)
 
 Planned commands:
 ---
@@ -73,10 +85,6 @@ Planned commands:
 /afk
 
 /away
-
-/bring (or /tphere)
-
-/place
 
 /speed
 

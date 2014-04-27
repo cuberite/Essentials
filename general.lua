@@ -7,12 +7,13 @@ function HandleBiomeCommand(Split,Player)
         local GetBiome = function(OtherPlayer)
             if (OtherPlayer:GetName() == Split[2]) then
                 biome = GetStringFromBiome(OtherPlayer:GetWorld():GetBiomeAt(OtherPlayer:GetPosX(), OtherPlayer:GetPosZ()))
-                Player:SendMessageInfo(OtherPlayer:GetName().. " is in ".. biome)
-            else
-                Player:SendMessageFailure("Player not found")
+                Player:SendMessageInfo(Split[2].. " is in ".. biome)
+                return true
             end
         end
-        cRoot:Get():FindAndDoWithPlayer(Split[2], GetBiome);
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], GetBiome))) then
+            Player:SendMessageFailure("Player not found")
+        end
     end
     return true
 end

@@ -33,6 +33,10 @@ function Initialize(Plugin)
 	cPluginManager:BindCommand("/delhome",       "es.delhome",            HandleDelHomeCommand,           " - Delete a home!")
 	cPluginManager:BindCommand("/lightning",       "es.lightning",            HandleLightningCommand,           " - Get a lightning damage the specified player")
 	cPluginManager:BindCommand("/shock",       "es.lightning",            HandleLightningCommand,           " - Get a lightning damage the specified player")
+	cPluginManager:BindCommand("/bring",       "es.tphere",             HandleTPHereCommand,           " - Get a lightning damage the specified player")
+    cPluginManager:BindCommand("/tphere",      "es.tphere",            HandleTPHereCommand,           " - Teleports a player to you")
+    cPluginManager:BindCommand("/place",       "es.place",             HandlePlaceCommand,            " - Teleports a player where you are looking")
+
 
 
 	cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
