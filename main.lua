@@ -38,8 +38,8 @@ function Initialize(Plugin)
     cPluginManager:BindCommand("/place",       "es.place",             HandlePlaceCommand,            " - Teleports a player where you are looking")
     cPluginManager:BindCommand("/getpos",      "es.getpos",             HandleGetPosCommand,            " - Get your current location in the world")
     cPluginManager:BindCommand("/whereami",    "es.getpos",             HandleGetPosCommand,            " - Get your current location in the world")
-
-
+    cPluginManager:BindCommand("/whois",       "es.whois",              HandleWhoisCommand,             " - Get information about the specified player")
+    
 
 	cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
 	cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)

@@ -36,3 +36,26 @@ function HandleGetPosCommand(Split,Player)
     return true
 end
 
+function HandleWhoisCommand(Split,Player)
+    if Split[2] == nil then
+        Player:SendMessageInfo("Your username is "..Player:GetName())
+        Player:SendMessageInfo("Your IP is "..Player:GetIP())
+        Player:SendMessageInfo("Your ping is "..Player:GetClientHandle():GetPing())
+        Player:SendMessageInfo("Your language is "..Player:GetClientHandle():GetLocale())
+    else
+        local GetInfo = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[2]) then
+                Player:SendMessageInfo("Username: "..OtherPlayer:GetName())
+                Player:SendMessageInfo("IP: "..OtherPlayer:GetIP())
+                Player:SendMessageInfo("Ping: "..OtherPlayer:GetClientHandle():GetPing())
+                Player:SendMessageInfo("Language: "..OtherPlayer:GetClientHandle():GetLocale())
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], GetInfo))) then
+            Player:SendMessageFailure("Player not found")
+        end
+    end
+    return true
+end
+

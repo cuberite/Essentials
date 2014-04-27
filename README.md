@@ -59,6 +59,8 @@ GENERAL
 
 /getpos (or /whereami)
 
+/whois
+
 TELEPORT
 
 /warp
@@ -97,8 +99,6 @@ Planned commands:
 /mute
 
 /unmute
-
-/whois
 
 /itemdb
 
