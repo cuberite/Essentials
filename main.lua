@@ -3,43 +3,11 @@ jails = {}
 
 
 function Initialize(Plugin)
-	Plugin:SetName("Essentials")
-	Plugin:SetVersion(0)
-	
-	cPluginManager.BindCommand( "/more",        "es.more",      HandleMoreCommand,   " Changes the held stack to have 64 items." )
-	cPluginManager.BindCommand( "/spawnmob",    "es.spawnmob",      HandleSpawnMobCommand,   " Spawn a mob." )
-	cPluginManager.BindCommand( "/biome",       "es.biome",      HandleBiomeCommand,   " Tells you the biome in wich you are." )
-	cPluginManager.BindCommand( "/repair",      "es.repair",      HandleRepairCommand,   " Repairs the item you are holding." )
-	cPluginManager.BindCommand( "/feed",        "es.feed",      HandleFeedCommand,   " Satisfy the hunger." )
-	cPluginManager.BindCommand( "/heal",        "es.heal",      HandleHealCommand,   " Heals a player." )
-	cPluginManager.BindCommand( "/enchant",     "es.enchant",      HandleEnchantCommand,   " Enchants the item you are holding." )
-	cPluginManager.BindCommand( "/xp",          "es.xp",      HandleXPCommand,   " Give, set, or look xp from a player." )
-	cPluginManager.BindCommand( "/burn",        "es.burn",      HandleBurnCommand,   " Set a player on fire." )
-	cPluginManager.BindCommand( "/ping",        "es.ping",      HandlePingCommand,   " Check if the server is alive." )
-	cPluginManager.BindCommand( "/vanish",      "es.vanish",      HandleVanishCommand,   " Be invisible!." )
-	cPluginManager.BindCommand( "/hat",         "es.hat",      HandleHatCommand,   " Use your equipped item as helmet." )
-	cPluginManager.BindCommand( "/fly",         "es.fly",      HandleFlyCommand,   " Enable or disable flying." )
-	cPluginManager:BindCommand("/warp",         "warp.warp",      	      HandleWarpCommand,      		      " - Moves player to location of warp [Tag].");
-	cPluginManager:BindCommand("/setwarp",      "warp.setwarp",     	      HandleSetWarpCommand,   		      " - Creates a warp at players location.");
-	cPluginManager:BindCommand("/delwarp",      "warp.dropwarp",            HandleDelWarpCommand,        	  " - Deletes a warp.");
-	cPluginManager:BindCommand("/warps",        "warp.listwarp",            HandleListWarpCommand,              " - Lists all warps.");
-	cPluginManager:BindCommand("/jail",         "jail.jail",      	    HandleJailCommand,      		  " - Jails a player.");
-	cPluginManager:BindCommand("/unjail",       "jail.unjail",      	    HandleUnJailCommand,      	  " - unjails a player.");
-	cPluginManager:BindCommand("/setjail",      "jail.setjail",     	    HandleSetJailCommand,   		  " - Creates a jail at players location.");
-	cPluginManager:BindCommand("/deljail",      "jail.deljail",            HandleDelJailCommand,        	  " - Deletes a jail.");
-	cPluginManager:BindCommand("/jails",        "jail.listjail",           HandleListJailCommand,            " - Lists all jails.");
-	cPluginManager:BindCommand("/home",          "es.home",                HandleHomeCommand,                " - Go Home")
-	cPluginManager:BindCommand("/sethome",       "es.sethome",            HandleSetHomeCommand,           " - Set your home!")
-	cPluginManager:BindCommand("/delhome",       "es.delhome",            HandleDelHomeCommand,           " - Delete a home!")
-	cPluginManager:BindCommand("/lightning",       "es.lightning",            HandleLightningCommand,           " - Get a lightning damage the specified player")
-	cPluginManager:BindCommand("/shock",       "es.lightning",            HandleLightningCommand,           " - Get a lightning damage the specified player")
-	cPluginManager:BindCommand("/bring",       "es.tphere",             HandleTPHereCommand,           " - Get a lightning damage the specified player")
-    cPluginManager:BindCommand("/tphere",      "es.tphere",            HandleTPHereCommand,           " - Teleports a player to you")
-    cPluginManager:BindCommand("/place",       "es.place",             HandlePlaceCommand,            " - Teleports a player where you are looking")
-    cPluginManager:BindCommand("/getpos",      "es.getpos",             HandleGetPosCommand,            " - Get your current location in the world")
-    cPluginManager:BindCommand("/whereami",    "es.getpos",             HandleGetPosCommand,            " - Get your current location in the world")
-    cPluginManager:BindCommand("/whois",       "es.whois",              HandleWhoisCommand,             " - Get information about the specified player")
+
+    dofile(cPluginManager:GetPluginsPath() .. "/InfoReg.lua")
     
+	Plugin:SetName(g_PluginInfo.Name)
+	Plugin:SetVersion(g_PluginInfo.Version)
 
 	cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
 	cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
@@ -48,6 +16,8 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_EXECUTE_COMMAND, OnExecuteCommand)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
+		
+    RegisterPluginInfoCommands();
 		
 	local WarpsINI = cIniFile()
 	if (WarpsINI:ReadFile("warps.ini")) then
