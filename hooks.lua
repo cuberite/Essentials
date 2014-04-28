@@ -65,7 +65,9 @@ function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX
 end
 
 function OnExecuteCommand(Player, CommandSplit)
-      if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (AreCommandsEnabled == false) then
+      if Player == nil then
+        return false
+      elseif (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (AreCommandsEnabled == false) then
              Player:SendMessageWarning("You are jailed") 
              return true
       else 

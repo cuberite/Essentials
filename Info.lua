@@ -186,20 +186,7 @@ g_PluginInfo =
             Permission =  "es.lightning",
             HelpString =  " - Get a lightning damage the specified player",
             Handler =  HandleLightningCommand,
-        },
-
-        ["/shock"] =
-        {
-            Permission =  "es.lightning",
-            HelpString =  " - Get a lightning damage the specified player",
-            Handler =  HandleLightningCommand,
-        },
-
-        ["/bring"] =
-        {
-            Permission =  "es.tphere",
-            HelpString =  " - Get a lightning damage the specified player",
-            Handler =  HandleTPHereCommand,
+            Alias = "/shock"
         },
 
         ["/tphere"] =
@@ -207,6 +194,7 @@ g_PluginInfo =
             Permission =  "es.tphere",
             HelpString =  " - Teleports a player to you",
             Handler =  HandleTPHereCommand,
+            Alias = "/bring"
         },
 
         ["/place"] =
@@ -216,18 +204,12 @@ g_PluginInfo =
             Handler =  HandlePlaceCommand,
         },
 
-        ["/getpos"] =
-        {
-            Permission =  "es.getpos",
-            HelpString =  " - Get your current location in the world",
-            Handler =  HandleGetPosCommand,
-        },
-
         ["/whereami"] =
         {
             Permission =  "es.getpos",
             HelpString =  " - Get your current location in the world",
             Handler =  HandleGetPosCommand,
+            Alias = "/getpos"
         },
 
         ["/whois"] =
@@ -236,6 +218,7 @@ g_PluginInfo =
             HelpString =  " - Get information about the specified player",
             Handler =  HandleWhoisCommand,
         },
+        
 		["/xp"] =
 		{
 			Permission = "es.xp",  
@@ -263,6 +246,48 @@ g_PluginInfo =
 					Handler = HandleXPCommand,
 				},
 			},
+		},
+		
+        ["/broadcast"] =
+        {
+            Permission =  "es.broadcast",
+            HelpString =  "Broadcast to all players.",
+            Handler =  HandleBroadcastCommand,
+            Alias = "/say"
+        },
+        
+        ["/itemdb"] =
+        {
+            Permission =  "es.itemdb",
+            HelpString =  "Displays the item information attached to an item.",
+            Handler =  HandleItemdbCommand,
+            Alias = "/iteminfo"
+        },
+        
+		["/flyspeed"] =
+		{
+			Permission = "es.flyspeed",  
+			Handler =  HandleFlySpeedCommand,  
+			HelpString = "Change player's flying speed.", 
+            Alias = "/fspeed", 
+			Category = "Cheat",
+		},
+		
+		["/walkspeed"] =
+		{
+			Permission = "es.walkspeed",  
+			Handler =  HandleWalkSpeedCommand,  
+			HelpString = "Change player's flying speed.", 
+            Alias = "/wspeed", 
+			Category = "Cheat",
+		},
+		["/runspeed"] =
+		{
+			Permission = "es.runspeed",  
+			Handler =  HandleRunSpeedCommand,  
+			HelpString = "Change player's sprinting speed.", 
+            Alias = "/rspeed", 
+			Category = "Cheat",
 		},
     },
 }

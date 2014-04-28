@@ -157,4 +157,70 @@ function HandleHatCommand(Split, Player)
     return true
 end
 
+function HandleFlySpeedCommand(Split, Player)
+    if Split[2] == nil then
+        Player:SendMessageInfo("Usage: /flyspeed <speed> [player]")
+    elseif Split[3] == nil then
+        Player:SetFlyingMaxSpeed(Split[2])
+        Player:SendMessageInfo("Your fly speed has been set to "..Split[2])
+    else
+        local FlySpeed = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[3]) then
+                OtherPlayer:SetFlyingMaxSpeed(Split[2])
+                Player:SendMessageSuccess(Split[3].." fly speed has been set to "..Split[2])
+                OtherPlayer:SendMessageInfo("Your fly speed has been set to "..Split[2])
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[3], FlySpeed))) then
+            Player:SendMessageFailure("Player not found")
+        end
+    end
+    return true
+end
+
+function HandleWalkSpeedCommand(Split, Player)
+    if Split[2] == nil then
+        Player:SendMessageInfo("Usage: /walkspeed <speed> [player]")
+    elseif Split[3] == nil then
+        Player:SetNormalMaxSpeed(Split[2])
+        Player:SendMessageInfo("Your walk speed has been set to "..Split[2])
+    else
+        local WalkSpeed = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[3]) then
+                OtherPlayer:SetNormalMaxSpeed(Split[2])
+                Player:SendMessageSuccess(Split[3].." walk speed has been set to "..Split[2])
+                OtherPlayer:SendMessageInfo("Your walk speed has been set to "..Split[2])
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[3], WalkSpeed))) then
+            Player:SendMessageFailure("Player not found")
+        end
+    end
+    return true
+end
+
+function HandleRunSpeedCommand(Split, Player)
+    if Split[2] == nil then
+        Player:SendMessageInfo("Usage: /runspeed <speed> [player]")
+    elseif Split[3] == nil then
+        Player:SetSprintingMaxSpeed(Split[2])
+        Player:SendMessageInfo("Your sprinting speed has been set to "..Split[2])
+    else
+        local RunSpeed = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[3]) then
+                OtherPlayer:SetSprintingMaxSpeed(Split[2])
+                Player:SendMessageSuccess(Split[3].." sprinting speed has been set to "..Split[2])
+                OtherPlayer:SendMessageInfo("Your sprinting speed has been set to "..Split[2])
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[3], RunSpeed))) then
+            Player:SendMessageFailure("Player not found")
+        end
+    end
+    return true
+end
+
 

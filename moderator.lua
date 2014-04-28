@@ -144,3 +144,17 @@ function HandleLightningCommand(Split, Player)
  	end
  	return true
 end
+
+function HandleItemdbCommand(Split, Player)
+    item = cItem()
+ 	if (Split[2] == nil) then
+ 	    itemstring = ItemToString(Player:GetEquippedItem())
+ 	    item = Player:GetEquippedItem()
+ 	    Player:SendMessageInfo("You are holding "..item.m_ItemCount.." "..itemstring..", ID: "..item.m_ItemType)
+    elseif StringToItem(Split[2], item) == true then
+        Player:SendMessageInfo(Split[2].." info: ID "..item.m_ItemType..", meta "..item.m_ItemDamage)
+    else
+        Player:SendMessageFailure("Specify a valid item name")
+    end
+ 	return true
+end
