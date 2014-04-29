@@ -21,6 +21,8 @@ CHEAT
 
 /feed
 
+/flyspeed
+
 /hat
 
 /heal
@@ -29,9 +31,15 @@ CHEAT
 
 /repair
 
+/runspeed
+
 /xp
 
+/walkspeed
+
 MODERATOR
+
+/broadcast
 
 /burn
 
@@ -58,6 +66,8 @@ GENERAL
 /biome
 
 /getpos (or /whereami)
+
+/itemdb
 
 /whois
 
@@ -90,16 +100,8 @@ Planned commands:
 
 /away
 
-/speed
-
-/broadcast
-
-/say
-
 /mute
 
 /unmute
-
-/itemdb
 
 /msg (and /r)
