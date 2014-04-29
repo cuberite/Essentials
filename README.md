@@ -5,7 +5,7 @@ This is a long-term plugin that aims to port most used Essentials commands to MC
 
 Features
 ---
--Over 20 commands.
+-Over 30 commands.
 
 -Warps
 
