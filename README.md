@@ -13,6 +13,8 @@ Features
 
 -Homes
 
+-Private messages (With /r included)
+
 Current commands:
 ---
 CHEAT
@@ -69,6 +71,10 @@ GENERAL
 
 /itemdb
 
+/msg
+
+/r
+
 /whois
 
 TELEPORT
@@ -103,5 +109,3 @@ Planned commands:
 /mute
 
 /unmute
-
-/msg (and /r)
