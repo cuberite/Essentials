@@ -289,5 +289,18 @@ g_PluginInfo =
             Alias = "/rspeed", 
 			Category = "Cheat",
 		},
+		
+        ["/msg"] =
+        {
+            Permission =  "es.msg",
+            HelpString =  "Sends a private message to another player.",
+            Handler =  HandleMsgCommand,
+        },
+        ["/r"] =
+        {
+            Permission =  "es.r",
+            HelpString =  "Answer quickly to latest private message you recieved.",
+            Handler =  HandleRCommand,
+        },
     },
 }

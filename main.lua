@@ -1,5 +1,6 @@
 warps = {}
 jails = {}
+lastsender = {}
 
 
 function Initialize(Plugin)
