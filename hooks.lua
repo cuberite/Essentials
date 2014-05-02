@@ -76,10 +76,15 @@ function OnExecuteCommand(Player, CommandSplit)
 end
 
 function OnChat(Player, Message)
-      if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsChatEnabled == false) then 
+      if (UsersIni:GetValue(Player:GetName(),   "Muted") == "true") then 
+             Player:SendMessageWarning("You are muted")
+             return true
+      elseif (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsChatEnabled == false) then 
              Player:SendMessageWarning("You are jailed")
              return true
       else 
              return false
       end
 end
+
+    

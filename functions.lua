@@ -111,6 +111,3 @@ function GetStringFromBiome(Biome)
 		return "mesa plateau"
 	end
 end
-
-
-

@@ -158,3 +158,41 @@ function HandleItemdbCommand(Split, Player)
     end
  	return true
 end
+
+function HandleMuteCommand(Split, Player)
+ 	if (Split[2] == nil) then
+ 	    Player:SendMessageInfo("Usage: "..Split[1].." <player>")
+    else
+        local MutePlayer = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[2]) then
+                UsersIni:SetValue(OtherPlayer:GetName(),   "Muted",   "true")
+                UsersIni:WriteFile("users.ini")
+                Player:SendMessageSuccess("Muted "..Split[2])
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], MutePlayer))) then
+            Player:SendMessageFailure("Player not found")
+        end
+ 	end
+ 	return true
+end
+
+function HandleUnmuteCommand(Split, Player)
+ 	if (Split[2] == nil) then
+ 	    Player:SendMessageInfo("Usage: "..Split[1].." <player>")
+    else
+        local UnmutePlayer = function(OtherPlayer)
+            if (OtherPlayer:GetName() == Split[2]) then
+                UsersIni:SetValue(OtherPlayer:GetName(),   "Muted",   "false")
+                UsersIni:WriteFile("users.ini")
+                Player:SendMessageSuccess("Unuted "..Split[2])
+                return true
+            end
+        end
+        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], UnmutePlayer))) then
+            Player:SendMessageFailure("Player not found")
+        end
+ 	end
+ 	return true
+end

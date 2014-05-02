@@ -302,5 +302,17 @@ g_PluginInfo =
             HelpString =  "Answer quickly to latest private message you recieved.",
             Handler =  HandleRCommand,
         },
+        ["/mute"] =
+        {
+            Permission =  "es.mute",
+            HelpString =  "Mute a player.",
+            Handler =  HandleMuteCommand,
+        },
+        ["/unmute"] =
+        {
+            Permission =  "es.unmute",
+            HelpString =  "Unmute a player.",
+            Handler =  HandleUnmuteCommand,
+        },
     },
 }
