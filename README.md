@@ -51,6 +51,10 @@ MODERATOR
 
 /jails
 
+/mute
+
+/unmute
+
 /setjail
 
 /deljail
@@ -105,7 +109,3 @@ Planned commands:
 /afk
 
 /away
-
-/mute
-
-/unmute
