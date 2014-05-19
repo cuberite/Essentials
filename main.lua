@@ -1,6 +1,7 @@
 warps = {}
 jails = {}
 lastsender = {}
+ticks = {}
 
 
 function Initialize(Plugin)
@@ -17,6 +18,7 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_EXECUTE_COMMAND, OnExecuteCommand)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
+    cPluginManager:AddHook(cPluginManager.HOOK_WORLD_TICK, OnWorldTick);
 		
     RegisterPluginInfoCommands();
 		

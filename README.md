@@ -67,6 +67,8 @@ MODERATOR
 
 /spawnmob
 
+/tps
+
 GENERAL
 
 /biome
@@ -101,11 +103,5 @@ TELEPORT
 
 /tphere (or /bring)
 
-Planned commands:
----
 
-/kit
 
-/afk
-
-/away

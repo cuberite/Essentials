@@ -314,5 +314,11 @@ g_PluginInfo =
             HelpString =  "Unmute a player.",
             Handler =  HandleUnmuteCommand,
         },
+        ["/tps"] =
+        {
+            Permission =  "es.tps",
+            HelpString =  "Know your server's tps.",
+            Handler =  HandleTpsCommand,
+        },
     },
 }

@@ -87,4 +87,15 @@ function OnChat(Player, Message)
       end
 end
 
+function OnWorldTick(World, TimeDelta)
+    if TimeDelta <= 50 then
+        ticks[World:GetName()] = 20
+    else
+        Ticks1 = TimeDelta * 20
+        Ticks2 = Ticks1 / 50
+        Ticks3 = Ticks2 - 20
+        Ticks = 20 - Ticks3
+        ticks[World:GetName()] = Ticks
+    end        
+end
     

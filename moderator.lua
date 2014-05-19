@@ -196,3 +196,17 @@ function HandleUnmuteCommand(Split, Player)
  	end
  	return true
 end
+
+function HandleTpsCommand(Split, Player)
+ 	if (Split[2] == nil) then
+ 	    local ForEachWorld = function(World)
+ 	        Player:SendMessageInfo(World:GetName().." tps: "..ticks[World:GetName()])
+ 	    end
+ 	    cRoot:Get():ForEachWorld(ForEachWorld)
+    elseif cRoot:Get():GetWorld(Split[2]) ~= nil then
+        Player:SendMessageInfo("Tps:"..ticks[cRoot:Get():GetWorld(Split[2]):GetName()])
+    else
+        Player:SendMessageFailure("Invalid world")
+    end
+ 	return true
+end
