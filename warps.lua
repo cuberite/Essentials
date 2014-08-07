@@ -14,9 +14,8 @@ function HandleWarpCommand( Split, Player )
         local OnAllChunksAvaliable = function()
             Player:MoveToWorld(warps[Tag]["w"])
             Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-            Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
         end
-        cRoot:GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
+        cRoot:Get():GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
 	end
 	if Player:GetGameMode() == 1  and clear_inv_when_going_from_creative_to_survival == true then
 	    Player:GetInventory():Clear()
