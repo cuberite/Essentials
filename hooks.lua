@@ -10,26 +10,7 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
     if (BlockType == E_BLOCK_SIGN) then	
         Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ , "", "", "", "" )
         if Line1 == "[SignWarp]" or Line1 == "[Warp]" then
-            local Tag = Line2
-            
-            if warps[Tag] == nil then 
-                Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
-                return true
-            end
-            if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
-                Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-                Player:MoveToWorld(warps[Tag]["w"])
-            end
-            if Player:GetGameMode() == 1  and clear_inv_when_going_from_creative_to_survival == true then
-                Player:GetInventory():Clear()
-            end
-            
-            Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-            Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-            if change_gm_when_changing_world == true then
-                Player:SetGameMode(Player:GetWorld():GetGameMode())
-                return true
-            end
+            cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
             return true
         end
     end
@@ -41,6 +22,13 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
             return true
         elseif (Line2 == "") then
             Player:SendMessageFailure('Must supply a tag for the warp.')
+            return true
+        end
+    elseif Line1 == "[Portal]" then
+        if (not(Player:HasPermission("es.createportal") == true)) then
+            return true
+        elseif (Line2 == "") then
+            Player:SendMessageFailure('Must supply a warp to teleport.')
             return true
         end
     end
@@ -88,6 +76,24 @@ function OnChat(Player, Message)
 end
 
 function OnWorldTick(World, TimeDelta)
-    ticks[World:GetName()] = 1000 / TimeDelta     
+    ticks[World:GetName()] = 1000 / TimeDelta   
+    if timer[World:GetName()] == nil then
+        timer[World:GetName()] = 0
+    elseif timer[World:GetName()] == 20 then
+        local ForEachPlayer = function(Player)
+            blocktype = Player:GetWorld():GetBlock(Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ())
+            print(blocktype)
+            if blocktype == 63 or blocktype == 78 then
+                Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ(), "", "", "", "" )
+                if (Line1 == "[Portal]") then
+                    cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
+                end
+            end           
+        end
+        World:ForEachPlayer(ForEachPlayer)
+        timer[World:GetName()] = 0
+    else
+        timer[World:GetName()] = timer[World:GetName()] + 1
+    end
 end
     

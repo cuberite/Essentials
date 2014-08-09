@@ -2,6 +2,7 @@ warps = {}
 jails = {}
 lastsender = {}
 ticks = {}
+timer = {}
 
 
 function Initialize(Plugin)
