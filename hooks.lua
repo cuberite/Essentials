@@ -86,7 +86,11 @@ function OnWorldTick(World, TimeDelta)
             if blocktype == 63 or blocktype == 78 then
                 Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ(), "", "", "", "" )
                 if (Line1 == "[Portal]") then
-                    cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
+                    if Line4 ~= "" then
+                        Player:TeleportToCoords(Line2, Line3, Line4)
+                    else
+                        cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
+                    end    
                 end
             end           
         end
@@ -97,3 +101,4 @@ function OnWorldTick(World, TimeDelta)
     end
 end
     
+
