@@ -82,7 +82,6 @@ function OnWorldTick(World, TimeDelta)
     elseif timer[World:GetName()] == 20 then
         local ForEachPlayer = function(Player)
             blocktype = Player:GetWorld():GetBlock(Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ())
-            print(blocktype)
             if blocktype == 63 or blocktype == 78 then
                 Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ(), "", "", "", "" )
                 if (Line1 == "[Portal]") then
