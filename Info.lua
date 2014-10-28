@@ -76,11 +76,25 @@ g_PluginInfo =
             Handler =  HandlePingCommand,
         },
 
+        ["/vanish"] =
+        {
+            Permission =  "es.vanish",
+            HelpString =  " Be invisible!.",
+            Handler =  HandleVanishCommand,
+        },
+
         ["/hat"] =
         {
             Permission =  "es.hat",
             HelpString =  " Use your equipped item as helmet.",
             Handler =  HandleHatCommand,
+        },
+
+        ["/fly"] =
+        {
+            Permission =  "es.fly",
+            HelpString =  " Enable or disable flying.",
+            Handler =  HandleFlyCommand,
         },
 
         ["/warp"] =
@@ -267,7 +281,6 @@ g_PluginInfo =
             Alias = "/wspeed", 
 			Category = "Cheat",
 		},
-		
 		["/runspeed"] =
 		{
 			Permission = "es.runspeed",  
@@ -277,25 +290,35 @@ g_PluginInfo =
 			Category = "Cheat",
 		},
 		
+        ["/msg"] =
+        {
+            Permission =  "es.msg",
+            HelpString =  "Sends a private message to another player.",
+            Handler =  HandleMsgCommand,
+        },
         ["/r"] =
         {
             Permission =  "es.r",
             HelpString =  "Answer quickly to latest private message you recieved.",
             Handler =  HandleRCommand,
         },
-		
         ["/mute"] =
         {
             Permission =  "es.mute",
             HelpString =  "Mute a player.",
             Handler =  HandleMuteCommand,
         },
-		
         ["/unmute"] =
         {
             Permission =  "es.unmute",
             HelpString =  "Unmute a player.",
             Handler =  HandleUnmuteCommand,
+        },
+        ["/tps"] =
+        {
+            Permission =  "es.tps",
+            HelpString =  "Know your server's tps.",
+            Handler =  HandleTpsCommand,
         },
     },
 }
