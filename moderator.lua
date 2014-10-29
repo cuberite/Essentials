@@ -61,68 +61,6 @@ function HandlePingCommand(Split, Player)
     return true
 end
 
-function HandleVanishCommand(Split, Player)
- 	if (Split[2] == nil) then
- 	    if Player:IsVisible() == true then
-            Player:SetVisible(false)
-            Player:SendMessageInfo("You're now invisible!")
-        else
-            Player:SetVisible(true)
-            Player:SendMessageInfo("You're now visible!")
-        end
-    elseif Player:HasPermission("es.vanish.other") then
-        local VanishPlayer = function(OtherPlayer)
-            if (OtherPlayer:GetName() == Split[2]) then
-                if OtherPlayer:IsVisible() == true then
-                    OtherPlayer:SetVisible(false)
-                    OtherPlayer:SendMessageInfo("You're now invisible!")
-                    Player:SendMessageSuccess( "Player " .. Split[2] .. " is now invisible" )
-                else
-                    OtherPlayer:SetVisible(true)
-                    OtherPlayer:SendMessageInfo("You're now visible!")
-                    Player:SendMessageSuccess( "Player " .. Split[2] .. " is now visible" )
-                end    
-                return true
-            end
-        end
-        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], VanishPlayer))) then
-            Player:SendMessageFailure("Player not found")
-        end
- 	end
- 	return true
-end
-
-function HandleFlyCommand(Split, Player)
- 	if (Split[2] == nil) then
- 	    if Player:CanFly() == false then
-            Player:SetCanFly(true)
-            Player:SendMessageInfo("You can fly")
-        else
-            Player:SetCanFly(false)
-            Player:SendMessageInfo("You can't fly anymore")
-        end
-    elseif Player:HasPermission("es.fly.other") then
-        local FlyPlayer = function(OtherPlayer)
-            if (OtherPlayer:GetName() == Split[2]) then
-                if OtherPlayer:CanFly() == false then
-                    OtherPlayer:SetCanFly(true)
-                    OtherPlayer:SendMessageInfo("You can fly")
-                    Player:SendMessageSuccess( "Player " .. Split[2] .. " can fly" )
-                else
-                    OtherPlayer:SetCanFly(false)
-                    OtherPlayer:SendMessageInfo("You can't fly anymore")
-                    Player:SendMessageSuccess( "Player " .. Split[2] .. " can't fly anymore" )
-                end    
-                return true
-            end
-        end
-        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], FlyPlayer))) then
-            Player:SendMessageFailure("Player not found")
-        end
- 	end
- 	return true
-end
-
 function HandleLightningCommand(Split, Player)
  	if (Split[3] == nil) then
  	    Player:SendMessageInfo("Usage: "..Split[1].." [player] [damage] [-b}")
@@ -194,19 +132,5 @@ function HandleUnmuteCommand(Split, Player)
             Player:SendMessageFailure("Player not found")
         end
  	end
- 	return true
-end
-
-function HandleTpsCommand(Split, Player)
- 	if (Split[2] == nil) then
- 	    local ForEachWorld = function(World)
- 	        Player:SendMessageInfo(World:GetName().." tps: "..ticks[World:GetName()])
- 	    end
- 	    cRoot:Get():ForEachWorld(ForEachWorld)
-    elseif cRoot:Get():GetWorld(Split[2]) ~= nil then
-        Player:SendMessageInfo("Tps:"..ticks[cRoot:Get():GetWorld(Split[2]):GetName()])
-    else
-        Player:SendMessageFailure("Invalid world")
-    end
  	return true
 end
