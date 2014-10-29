@@ -5,7 +5,7 @@ This is a long-term plugin that aims to port most used Essentials commands to MC
 
 Features
 ---
--Over 30 commands.
+-Over 25 commands.
 
 -Warps
 
@@ -45,8 +45,6 @@ MODERATOR
 
 /burn
 
-/fly
-
 /jail
 
 /jails
@@ -63,11 +61,7 @@ MODERATOR
 
 /ping
 
-/vanish
-
 /spawnmob
-
-/tps
 
 GENERAL
 
@@ -76,8 +70,6 @@ GENERAL
 /getpos (or /whereami)
 
 /itemdb
-
-/msg
 
 /r
 
@@ -102,6 +94,3 @@ TELEPORT
 /place
 
 /tphere (or /bring)
-
-
-
