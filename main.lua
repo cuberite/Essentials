@@ -62,8 +62,3 @@ function Initialize(Plugin)
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 end
-
-
-
-
-

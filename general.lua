@@ -68,27 +68,6 @@ function HandleBroadcastCommand(Split,Player)
     return true
 end
 
-function HandleMsgCommand(Split,Player)
-    if Split[3] == nil then
-        Player:SendMessageInfo("Usage: "..Split[1].." <player> <message>")
-    else
-        local SendMessage = function(OtherPlayer)
-            if (OtherPlayer:GetName() == Split[2]) then
-                local newSplit = table.concat( Split, " ", 3 )
-                Player:SendMessageSuccess( "Message to player " .. Split[2] .. " sent!" )
-                OtherPlayer:SendMessagePrivateMsg(newSplit, Player:GetName())
-                lastsender[OtherPlayer:GetName()] = Player:GetName()
-                return true
-            end
-        end
-        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], SendMessage))) then
-            Player:SendMessageFailure("Player not found")
-        end
-    end
-    return true
-end
-
-
 function HandleRCommand(Split,Player)
     if Split[2] == nil then
         Player:SendMessageInfo("Usage: "..Split[1].." <message>")

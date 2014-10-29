@@ -76,25 +76,11 @@ g_PluginInfo =
             Handler =  HandlePingCommand,
         },
 
-        ["/vanish"] =
-        {
-            Permission =  "es.vanish",
-            HelpString =  " Be invisible!.",
-            Handler =  HandleVanishCommand,
-        },
-
         ["/hat"] =
         {
             Permission =  "es.hat",
             HelpString =  " Use your equipped item as helmet.",
             Handler =  HandleHatCommand,
-        },
-
-        ["/fly"] =
-        {
-            Permission =  "es.fly",
-            HelpString =  " Enable or disable flying.",
-            Handler =  HandleFlyCommand,
         },
 
         ["/warp"] =
@@ -219,34 +205,34 @@ g_PluginInfo =
             Handler =  HandleWhoisCommand,
         },
         
-		["/xp"] =
+	["/xp"] =
+	{
+		Permission = "es.xp",  
+		Handler = HandleXPCommand,  
+		HelpString = " Give, set, or look xp from a player.",  
+		Category = "Cheat",
+		Subcommands =
 		{
-			Permission = "es.xp",  
-			Handler = HandleXPCommand,  
-			HelpString = " Give, set, or look xp from a player.",  
-			Category = "Cheat",
-			Subcommands =
+			show =
 			{
-				show =
-				{
-					HelpString = "Show xp of specified player.",
-					Permission = "es.xp.show",
-					Handler = HandleXPCommand,
-				},
-				set =
-				{
-					HelpString = "Set player's current xp.",
-					Permission = "es.xp.set",
-					Handler = HandleXPCommand,
-				},
-				give =
-				{
-					HelpString = "Give xp to the specified player",
-					Permission = "es.xp.give",
-					Handler = HandleXPCommand,
-				},
+				HelpString = "Show xp of specified player.",
+				Permission = "es.xp.show",
+				Handler = HandleXPCommand,
+			},
+			set =
+			{
+				HelpString = "Set player's current xp.",
+				Permission = "es.xp.set",
+				Handler = HandleXPCommand,
+			},
+			give =
+			{
+				HelpString = "Give xp to the specified player",
+				Permission = "es.xp.give",
+				Handler = HandleXPCommand,
 			},
 		},
+	},
 		
         ["/broadcast"] =
         {
@@ -264,61 +250,52 @@ g_PluginInfo =
             Alias = "/iteminfo"
         },
         
-		["/flyspeed"] =
-		{
-			Permission = "es.flyspeed",  
-			Handler =  HandleFlySpeedCommand,  
-			HelpString = "Change player's flying speed.", 
-            Alias = "/fspeed", 
-			Category = "Cheat",
-		},
+	["/flyspeed"] =
+	{
+		Permission = "es.flyspeed",  
+		Handler =  HandleFlySpeedCommand,  
+		HelpString = "Change player's flying speed.", 
+    		Alias = "/fspeed", 
+		Category = "Cheat",
+	},
 		
-		["/walkspeed"] =
-		{
-			Permission = "es.walkspeed",  
-			Handler =  HandleWalkSpeedCommand,  
-			HelpString = "Change player's flying speed.", 
-            Alias = "/wspeed", 
-			Category = "Cheat",
-		},
-		["/runspeed"] =
-		{
-			Permission = "es.runspeed",  
-			Handler =  HandleRunSpeedCommand,  
-			HelpString = "Change player's sprinting speed.", 
-            Alias = "/rspeed", 
-			Category = "Cheat",
-		},
-		
-        ["/msg"] =
-        {
-            Permission =  "es.msg",
-            HelpString =  "Sends a private message to another player.",
-            Handler =  HandleMsgCommand,
-        },
+	["/walkspeed"] =
+	{
+		Permission = "es.walkspeed",  
+		Handler =  HandleWalkSpeedCommand,  
+		HelpString = "Change player's flying speed.", 
+    		Alias = "/wspeed", 
+		Category = "Cheat",
+	},
+	
+	["/runspeed"] =
+	{
+		Permission = "es.runspeed",  
+		Handler =  HandleRunSpeedCommand,  
+		HelpString = "Change player's sprinting speed.", 
+    		Alias = "/rspeed", 
+		Category = "Cheat",
+	},
+	
         ["/r"] =
         {
             Permission =  "es.r",
             HelpString =  "Answer quickly to latest private message you recieved.",
             Handler =  HandleRCommand,
         },
+        
         ["/mute"] =
         {
             Permission =  "es.mute",
             HelpString =  "Mute a player.",
             Handler =  HandleMuteCommand,
         },
+        
         ["/unmute"] =
         {
             Permission =  "es.unmute",
             HelpString =  "Unmute a player.",
             Handler =  HandleUnmuteCommand,
-        },
-        ["/tps"] =
-        {
-            Permission =  "es.tps",
-            HelpString =  "Know your server's tps.",
-            Handler =  HandleTpsCommand,
         },
     },
 }
