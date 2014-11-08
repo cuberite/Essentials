@@ -76,7 +76,6 @@ function OnChat(Player, Message)
 end
 
 function OnWorldTick(World, TimeDelta)
-    ticks[World:GetName()] = 1000 / TimeDelta   
     if timer[World:GetName()] == nil then
         timer[World:GetName()] = 0
     elseif timer[World:GetName()] == 20 then

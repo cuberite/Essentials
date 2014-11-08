@@ -55,13 +55,6 @@ g_PluginInfo =
             Handler =  HandleHealCommand,
         },
 
-        ["/enchant"] =
-        {
-            Permission =  "es.enchant",
-            HelpString =  " Enchants the item you are holding.",
-            Handler =  HandleEnchantCommand,
-        },
-
         ["/burn"] =
         {
             Permission =  "es.burn",

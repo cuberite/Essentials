@@ -19,8 +19,6 @@ Current commands:
 ---
 CHEAT
 
-/enchant
-
 /feed
 
 /flyspeed

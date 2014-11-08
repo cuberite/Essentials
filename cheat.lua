@@ -86,22 +86,6 @@ function HandleHealCommand(Split, Player)
     return true
 end
 
-function HandleEnchantCommand(Split, Player)
-    if( #Split ~= 3 ) then
-        Player:SendMessageInfo("Usage: /enchant [enchantment] [level]")
-    else 
-        Item = Player:GetEquippedItem()
-        if(not(Item:IsEmpty())) then
-            Item.m_Enchantments:SetLevel(cEnchantments:StringToEnchantmentID(Split[2]), Split[3])
-            Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), Item)
-            Player:SendMessageSuccess("Item enchanted")
-        else
-            Player:SendMessageFailure("Please hold an item to enchant")
-        end
-    end
-    return true
-end
-
 function HandleXPCommand(Split, Player)
     if( #Split <= 2 ) then
         Player:SendMessageInfo("Usage: /xp <show|set|give> [playername] [amount]")
