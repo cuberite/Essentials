@@ -45,8 +45,6 @@ MODERATOR
 
 /burn
 
-/fly
-
 /jail
 
 /jails
@@ -63,11 +61,7 @@ MODERATOR
 
 /ping
 
-/vanish
-
 /spawnmob
-
-/tps
 
 GENERAL
 
