@@ -76,25 +76,11 @@ g_PluginInfo =
             Handler =  HandlePingCommand,
         },
 
-        ["/vanish"] =
-        {
-            Permission =  "es.vanish",
-            HelpString =  " Be invisible!.",
-            Handler =  HandleVanishCommand,
-        },
-
         ["/hat"] =
         {
             Permission =  "es.hat",
             HelpString =  " Use your equipped item as helmet.",
             Handler =  HandleHatCommand,
-        },
-
-        ["/fly"] =
-        {
-            Permission =  "es.fly",
-            HelpString =  " Enable or disable flying.",
-            Handler =  HandleFlyCommand,
         },
 
         ["/warp"] =
@@ -313,12 +299,6 @@ g_PluginInfo =
             Permission =  "es.unmute",
             HelpString =  "Unmute a player.",
             Handler =  HandleUnmuteCommand,
-        },
-        ["/tps"] =
-        {
-            Permission =  "es.tps",
-            HelpString =  "Know your server's tps.",
-            Handler =  HandleTpsCommand,
         },
     },
 }
