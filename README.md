@@ -69,10 +69,6 @@ GENERAL
 
 /itemdb
 
-/msg
-
-/r
-
 /whois
 
 TELEPORT
