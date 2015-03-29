@@ -1,23 +1,3 @@
-
-function HandleTPHereCommand(Split,Player)
-    if Split[2] == nil then
-        Player:SendMessageInfo("Usage: "..Split[1].." [player]")
-    else
-        local Teleport = function(OtherPlayer)
-            if (OtherPlayer:GetName() == Split[2]) then
-                OtherPlayer:TeleportToEntity(Player)
-                OtherPlayer:SendMessageSuccess("You have been teleported to "..Player:GetName())
-                Player:SendMessageSuccess("Teleported "..Split[2].." to you")
-                return true
-            end
-        end
-        if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], Teleport))) then
-            Player:SendMessageFailure("Player not found")
-        end
-    end
-    return true
-end
-
 function HandlePlaceCommand(Split,Player)
     if Split[2] == nil then
         Player:SendMessageInfo("Usage: "..Split[1].." [player]")

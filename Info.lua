@@ -168,14 +168,6 @@ g_PluginInfo =
             Alias = "/shock"
         },
 
-        ["/tphere"] =
-        {
-            Permission =  "es.tphere",
-            HelpString =  " - Teleports a player to you",
-            Handler =  HandleTPHereCommand,
-            Alias = "/bring"
-        },
-
         ["/place"] =
         {
             Permission =  "es.place",
