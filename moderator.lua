@@ -134,3 +134,13 @@ function HandleUnmuteCommand(Split, Player)
  	end
  	return true
 end
+
+function HandleAntiOchCommand(Split,Player)
+    pos = GetPlayerLookPosPlace(Player)
+    if pos.x == 0 and pos.y == 0 and pos.z == 0 then
+        Player:SendMessageFailure("You're not looking at a block (or it's too far)")
+    else
+        Player:GetWorld():SpawnPrimedTNT(pos.x, pos.y, pos.z, 35)
+    end
+    return true
+end

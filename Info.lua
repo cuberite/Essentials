@@ -13,6 +13,12 @@ g_PluginInfo =
 
     Commands =
     {
+        ["/antioch"] =
+        {
+            Permission = "es.antioch",
+            HelpString = "TNT!",
+            Handler = HandleAntiOchCommand,
+        },
         ["/more"] =
         {
             Permission =  "es.more",

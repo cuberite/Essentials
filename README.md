@@ -39,6 +39,8 @@ CHEAT
 
 MODERATOR
 
+/antioch
+
 /broadcast
 
 /burn
