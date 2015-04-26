@@ -63,7 +63,7 @@ function HandleBroadcastCommand(Split,Player)
     if Split[2] == nil then
         Player:SendMessageInfo("Usage: "..Split[1].." <message>")
     else
-        cRoot:Get():QueueExecuteConsoleCommand("say "..Split[2])
+        cRoot:Get():QueueExecuteConsoleCommand("say "..table.concat( Split , " " , 2 ))
     end
     return true
 end
