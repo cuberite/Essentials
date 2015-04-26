@@ -9,7 +9,7 @@ g_PluginInfo =
 {
     Name = "Essentials",
     Version = "0.1",
-    Description = "Adds some usefull commands taken from bukkit's Essentials",
+    Description = "Adds some useful commands taken from Bukkit's Essentials",
 
     Commands =
     {
@@ -18,6 +18,7 @@ g_PluginInfo =
             Permission = "es.antioch",
             HelpString = "TNT!",
             Handler = HandleAntiOchCommand,
+            Alias = { "/grenade", "/tnt", }
         },
         ["/more"] =
         {
@@ -31,6 +32,7 @@ g_PluginInfo =
             Permission =  "es.spawnmob",
             HelpString =  " Spawn a mob.",
             Handler =  HandleSpawnMobCommand,
+            Alias = "/mob"
         },
 
         ["/biome"] =
@@ -45,6 +47,7 @@ g_PluginInfo =
             Permission =  "es.repair",
             HelpString =  " Repairs the item you are holding.",
             Handler =  HandleRepairCommand,
+            Alias = "/fix"
         },
 
         ["/feed"] =
@@ -52,6 +55,7 @@ g_PluginInfo =
             Permission =  "es.feed",
             HelpString =  " Satisfy the hunger.",
             Handler =  HandleFeedCommand,
+            Alias = "/eat"
         },
 
         ["/heal"] =
@@ -73,6 +77,7 @@ g_PluginInfo =
             Permission =  "es.ping",
             HelpString =  " Check if the server is alive.",
             Handler =  HandlePingCommand,
+            Alias = { "/pong", "/echo", }
         },
 
         ["/hat"] =
@@ -80,6 +85,7 @@ g_PluginInfo =
             Permission =  "es.hat",
             HelpString =  " Use your equipped item as helmet.",
             Handler =  HandleHatCommand,
+            Alias = "/head"
         },
 
         ["/warp"] =
@@ -94,6 +100,7 @@ g_PluginInfo =
             Permission =  "warp.setwarp",
             HelpString =  " - Creates a warp at players location.",
             Handler =  HandleSetWarpCommand,
+            Alias = "/createwarp"
         },
 
         ["/delwarp"] =
@@ -101,6 +108,7 @@ g_PluginInfo =
             Permission =  "warp.dropwarp",
             HelpString =  " - Deletes a warp.",
             Handler =  HandleDelWarpCommand,
+            Alias = { "/remwarp", "/rmwarp", }
         },
 
         ["/warps"] =
@@ -129,6 +137,7 @@ g_PluginInfo =
             Permission =  "jail.setjail",
             HelpString =  " - Creates a jail at players location.",
             Handler =  HandleSetJailCommand,
+            Alias = "/createjail"
         },
 
         ["/deljail"] =
@@ -136,6 +145,7 @@ g_PluginInfo =
             Permission =  "jail.deljail",
             HelpString =  " - Deletes a jail.",
             Handler =  HandleDelJailCommand,
+            Alias = { "/remjail", "/rmjail", }
         },
 
         ["/jails"] =
@@ -157,6 +167,7 @@ g_PluginInfo =
             Permission =  "es.sethome",
             HelpString =  " - Set your home!",
             Handler =  HandleSetHomeCommand,
+            Alias = "/createhome"
         },
 
         ["/delhome"] =
@@ -164,6 +175,7 @@ g_PluginInfo =
             Permission =  "es.delhome",
             HelpString =  " - Delete a home!",
             Handler =  HandleDelHomeCommand,
+            Alias = { "/remhome", "/rmhome", }
         },
 
         ["/lightning"] =
@@ -171,7 +183,7 @@ g_PluginInfo =
             Permission =  "es.lightning",
             HelpString =  " - Get a lightning damage the specified player",
             Handler =  HandleLightningCommand,
-            Alias = "/shock"
+            Alias = { "/shock", "/strike", "/smite", "/thor", }
         },
 
         ["/place"] =
@@ -186,7 +198,7 @@ g_PluginInfo =
             Permission =  "es.getpos",
             HelpString =  " - Get your current location in the world",
             Handler =  HandleGetPosCommand,
-            Alias = "/getpos"
+            Alias = { "/getpos", "/getlocation", "/getloc", "/coords", "/position", }
         },
 
         ["/whois"] =
@@ -200,7 +212,8 @@ g_PluginInfo =
 		{
 			Permission = "es.xp",  
 			Handler = HandleXPCommand,  
-			HelpString = " Give, set, or look xp from a player.",  
+			HelpString = " Give, set, or look xp from a player.",
+			Alias = "/exp",
 			Category = "Cheat",
 			Subcommands =
 			{
@@ -230,7 +243,7 @@ g_PluginInfo =
             Permission =  "es.broadcast",
             HelpString =  "Broadcast to all players.",
             Handler =  HandleBroadcastCommand,
-            Alias = "/say"
+            Alias = { "/say", "/bcast", "/bc", }
         },
         
         ["/itemdb"] =
@@ -238,7 +251,7 @@ g_PluginInfo =
             Permission =  "es.itemdb",
             HelpString =  "Displays the item information attached to an item.",
             Handler =  HandleItemdbCommand,
-            Alias = "/iteminfo"
+            Alias = { "/iteminfo", "/itemno", "/durability", "/dura", }
         },
         
 		["/flyspeed"] =
@@ -272,6 +285,7 @@ g_PluginInfo =
             Permission =  "es.mute",
             HelpString =  "Mute a player.",
             Handler =  HandleMuteCommand,
+            Alias = "/silence"
         },
         ["/unmute"] =
         {
