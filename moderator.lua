@@ -2,7 +2,7 @@ function HandleSpawnMobCommand(Split,Player)
 	if Split[2] == nil then
 		Player:SendMessageInfo("Usage: /spawnmob [mobtype] [player]")
 	end
-	Mob = StringToMobType(Split[2])
+	Mob = cMonster:StringToMobType(Split[2])
 	if Mob == -1 then
 		Player:SendMessageFailure("Unknown mob type")
 	else
