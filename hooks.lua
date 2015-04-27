@@ -1,4 +1,5 @@
 function OnTakeDamage(Receiver, TDI)
+    --Avoid fall damage if player is flying
 	Player = tolua.cast(Receiver,"cPlayer")
 	if Receiver:IsPlayer() == true and Player:CanFly() == true and TDI.DamageType == dtFalling then
 		return true
@@ -7,8 +8,10 @@ end
 
 function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ)
 	World = Player:GetWorld()
-	if (BlockType == E_BLOCK_SIGN) then	
-		Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ , "", "", "", "" )
+	--Check for a sign
+    if (BlockType == E_BLOCK_SIGN) then	
+		Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ)
+		--If the sign is written like it should, teleport the player
 		if Line1 == "[SignWarp]" or Line1 == "[Warp]" then
 			cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
 			return true
@@ -17,6 +20,7 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
 end
 
 function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line4, Player)
+    --Avoid creating of warp signs by non-allowed users
 	if Line1 == "[SignWarp]" or Line1 == "[Warp]" then
 		if (not(Player:HasPermission("warp.createsign") == true)) then
 			return true
@@ -76,13 +80,14 @@ function OnChat(Player, Message)
 end
 
 function OnWorldTick(World, TimeDelta)
+    --Check each 20 seconds if there's a sign above the player, if there is, teleport
 	if timer[World:GetName()] == nil then
 		timer[World:GetName()] = 0
 	elseif timer[World:GetName()] == 20 then
 		local ForEachPlayer = function(Player)
 			blocktype = Player:GetWorld():GetBlock(Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ())
 			if blocktype == 63 or blocktype == 78 then
-				Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ(), "", "", "", "" )
+				Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ())
 				if (Line1 == "[Portal]") then
 					if Line4 ~= "" then
 						Player:TeleportToCoords(Line2, Line3, Line4)

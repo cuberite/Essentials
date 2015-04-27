@@ -1,5 +1,6 @@
 function HandleBiomeCommand(Split,Player)
 	if Split[2] == nil then
+        --Get the name of the biome where the player is and store it in a variable
 		biome = GetStringFromBiome(Player:GetWorld():GetBiomeAt(Player:GetPosX(), Player:GetPosZ()))
 		Player:SendMessageInfo("You're in ".. biome)
 	elseif Player:HasPermission("es.biome.other") then
@@ -36,6 +37,7 @@ end
 
 function HandleWhoisCommand(Split,Player)
 	if Split[2] == nil then
+        --Get Player information and show it as a mesage	
 		Player:SendMessageInfo("Your username is "..Player:GetName())
 		Player:SendMessageInfo("Your IP is "..Player:GetIP())
 		Player:SendMessageInfo("Your ping is "..Player:GetClientHandle():GetPing())
@@ -61,6 +63,7 @@ function HandleBroadcastCommand(Split,Player)
 	if Split[2] == nil then
 		Player:SendMessageInfo("Usage: "..Split[1].." <message>")
 	else
+        --Send all Split[x]	
 		cRoot:Get():QueueExecuteConsoleCommand("say "..table.concat( Split , " " , 2 ))
 	end
 	return true
