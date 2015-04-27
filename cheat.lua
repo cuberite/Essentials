@@ -1,7 +1,6 @@
-
 function HandleMoreCommand(Split,Player)
-	if Split[2] == nil then
-	    HoldedItem = Player:GetEquippedItem()
+    if Split[2] == nil then
+        HoldedItem = Player:GetEquippedItem()
         if(not(HoldedItem:IsEmpty())) then
             HoldedItem.m_ItemCount = 64
             Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HoldedItem)
