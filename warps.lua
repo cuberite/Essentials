@@ -1,7 +1,7 @@
 function HandleWarpCommand( Split, Player )
-    local EachPlayer = function(Player)
-        Player:SetVisible(true)
-    end
+	local EachPlayer = function(Player)
+		Player:SetVisible(true)
+	end
 	local Schedule = function(World)
 		World:ForEachPlayer(EachPlayer)
 	end
@@ -17,24 +17,23 @@ function HandleWarpCommand( Split, Player )
 		return true
 	end
 	if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
-	 Player:SetVisible(false)
-        Player:MoveToWorld(warps[Tag]["w"])
-        Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-        Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-	 name = Player:GetName()
-        Player:GetWorld():ScheduleTask(10, Schedule)
+		Player:SetVisible(false)
+		Player:MoveToWorld(warps[Tag]["w"])
+		Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
+		Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+		name = Player:GetName()
+		Player:GetWorld():ScheduleTask(10, Schedule)
 	else
 		Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-        Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-    end
+		Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+	end
 	if Player:GetGameMode() == 1  and clear_inv_when_going_from_creative_to_survival == true then
-	    Player:GetInventory():Clear()
+		Player:GetInventory():Clear()
 	end
 		
-
 	if change_gm_when_changing_world == true then
-	    Player:SetGameMode(Player:GetWorld():GetGameMode())
-	    return true
+		Player:SetGameMode(Player:GetWorld():GetGameMode())
+		return true
 	end
 	return true
 end
@@ -45,7 +44,7 @@ function HandleSetWarpCommand( Split, Player)
 	local pX = math.floor(Player:GetPosX())
 	local pY = math.floor(Player:GetPosY())
 	local pZ = math.floor(Player:GetPosZ())
-	
+
 	if #Split < 2 then
 		Player:SendMessageFailure('Must supply a tag for the warp.')
 		return true
@@ -60,14 +59,12 @@ function HandleSetWarpCommand( Split, Player)
 	WarpsINI:ReadFile("warps.ini")
 	
 	if (WarpsINI:FindKey(Tag)<0) then
-	warps[Tag]["w"] = World
-	warps[Tag]["x"] = pX
-	warps[Tag]["y"] = pY
-	warps[Tag]["z"] = pZ
+		warps[Tag]["w"] = World
+		warps[Tag]["x"] = pX
+		warps[Tag]["y"] = pY
+		warps[Tag]["z"] = pZ
 	end
-	
 
-	
 	if (WarpsINI:FindKey(Tag)<0) then
 		WarpsINI:AddKeyName(Tag);
 		WarpsINI:SetValue( Tag , "w" , World)
@@ -80,7 +77,7 @@ function HandleSetWarpCommand( Split, Player)
 	else
 		Player:SendMessageFailure('Warp "' .. Tag .. '" already exists')
 	end
-return true
+	return true
 end
 
 function HandleDelWarpCommand( Split, Player)

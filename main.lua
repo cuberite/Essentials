@@ -4,11 +4,10 @@ lastsender = {}
 ticks = {}
 timer = {}
 
-
 function Initialize(Plugin)
 
-    dofile(cPluginManager:GetPluginsPath() .. "/InfoReg.lua")
-    
+	dofile(cPluginManager:GetPluginsPath() .. "/InfoReg.lua")
+
 	Plugin:SetName(g_PluginInfo.Name)
 	Plugin:SetVersion(g_PluginInfo.Version)
 
@@ -19,10 +18,10 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_EXECUTE_COMMAND, OnExecuteCommand)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
-    cPluginManager:AddHook(cPluginManager.HOOK_WORLD_TICK, OnWorldTick);
-		
-    RegisterPluginInfoCommands();
-		
+	cPluginManager:AddHook(cPluginManager.HOOK_WORLD_TICK, OnWorldTick);
+
+	RegisterPluginInfoCommands();
+
 	local WarpsINI = cIniFile()
 	if (WarpsINI:ReadFile("warps.ini")) then
 		warpNum = WarpsINI:GetNumKeys();
@@ -38,7 +37,7 @@ function Initialize(Plugin)
 
 	localdir = Plugin:GetLocalDirectory()
 	homeDir = Plugin:GetLocalDirectory().."/homes"
-    
+
 	local jailsINI = cIniFile()
 	if (jailsINI:ReadFile("jails.ini")) then
 		jailNum = jailsINI:GetNumKeys();
@@ -55,10 +54,10 @@ function Initialize(Plugin)
 	UsersIni = cIniFile()
 	UsersIni:ReadFile("users.ini")
 
-    if cFile:IsFolder(homeDir) ~= true then
-        cFile:CreateFolder(homeDir)
-    end
-        
+	if cFile:IsFolder(homeDir) ~= true then
+		cFile:CreateFolder(homeDir)
+	end
+
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 end

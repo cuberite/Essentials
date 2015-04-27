@@ -1,97 +1,56 @@
 Essentials
 ===========
 
-This is a long-term plugin that aims to port most used Essentials commands to MCServer. Commands already implemented in Core won't be implemented.
+This plugin aims to port commands from Bukkit's Essentials to MCServer, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.
 
-Features
----
--Over 30 commands.
+### Features
 
--Warps
+- Over 30 commands.
 
--Jails
+- Warps
 
--Homes
+- Jails
 
--Private messages (With /r included)
+- Homes
 
-Current commands:
----
-CHEAT
+### Commands
 
-/feed
-
-/flyspeed
-
-/hat
-
-/heal
-
-/more
-
-/repair
-
-/runspeed
-
-/xp
-
-/walkspeed
-
-MODERATOR
-
-/antioch
-
-/broadcast
-
-/burn
-
-/jail
-
-/jails
-
-/mute
-
-/unmute
-
-/setjail
-
-/deljail
-
-/lightning (or /shock)
-
-/ping
-
-/spawnmob
-
-GENERAL
-
-/biome
-
-/getpos (or /whereami)
-
-/itemdb
-
-/whois
-
-TELEPORT
-
-/warp
-
-/warps
-
-/setwarp
-
-/delwarp
-
-/home
-
-/sethome
-
-/delhome
-
-/place
-
-/tphere (or /bring)
-
-
-
+| Command | Aliases | Permission | Permission (affects other players) | Description |
+| ------- | ------- | ---------- | ---------------------------------- | ----------- |
+|/antioch | /grenade, /tnt | es.antioch | | Spawn a TNT in the location you're looking at.|
+|/biome | | es.biome | es.biome.other | Tells you the biome in which you are.|
+|/broadcast | /bcast, /bc, /say | es.broadcast | | Broadcast a message to all players.|
+|/burn | | es.burn | | Set a player on fire.|
+|/delhome | /remhome, /rmhome | es.delhome | | Delete a home.|
+|/deljail | /remjail, /rmjail | jail.deljail | | Delete a jail.|
+|/delwarp | /remwarp, /rmwarp | warp.dropwarp | | Delete a warp.|
+|/feed | /eat | es.feed | es.feed.other | Satisfy the hunger.|
+|/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
+|/hat | /head | es.hat | | Use your equipped item as a helmet.|
+|/heal | | es.heal | es.heal.other | Heal a player.|
+|/home | | es.home | | Teleport to your home.|
+|/itemdb | /iteminfo, /itemno, /durability, /dura | es.home | | Displays the item information of an item you are holding.|
+|/jail | | jail.jail | | Jail a player.|
+|/jails | | jail.listjail | | Lists all jails.|
+|/lightning | /shock, /smite, /strike, /thor | es.lightning | | Damage the specified player with lightning.|
+|/more | | es.more | es.more.other | Increases the item amount in the held stack to 64 items.|
+|/mute | /silence | es.mute | | Mute a player.|
+|/ping | /pong, /echo | es.ping | | Check if the server is alive.|
+|/place | | es.place | | Teleport a player where you are looking.|
+|/repair | /fix | es.repair | | Repair the item you are holding.|
+|/runspeed | /rspeed | es.runspeed | | Change a player's sprinting speed.|
+|/sethome | /createhome | es.sethome | | Set your home.|
+|/setjail | /createjail | jail.setjail | | Create a jail at your location.|
+|/setwarp | /createwarp | warp.setwarp | | Create a warp at your location.|
+|/spawnmob | /mob | es.spawnmob | es.spawnmob.other | Spawn a mob.|
+|/unjail | | jail.unjail | | Unjail a player.|
+|/unmute | | es.unmute | | Unmute a player.|
+|/walkspeed | /wspeed | es.walkspeed | | Change a player's walking speed.|
+|/warp | | warp.warp | | Moves player to location of warp [Tag].|
+|/warps | | warp.listwarp | | Lists all warps.|
+|/whereami | /getpos, /getlocation, /getloc, /coords, /position | es.getpos | es.getpos.other | Get your current location in the world.|
+|/whois | | es.whois | | Get information about the specified player.|
+|/xp | /exp | es.xp | | Manage xp for a player.|
+|/xp show | | es.xp.show | | Show xp of specified player.|
+|/xp set | | es.xp.set | | Set player's current xp.|
+|/xp give | | es.xp.give | | Give xp to the specified player.|
