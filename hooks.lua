@@ -8,7 +8,7 @@ end
 function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ)
 	World = Player:GetWorld()
 	if (BlockType == E_BLOCK_SIGN) then	
-		Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ , "", "", "", "" )
+		Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ )
 		if Line1 == "[SignWarp]" or Line1 == "[Warp]" then
 			cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
 			return true
