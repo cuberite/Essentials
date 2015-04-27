@@ -35,8 +35,8 @@ function Initialize(Plugin)
 		end
 	end
 
-	localdir = Plugin:GetLocalDirectory()
-	homeDir = Plugin:GetLocalDirectory().."/homes"
+	localdir = Plugin:GetLocalFolder()
+	homeDir = Plugin:GetLocalFolder().."/homes"
 
 	local jailsINI = cIniFile()
 	if (jailsINI:ReadFile("jails.ini")) then
