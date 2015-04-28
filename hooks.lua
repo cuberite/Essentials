@@ -35,8 +35,9 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
 					ItemEnchant:SetLevel(Enchantment, NextLevel)
 					Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HeldItem)
 					Player:DeltaExperience(-toremove * 17)
+					Player:SendMessageSuccess("Successfully enchanted item")
 				else
-					Player:SendMessage("This item is not enchantable")
+					Player:SendMessageFailure("This item is not enchantable")
 				end
 			end
 		end
