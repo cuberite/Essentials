@@ -111,3 +111,21 @@ function GetStringFromBiome(Biome)
 		return "mesa plateau"
 	end
 end
+
+function IsEnchantable()
+	if (HeldItemType >= 256) and (HeldItemType <= 259) then
+		return true;
+	elseif (HeldItemType >= 267) and (HeldItemType <= 279) then
+		return true;
+	elseif (HeldItemType >= 283) and (HeldItemType <= 286) then
+		return true;
+	elseif (HeldItemType >= 290) and (HeldItemType <= 294) then
+		return true;
+	elseif (HeldItemType >= 298) and (HeldItemType <= 317) then
+		return true;
+	elseif (HeldItemType >= 290) and (HeldItemType <= 294) then
+		return true;
+	elseif (HeldItemType == 346) or (HeldItemType == 359) or (HeldItemType == 261) then
+		return true;
+	end
+end
