@@ -15,9 +15,8 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
 		if Line1 == "[SignWarp]" or Line1 == "[Warp]" then
 			cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
 			return true
-		end
 		--If the sign is written like it should, enchant the item
-		if Line1 == "[Enchant]" and Line2 ~= "" and Line3 ~= "" and Line4 ~= "" then
+		elseif Line1 == "[Enchant]" and Line2 ~= "" and Line3 ~= "" and Line4 ~= "" then
 			HeldItem = Player:GetEquippedItem();
 			HeldItemType = HeldItem.m_ItemType;
 			ItemEnchant = HeldItem.m_Enchantments;
