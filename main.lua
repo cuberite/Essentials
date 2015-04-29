@@ -13,7 +13,7 @@ function Initialize(Plugin)
 	Plugin:SetName(g_PluginInfo.Name)
 	Plugin:SetVersion(g_PluginInfo.Version)
 
-    --Register hooks
+	--Register hooks
 	cPluginManager:AddHook(cPluginManager.HOOK_TAKE_DAMAGE, OnTakeDamage);
 	cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_RIGHT_CLICK, OnPlayerRightClick)
 	cPluginManager.AddHook(cPluginManager.HOOK_UPDATING_SIGN, OnUpdatingSign);
@@ -25,7 +25,7 @@ function Initialize(Plugin)
 
 	RegisterPluginInfoCommands();
 
-    --Read the warps (stored in ini file)
+	--Read the warps (stored in ini file)
 	local WarpsINI = cIniFile()
 	if (WarpsINI:ReadFile("warps.ini")) then
 		warpNum = WarpsINI:GetNumKeys();
@@ -39,11 +39,11 @@ function Initialize(Plugin)
 		end
 	end
 
-    --Set dirs which will be used later on
+	--Set dirs which will be used later on
 	localdir = Plugin:GetLocalFolder()
 	homeDir = Plugin:GetLocalFolder().."/homes"
 
-    --Read jails (from ini file)
+	--Read jails (from ini file)
 	local jailsINI = cIniFile()
 	if (jailsINI:ReadFile("jails.ini")) then
 		jailNum = jailsINI:GetNumKeys();
@@ -60,7 +60,7 @@ function Initialize(Plugin)
 	UsersIni = cIniFile()
 	UsersIni:ReadFile("users.ini")
 
-    --If there's no home folder, plugin will create it
+	--If there's no home folder, plugin will create it
 	if cFile:IsFolder(homeDir) ~= true then
 		cFile:CreateFolder(homeDir)
 	end
