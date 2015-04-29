@@ -63,11 +63,11 @@ This plugin aims to port commands from Bukkit's Essentials to MCServer, but also
 | es.home.unlimited | Allows a player to have an unlimited amount of homes |
 
 ###Warp Sign template
-[Warp] 
+[Warp]  
 warpname
 
 ###Enchant Sign template
-[Enchant] 
-EnchantmentID 
-EnchantmentLevel 
+[Enchant]  
+EnchantmentID  
+EnchantmentLevel  
 RequiredXPLevelToEnchant
