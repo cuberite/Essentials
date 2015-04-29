@@ -54,3 +54,20 @@ This plugin aims to port commands from Bukkit's Essentials to MCServer, but also
 |/xp show | | es.xp.show | | Show xp of specified player.|
 |/xp set | | es.xp.set | | Set player's current xp.|
 |/xp give | | es.xp.give | | Give xp to the specified player.|
+
+###Use-permissions
+| Permission | Description |
+| ---------- | ----------- |
+| warp.createsign | Allows a player to create Warp Signs |
+| es.enchantsign | Allows a player to create Enchant Signs |
+| es.home.unlimited | Allows a player to have an unlimited amount of homes |
+
+###Warp Sign template
+[Warp]
+warpname
+
+###Enchant Sign template
+[Enchant]
+EnchantmentID
+EnchantmentLevel
+RequiredXPLevelToEnchant
