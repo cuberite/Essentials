@@ -68,3 +68,24 @@ function HandleBroadcastCommand(Split,Player)
 	end
 	return true
 end
+
+function HandleShoutCommand(Split,Player)
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: /shout <message>")
+	elseif Split[1] == "/shout" then
+		range = cBoundingBox(Player:GetPosX() - 128, Player:GetPosX() + 128, Player:GetPosY() - 128, Player:GetPosY() + 128, Player:GetPosZ() - 128, Player:GetPosZ() + 128)
+		action = "[SHOUT]"
+	elseif Split[1] == "/whisper" then
+		range = cBoundingBox(Player:GetPosX() - 16, Player:GetPosX() + 16, Player:GetPosY() - 16, Player:GetPosY() + 16, Player:GetPosZ() - 16, Player:GetPosZ() + 16)
+		action = "[WHISPER]"
+	end
+	world = Player:GetWorld()
+	local Send = function(Entity)
+		if Entity:IsPlayer() then
+			Player = tolua.cast(Entity, "cPlayer")
+			Player:SendMessage(cChatColor.Yellow..""..action..""..cChatColor.White.." <"..Player:GetName().."> "..table.concat( Split , " " , 2 ))
+		end
+	end
+	world:ForEachEntityInBox(range, Send)
+	return true
+end

@@ -179,6 +179,13 @@ g_PluginInfo =
 			Handler =  HandleSetWarpCommand,
 			Alias = "/createwarp"
 		},
+		["/shout"] =
+		{
+			Permission =  "es.shout",
+			HelpString =  "Chat in a range of 128 blocks.",
+			Handler =  HandleShoutCommand,
+			Alias = "/whisper"
+		},
 		["/spawnmob"] =
 		{
 			Permission =  "es.spawnmob",
