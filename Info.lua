@@ -45,14 +45,14 @@ g_PluginInfo =
 		},
 		["/deljail"] =
 		{
-			Permission =  "jail.deljail",
+			Permission =  "es.deljail",
 			HelpString =  "Delete a jail.",
 			Handler =  HandleDelJailCommand,
 			Alias = { "/remjail", "/rmjail", }
 		},
 		["/delwarp"] =
 		{
-			Permission =  "warp.dropwarp",
+			Permission =  "es.dropwarp",
 			HelpString =  "Delete a warp.",
 			Handler =  HandleDelWarpCommand,
 			Alias = { "/remwarp", "/rmwarp", }
@@ -100,13 +100,13 @@ g_PluginInfo =
 		},
 		["/jail"] =
 		{
-			Permission =  "jail.jail",
+			Permission =  "es.jail",
 			HelpString =  "Jail a player.",
 			Handler =  HandleJailCommand,
 		},
 		["/jails"] =
 		{
-			Permission =  "jail.listjail",
+			Permission =  "es.listjail",
 			HelpString =  "Lists all jails.",
 			Handler =  HandleListJailCommand,
 		},
@@ -167,14 +167,14 @@ g_PluginInfo =
 		},
 		["/setjail"] =
 		{
-			Permission =  "jail.setjail",
+			Permission =  "es.setjail",
 			HelpString =  "Create a jail at your location.",
 			Handler =  HandleSetJailCommand,
 			Alias = "/createjail"
 		},
 		["/setwarp"] =
 		{
-			Permission =  "warp.setwarp",
+			Permission =  "es.setwarp",
 			HelpString =  "Create a warp at your location.",
 			Handler =  HandleSetWarpCommand,
 			Alias = "/createwarp"
@@ -184,7 +184,6 @@ g_PluginInfo =
 			Permission =  "es.shout",
 			HelpString =  "Chat in a range of 128 blocks.",
 			Handler =  HandleShoutCommand,
-			Alias = "/whisper"
 		},
 		["/spawnmob"] =
 		{
@@ -195,7 +194,7 @@ g_PluginInfo =
 		},
 		["/unjail"] =
 		{
-			Permission =  "jail.unjail",
+			Permission =  "es.unjail",
 			HelpString =  "Unjail a player.",
 			Handler =  HandleUnJailCommand,
 		},
@@ -215,13 +214,13 @@ g_PluginInfo =
 		},
 		["/warp"] =
 		{
-			Permission =  "warp.warp",
+			Permission =  "es.warp",
 			HelpString =  "Moves player to location of warp [Tag].",
 			Handler =  HandleWarpCommand,
 		},
 		["/warps"] =
 		{
-			Permission =  "warp.listwarp",
+			Permission =  "es.listwarp",
 			HelpString =  "Lists all warps.",
 			Handler =  HandleListWarpCommand,
 		},
@@ -231,6 +230,12 @@ g_PluginInfo =
 			HelpString =  "Get your current location in the world.",
 			Handler =  HandleGetPosCommand,
 			Alias = { "/getpos", "/getlocation", "/getloc", "/coords", "/position", }
+		},
+		["/whisper"] =
+		{
+			Permission =  "es.whisper",
+			HelpString =  "Chat in a range of 16 blocks.",
+			Handler =  HandleShoutCommand,
 		},
 		["/whois"] =
 		{
