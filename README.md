@@ -22,16 +22,16 @@ This plugin aims to port commands from Bukkit's Essentials to MCServer, but also
 |/broadcast | /bcast, /bc, /say | es.broadcast | | Broadcast a message to all players.|
 |/burn | | es.burn | | Set a player on fire.|
 |/delhome | /remhome, /rmhome | es.delhome | | Delete a home.|
-|/deljail | /remjail, /rmjail | jail.deljail | | Delete a jail.|
-|/delwarp | /remwarp, /rmwarp | warp.dropwarp | | Delete a warp.|
+|/deljail | /remjail, /rmjail | es.deljail | | Delete a jail.|
+|/delwarp | /remwarp, /rmwarp | es.dropwarp | | Delete a warp.|
 |/feed | /eat | es.feed | es.feed.other | Satisfy the hunger.|
 |/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
 |/heal | | es.heal | es.heal.other | Heal a player.|
 |/home | | es.home | | Teleport to your home.|
 |/itemdb | /iteminfo, /itemno, /durability, /dura | es.home | | Displays the item information of an item you are holding.|
-|/jail | | jail.jail | | Jail a player.|
-|/jails | | jail.listjail | | Lists all jails.|
+|/jail | | es.jail | | Jail a player.|
+|/jails | | es.listjail | | Lists all jails.|
 |/lightning | /shock, /smite, /strike, /thor | es.lightning | | Damage the specified player with lightning.|
 |/more | | es.more | es.more.other | Increases the item amount in the held stack to 64 items.|
 |/mute | /silence | es.mute | | Mute a player.|
@@ -40,15 +40,15 @@ This plugin aims to port commands from Bukkit's Essentials to MCServer, but also
 |/repair | /fix | es.repair | | Repair the item you are holding.|
 |/runspeed | /rspeed | es.runspeed | | Change a player's sprinting speed.|
 |/sethome | /createhome | es.sethome | | Set your home.|
-|/setjail | /createjail | jail.setjail | | Create a jail at your location.|
-|/setwarp | /createwarp | warp.setwarp | | Create a warp at your location.|
+|/setjail | /createjail | es.setjail | | Create a jail at your location.|
+|/setwarp | /createwarp | es.setwarp | | Create a warp at your location.|
 |/shout or /whisper | | es.shout | | Chat in a range of 128 or 16 blocks.|
 |/spawnmob | /mob | es.spawnmob | es.spawnmob.other | Spawn a mob.|
-|/unjail | | jail.unjail | | Unjail a player.|
+|/unjail | | es.unjail | | Unjail a player.|
 |/unmute | | es.unmute | | Unmute a player.|
 |/walkspeed | /wspeed | es.walkspeed | | Change a player's walking speed.|
-|/warp | | warp.warp | | Moves player to location of warp [Tag].|
-|/warps | | warp.listwarp | | Lists all warps.|
+|/warp | | es.warp | | Moves player to location of warp [Tag].|
+|/warps | | es.listwarp | | Lists all warps.|
 |/whereami | /getpos, /getlocation, /getloc, /coords, /position | es.getpos | es.getpos.other | Get your current location in the world.|
 |/whois | | es.whois | | Get information about the specified player.|
 |/xp | /exp | es.xp | | Manage xp for a player.|
