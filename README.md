@@ -60,16 +60,25 @@ This plugin aims to port commands from Bukkit's Essentials to MCServer, but also
 ###Use-permissions
 | Permission | Description |
 | ---------- | ----------- |
-| warp.createsign | Allows a player to create Warp Signs |
+| es.warpsign | Allows a player to create Warp Signs |
 | es.enchantsign | Allows a player to create Enchant Signs |
+| es.createportal | Allows a player to create a portal |
 | es.home.unlimited | Allows a player to have an unlimited amount of homes |
 
-###Warp Sign template
+###Warp Sign Template
 [Warp]  
-warpname
+Warpname
 
-###Enchant Sign template
+###Enchant Sign Template
 [Enchant]  
 EnchantmentID  
 EnchantmentLevel  
 RequiredXPLevelToEnchant
+
+###Portals
+To create a portal, place a sign underneath a block with the following template:  
+  
+[Portal]  
+Warpname  
+  
+When walking on top of the block, you will get teleported to the specified warp.
