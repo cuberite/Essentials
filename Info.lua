@@ -12,32 +12,25 @@ g_PluginInfo =
 	{
 		{
 			Title = "Warp Signs",
-			Contents = "To create a warp sign, use the following template:
-			
+			Contents = [[To create a warp sign, use the following template:
 			[Warp]
-			warpname
-			
-			",
+			warpname]],
 		},
 		{
 			Title = "Enchant Signs",
-			Contents = "To create an enchant sign, use the following template:
-			
+			Contents = [[To create an enchant sign, use the following template:
 			[Enchant]
 			EnchantmentID
 			EnchantmentLevel
-			RequiredXPLevelToEnchant
-			
-			",
+			RequiredXPLevelToEnchant]],
 		},
 		{
 			Title = "Portals",
-			Contents = "To create a portal, place a sign underneath a block with the following template:
-
+			Contents = [[To create a portal, place a sign underneath a block with the following template:
 			[Portal]
 			Warpname
-
-			When walking on top of the block, you will get teleported to the specified warp.",
+			
+			When walking on top of the block, you will get teleported to the specified warp.]],
 		},
 	},
 	Commands =
