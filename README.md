@@ -1,7 +1,7 @@
 Essentials
 ===========
 
-This plugin aims to port commands from Bukkit's Essentials to MCServer, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.
+This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.org/bukkit-plugins/essentials/) to MCServer, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.
 
 ### Features
 
