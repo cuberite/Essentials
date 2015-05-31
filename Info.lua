@@ -57,6 +57,13 @@ g_PluginInfo =
 			Handler =  HandleDelWarpCommand,
 			Alias = { "/remwarp", "/rmwarp", }
 		},
+                ["/ext"] =
+                {
+                        Permission =  "es.ext",
+                        HelpString =  "Extinguish a player.",
+                        Handler =  HandleExtinguishCommand,
+                        Alias = { "/extinguish", },
+                },
 		["/feed"] =
 		{
 			Permission =  "es.feed",

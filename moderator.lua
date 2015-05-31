@@ -60,6 +60,23 @@ function HandleBurnCommand(Split, Player)
 	return true
 end
 
+function HandleExtinguishCommand(Split, Player)
+        if Split[2] == nil then
+                Player:SendMessageInfo("Usage: /ext [player]")
+        else
+                local found = cRoot:Get():FindAndDoWithPlayer(Split[2],function(ExtPlayer)
+                        if ExtPlayer:GetName() == Split[2] then
+                                ExtPlayer:StopBurning()
+                        end
+                        return true
+                end)
+                if not found then
+                        Player:SendMessageFailure("Player not found")
+                end
+        end
+        return true
+end
+
 function HandlePingCommand(Split, Player)
 	Player:SendMessage(cChatColor.Green.. "Pong!")
 	return true

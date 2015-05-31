@@ -24,6 +24,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/delhome | /remhome, /rmhome | es.delhome | | Delete a home.|
 |/deljail | /remjail, /rmjail | es.deljail | | Delete a jail.|
 |/delwarp | /remwarp, /rmwarp | es.dropwarp | | Delete a warp.|
+|/ext | /extinguish | es.ext | | Extinguish a player.|
 |/feed | /eat | es.feed | es.feed.other | Satisfy the hunger.|
 |/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
