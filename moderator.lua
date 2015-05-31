@@ -170,3 +170,18 @@ function HandleAntiOchCommand(Split,Player)
 	end
 	return true
 end
+
+function HandleInventoryClearCommand(Split,Player)
+        if Split[2] == nil then
+                Player:SendMessage("Usage: "..Split[1].." <player>")
+        else
+                local found = cRoot:Get():FindAndDoWithPlayer(Split[2],function(a_Player)
+                        a_Player:GetInventory():Clear()
+                        return true
+                end)
+                if not found then
+                        Player:SendMessageFailure("Player not found")
+                end
+        end
+        return true
+end

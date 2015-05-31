@@ -98,6 +98,13 @@ g_PluginInfo =
 			HelpString =  "Teleport to your home.",
 			Handler =  HandleHomeCommand,
 		},
+                ["/clearinventory"] =
+                {
+                        Permission =  "es.clearinventory",
+                        HelpString =  "Clear a players inventory.",
+                        Handler =  HandleInventoryClearCommand,
+                        Alias = { "/ci", "/clean", "/clearinvent" },
+                },
 		["/itemdb"] =
 		{
 			Permission =  "es.itemdb",
