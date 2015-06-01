@@ -60,6 +60,23 @@ function HandleBurnCommand(Split, Player)
 	return true
 end
 
+function HandleExtinguishCommand(Split, Player)
+        if Split[2] == nil then
+                Player:SendMessageInfo("Usage: /ext [player]")
+        else
+                local found = cRoot:Get():FindAndDoWithPlayer(Split[2],function(ExtPlayer)
+                        if ExtPlayer:GetName() == Split[2] then
+                                ExtPlayer:StopBurning()
+                        end
+                        return true
+                end)
+                if not found then
+                        Player:SendMessageFailure("Player not found")
+                end
+        end
+        return true
+end
+
 function HandlePingCommand(Split, Player)
 	Player:SendMessage(cChatColor.Green.. "Pong!")
 	return true
@@ -152,4 +169,19 @@ function HandleAntiOchCommand(Split,Player)
 		Player:GetWorld():SpawnPrimedTNT(pos.x, pos.y, pos.z, 35)
 	end
 	return true
+end
+
+function HandleInventoryClearCommand(Split,Player)
+        if Split[2] == nil then
+                Player:SendMessage("Usage: "..Split[1].." <player>")
+        else
+                local found = cRoot:Get():FindAndDoWithPlayer(Split[2],function(a_Player)
+                        a_Player:GetInventory():Clear()
+                        return true
+                end)
+                if not found then
+                        Player:SendMessageFailure("Player not found")
+                end
+        end
+        return true
 end

@@ -57,6 +57,13 @@ g_PluginInfo =
 			Handler =  HandleDelWarpCommand,
 			Alias = { "/remwarp", "/rmwarp", }
 		},
+                ["/ext"] =
+                {
+                        Permission =  "es.ext",
+                        HelpString =  "Extinguish a player.",
+                        Handler =  HandleExtinguishCommand,
+                        Alias = { "/extinguish", },
+                },
 		["/feed"] =
 		{
 			Permission =  "es.feed",
@@ -91,6 +98,13 @@ g_PluginInfo =
 			HelpString =  "Teleport to your home.",
 			Handler =  HandleHomeCommand,
 		},
+                ["/clearinventory"] =
+                {
+                        Permission =  "es.clearinventory",
+                        HelpString =  "Clear a players inventory.",
+                        Handler =  HandleInventoryClearCommand,
+                        Alias = { "/ci", "/clean", "/clearinvent" },
+                },
 		["/itemdb"] =
 		{
 			Permission =  "es.itemdb",
