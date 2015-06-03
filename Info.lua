@@ -6,8 +6,33 @@ g_PluginInfo =
 {
 	Name = "Essentials",
 	Version = "0.1",
-	Description = [[Adds some useful commands to MCServer.]],
+	Description = [[This plugin aims to port commands from Bukkit's Essentials to MCServer, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.]],
 
+	AdditionalInfo =
+	{
+		{
+			Title = "Warp Signs",
+			Contents = [[To create a warp sign, use the following template:
+			[Warp]
+			warpname]],
+		},
+		{
+			Title = "Enchant Signs",
+			Contents = [[To create an enchant sign, use the following template:
+			[Enchant]
+			EnchantmentID
+			EnchantmentLevel
+			RequiredXPLevelToEnchant]],
+		},
+		{
+			Title = "Portals",
+			Contents = [[To create a portal, place a sign underneath a block with the following template:
+			[Portal]
+			Warpname
+			
+			When walking on top of the block, you will get teleported to the specified warp.]],
+		},
+	},
 	Commands =
 	{
 		["/antioch"] =
@@ -285,6 +310,59 @@ g_PluginInfo =
 					Handler = HandleXPCommand,
 				},
 			},
+		},
+	},
+	Permissions = 
+	{
+		["es.biome.other"] =
+		{
+			Description = "Shows you in which biome another player is.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.createportal"] =
+		{
+			Description = "Allows a player to create a portal.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.enchantsign"] =
+		{
+			Description = "Allows a player to create Enchant Signs.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.feed.other"] =
+		{
+			Description = "Satisfy the hunger of another player.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.getpos.other"] =
+		{
+			Description = "Get the position of another player.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.heal.other"] =
+		{
+			Description = "Heal another player.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.home.unlimited"] =
+		{
+			Description = "Allows a player to have an unlimited amount of homes.",
+			RecommendedGroups = "mods, players",
+		},
+		["es.more.other"] =
+		{
+			Description = "Increases the item amount in another player's held stack to 64 items.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.spawnmob.other"] =
+		{
+			Description = "Spawns a mob near a player.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.warpsign"] =
+		{
+			Description = "Allows a player to create Warp Signs.",
+			RecommendedGroups = "admins, mods",
 		},
 	},
 }
