@@ -8,7 +8,7 @@ g_PluginInfo =
 	Version = "0.1",
 	Description = [[This plugin aims to port commands from Bukkit's Essentials to MCServer, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.]],
 
-	AdditionalInformation =
+	AdditionalInfo =
 	{
 		{
 			Title = "Warp Signs",
