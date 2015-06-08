@@ -46,7 +46,7 @@ end
 function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line4, Player)
 	--Avoid creating of warp signs by non-allowed users
 	if Line1 == "[SignWarp]" or Line1 == "[Warp]" then
-		if (not(Player:HasPermission("warp.createsign") == true)) then
+		if (not(Player:HasPermission("es.warpsign") == true)) then
 			return true
 		elseif (Line2 == "") then
 			Player:SendMessageFailure('Must supply a tag for the warp.')
