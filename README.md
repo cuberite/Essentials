@@ -21,7 +21,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/biome | | es.biome | es.biome.other | Tells you the biome in which you are.|
 |/broadcast | /bcast, /bc, /say | es.broadcast | | Broadcast a message to all players.|
 |/burn | | es.burn | | Set a player on fire.|
-|/clearinventory | /ci,/clean,/clearinvent | es.clearinventory | | Clear a players inventory.|
+|/clearinventory | /ci, /clean, /clearinvent | es.clearinventory | | Clear a players inventory.|
 |/delhome | /remhome, /rmhome | es.delhome | | Delete a home.|
 |/deljail | /remjail, /rmjail | es.deljail | | Delete a jail.|
 |/delwarp | /remwarp, /rmwarp | es.dropwarp | | Delete a warp.|
@@ -62,16 +62,25 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 ###Use-permissions
 | Permission | Description |
 | ---------- | ----------- |
-| warp.createsign | Allows a player to create Warp Signs |
+| es.warpsign | Allows a player to create Warp Signs |
 | es.enchantsign | Allows a player to create Enchant Signs |
+| es.createportal | Allows a player to create a portal |
 | es.home.unlimited | Allows a player to have an unlimited amount of homes |
 
-###Warp Sign template
+###Warp Sign Template
 [Warp]  
-warpname
+Warpname
 
-###Enchant Sign template
+###Enchant Sign Template
 [Enchant]  
 EnchantmentID  
 EnchantmentLevel  
 RequiredXPLevelToEnchant
+
+###Portals
+To create a portal, place a sign underneath a block with the following template:  
+  
+[Portal]  
+Warpname  
+  
+When walking on top of the block, you will get teleported to the specified warp.
