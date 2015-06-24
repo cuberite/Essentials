@@ -71,7 +71,7 @@ end
 
 function HandleShoutCommand(Split,Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: /shout <message>")
+		Player:SendMessageInfo("Usage: "..Split[1].." <message>")
 	elseif Split[1] == "/shout" then
 		range = cBoundingBox(Player:GetPosX() - 128, Player:GetPosX() + 128, Player:GetPosY() - 128, Player:GetPosY() + 128, Player:GetPosZ() - 128, Player:GetPosZ() + 128)
 		action = "[SHOUT]"
