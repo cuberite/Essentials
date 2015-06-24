@@ -21,7 +21,6 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/biome | | es.biome | es.biome.other | Tells you the biome in which you are.|
 |/broadcast | /bcast, /bc, /say | es.broadcast | | Broadcast a message to all players.|
 |/burn | | es.burn | | Set a player on fire.|
-|/clearinventory | /ci, /clean, /clearinvent | es.clearinventory | | Clear a players inventory.|
 |/delhome | /remhome, /rmhome | es.delhome | | Delete a home.|
 |/deljail | /remjail, /rmjail | es.deljail | | Delete a jail.|
 |/delwarp | /remwarp, /rmwarp | es.dropwarp | | Delete a warp.|
