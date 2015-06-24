@@ -1,6 +1,6 @@
 function HandleSpawnMobCommand(Split,Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: /spawnmob [mobtype] [player]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <mobtype> [player]")
 	end
 	Mob = cMonster:StringToMobType(Split[2])
 	if Mob == -1 then
@@ -39,7 +39,7 @@ end
 
 function HandleBurnCommand(Split, Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: /burn [player] [seconds]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <player> [seconds]")
 	else
 		local BurnPlayer = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then
@@ -62,7 +62,7 @@ end
 
 function HandleExtinguishCommand(Split, Player)
         if Split[2] == nil then
-                Player:SendMessageInfo("Usage: /ext [player]")
+                Player:SendMessageInfo("Usage: "..Split[1].." <player>")
         else
                 local found = cRoot:Get():FindAndDoWithPlayer(Split[2],function(ExtPlayer)
                         if ExtPlayer:GetName() == Split[2] then
@@ -84,7 +84,7 @@ end
 
 function HandleLightningCommand(Split, Player)
 	if (Split[3] == nil) then
-		Player:SendMessageInfo("Usage: "..Split[1].." [player] [damage] [-b}")
+		Player:SendMessageInfo("Usage: "..Split[1].." <player> <damage> [-b]")
 	else
 		local ShockPlayer = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then
@@ -169,19 +169,4 @@ function HandleAntiOchCommand(Split,Player)
 		Player:GetWorld():SpawnPrimedTNT(pos.x, pos.y, pos.z, 35)
 	end
 	return true
-end
-
-function HandleInventoryClearCommand(Split,Player)
-        if Split[2] == nil then
-                Player:SendMessage("Usage: "..Split[1].." <player>")
-        else
-                local found = cRoot:Get():FindAndDoWithPlayer(Split[2],function(a_Player)
-                        a_Player:GetInventory():Clear()
-                        return true
-                end)
-                if not found then
-                        Player:SendMessageFailure("Player not found")
-                end
-        end
-        return true
 end
