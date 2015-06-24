@@ -61,13 +61,6 @@ g_PluginInfo =
 			HelpString =  "Set a player on fire.",
 			Handler =  HandleBurnCommand,
 		},
-                ["/clearinventory"] =
-                {
-                        Permission =  "es.clearinventory",
-                        HelpString =  "Clear a player's inventory.",
-                        Handler =  HandleInventoryClearCommand,
-                        Alias = { "/ci", "/clean", "/clearinvent" },
-                },
 		["/delhome"] =
 		{
 			Permission =  "es.delhome",
