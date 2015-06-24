@@ -29,12 +29,12 @@ function HandleSetHomeCommand(Split, Player)
 		local file = io.open(homeDir..'/'..username..'.'..Split[2], "w")
 		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
 		file:close()
-		Player:SendMessageSuccess('Home set! use /home to go home!')	
+		Player:SendMessageSuccess('Home set! Use /home to go home!')	
 	else
 		local file = io.open(homeDir..'/'..username..'.home', "w")
 		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
 		file:close()
-		Player:SendMessageSuccess('Home set! use /home to go home!')	
+		Player:SendMessageSuccess('Home set! Use /home to go home!')	
 	end
 	return true
 end
