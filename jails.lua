@@ -8,7 +8,7 @@ function HandleJailCommand( Split, Player )
 		return true
 	end
 	if #Split < 2 or #Split < 3  then
-		Player:SendMessageInfo('Usage: /jail [player] [jail]')
+		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
 		return true
 	end
 	local Tag = Split[3]
@@ -48,7 +48,7 @@ function HandleUnJailCommand( Split, Player )
 		LOG( "Could not read users.ini!" )
 	end
 	if #Split < 2 then
-		Player:SendMessageInfo('Usage: /unjail [player] [jail]')
+		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
 		return true
 	end
 
@@ -82,7 +82,7 @@ function HandleSetJailCommand( Split, Player)
 	local pZ = math.floor(Player:GetPosZ())
 
 	if #Split < 2 then
-		Player:SendMessageFailure('Must supply a tag for the jail.')
+		Player:SendMessageInfo('Usage: '..Split[1]..' <jailname>')
 		return true
 	end
 	local Tag = Split[2]
@@ -122,7 +122,7 @@ function HandleDelJailCommand( Split, Player)
 	local Server = cRoot:Get():GetServer()
 
 	if #Split < 2 then
-		Player:SendMessageInfo('Usage: /deljail [jail]')
+		Player:SendMessageInfo('Usage: '..Split[1]..' <jail>')
 		return true
 	end
 	local Tag = Split[2]
