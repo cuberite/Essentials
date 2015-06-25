@@ -92,7 +92,7 @@ end
 
 function HandleXPCommand(Split, Player)
 	if( #Split <= 2 ) then
-		Player:SendMessageInfo("Usage: /xp <show|set|give> [playername] [amount]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <show|set|give> [playername] [amount]")
 	elseif Split[2] == "show" and Player:HasPermission("es.xp.show") then 
 		local GetXP = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[3]) then
@@ -150,7 +150,7 @@ end
 
 function HandleFlySpeedCommand(Split, Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: /flyspeed <speed> [player]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <speed> [player]")
 	elseif Split[3] == nil then
 		Player:SetFlyingMaxSpeed(Split[2])
 		Player:SendMessageInfo("Your fly speed has been set to "..Split[2])
@@ -173,7 +173,7 @@ end
 
 function HandleWalkSpeedCommand(Split, Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: /walkspeed <speed> [player]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <speed> [player]")
 	elseif Split[3] == nil then
 		--Set new walk speed
 		Player:SetNormalMaxSpeed(Split[2])
@@ -196,7 +196,7 @@ end
 
 function HandleRunSpeedCommand(Split, Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: /runspeed <speed> [player]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <speed> [player]")
 	elseif Split[3] == nil then
 		--Set new sprinting speed
 		Player:SetSprintingMaxSpeed(Split[2])

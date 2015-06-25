@@ -1,6 +1,6 @@
 function HandlePlaceCommand(Split,Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." [player]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <player>")
 	else
 		pos = GetPlayerLookPosPlace(Player)
 		local Teleport = function(OtherPlayer)

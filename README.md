@@ -21,7 +21,6 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/biome | | es.biome | es.biome.other | Tells you the biome in which you are.|
 |/broadcast | /bcast, /bc, /say | es.broadcast | | Broadcast a message to all players.|
 |/burn | | es.burn | | Set a player on fire.|
-|/clearinventory | /ci, /clean, /clearinvent | es.clearinventory | | Clear a players inventory.|
 |/delhome | /remhome, /rmhome | es.delhome | | Delete a home.|
 |/deljail | /remjail, /rmjail | es.deljail | | Delete a jail.|
 |/delwarp | /remwarp, /rmwarp | es.dropwarp | | Delete a warp.|
@@ -31,7 +30,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
 |/heal | | es.heal | es.heal.other | Heal a player.|
 |/home | | es.home | | Teleport to your home.|
-|/itemdb | /iteminfo, /itemno, /durability, /dura | es.home | | Displays the item information of an item you are holding.|
+|/itemdb | /iteminfo, /itemno, /durability, /dura | es.itemdb | | Displays the item information of an item you are holding.|
 |/jail | | es.jail | | Jail a player.|
 |/jails | | es.listjail | | Lists all jails.|
 |/lightning | /shock, /smite, /strike, /thor | es.lightning | | Damage the specified player with lightning.|
@@ -52,7 +51,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/warp | | es.warp | | Moves player to location of warp [Tag].|
 |/warps | | es.listwarp | | Lists all warps.|
 |/whereami | /getpos, /getlocation, /getloc, /coords, /position | es.getpos | es.getpos.other | Get your current location in the world.|
-|/whisper | | es.shout | | Chat in a range of 16 blocks.|
+|/whisper | | es.whisper | | Chat in a range of 16 blocks.|
 |/whois | | es.whois | | Get information about the specified player.|
 |/xp | /exp | es.xp | | Manage xp for a player.|
 |/xp show | | es.xp.show | | Show xp of specified player.|

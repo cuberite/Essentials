@@ -46,7 +46,7 @@ function HandleSetWarpCommand( Split, Player)
 	local pZ = math.floor(Player:GetPosZ())
 
 	if #Split < 2 then
-		Player:SendMessageFailure('Must supply a tag for the warp.')
+		Player:SendMessageInfo('Usage: '..Split[1]..' <warpname>')
 		return true
 	end
 	local Tag = Split[2]
@@ -84,7 +84,7 @@ function HandleDelWarpCommand( Split, Player)
 	local Server = cRoot:Get():GetServer()
 	
 	if #Split < 2 then
-		Player:SendMessageFailure('Must supply a tag for the warp.')
+		Player:SendMessageInfo('Usage: '..Split[1]..' <warp>')
 		return true
 	end
 	local Tag = Split[2]
