@@ -96,6 +96,13 @@ g_PluginInfo =
 			Handler =  HandleFeedCommand,
 			Alias = "/eat"
 		},
+		["/fly"] =
+		{
+			Permission = "es.fly",  
+			Handler =  HandleFlyCommand,  
+			HelpString = "Enable flying.",  
+			Category = "Cheat",
+		},
 		["/flyspeed"] =
 		{
 			Permission = "es.flyspeed",  
@@ -148,6 +155,13 @@ g_PluginInfo =
 			HelpString =  "Damage the specified player with lightning.",
 			Handler =  HandleLightningCommand,
 			Alias = { "/shock", "/strike", "/smite", "/thor", }
+		},
+		["/locate"] =
+		{
+			Permission =  "es.locate",
+			HelpString =  "Get your current coords.",
+			Handler =  HandleLocateCommand,
+			Alias = { "/getpos", "/whereami", }
 		},
 		["/more"] =
 		{
@@ -325,6 +339,11 @@ g_PluginInfo =
 		["es.feed.other"] =
 		{
 			Description = "Satisfy the hunger of another player.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.fly.other"] =
+		{
+			Description = "Toggle flying for other players.",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.getpos.other"] =

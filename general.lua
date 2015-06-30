@@ -89,3 +89,9 @@ function HandleShoutCommand(Split,Player)
 	world:ForEachEntityInBox(range, Send)
 	return true
 end
+
+function HandleLocateCommand( Split, Player )
+	Player:SendMessageInfo( string.format ("You are at [X:%i Y:%i Z:%i] in world %s", Player:GetPosX(), Player:GetPosY(), Player:GetPosZ(), Player:GetWorld():GetName()) )
+	return true
+end
+
