@@ -1,3 +1,19 @@
+function SetBackCoordinates( Player )
+	BackCoords[Player:GetName()] = Vector3d( Player:GetPosX(), Player:GetPosY(), Player:GetPosZ() )
+end
+
+function SendMessage(a_Player, a_Message)
+	a_Player:SendMessageInfo(a_Message)
+end
+
+function SendMessageSuccess(a_Player, a_Message)
+	a_Player:SendMessageSuccess(a_Message)
+end
+
+function SendMessageFailure(a_Player, a_Message)
+	a_Player:SendMessageFailure(a_Message)
+end
+
 function GetPlayerLookPos(Player)
 	local World = Player:GetWorld()
 	local Tracer = cTracer(World)

@@ -4,6 +4,8 @@ jails = {}
 lastsender = {}
 ticks = {}
 timer = {}
+BackCoords = {}
+TpRequestTimeLimit = 0
 
 --Initialize the plugin
 function Initialize(Plugin)

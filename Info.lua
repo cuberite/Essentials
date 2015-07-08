@@ -42,6 +42,12 @@ g_PluginInfo =
 			Handler = HandleAntiOchCommand,
 			Alias = { "/grenade", "/tnt", }
 		},
+		["/back"] =
+		{
+			Permission =  "es.back",
+			HelpString =  "Return to last death/teleport position.",
+			Handler =  HandleBackCommand,
+		},
 		["/biome"] =
 		{
 			Permission =  "es.biome",
@@ -237,6 +243,37 @@ g_PluginInfo =
 			HelpString =  "Spawn a mob.",
 			Handler =  HandleSpawnMobCommand,
 			Alias = "/mob"
+		},
+		["/tpa"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Request teleport to another player position's.",
+			Handler =  HandleTPACommand,
+		},
+		["/tpaccept"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Accept teleport request.",
+			Handler =  HandleTPAcceptCommand,
+		},
+		["/tpahere"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Request teleport to your position.",
+			Handler =  HandleTPACommand,
+		},
+		["/tpdeny"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Deny teleport request.",
+			Handler =  HandleTPDenyCommand,
+		},
+		["/tphere"] =
+		{
+			Permission =  "es.tp",
+			HelpString =  "Teleport a player to your position.",
+			Handler =  HandleTPHereCommand,
+			Alias = "/bring"
 		},
 		["/unjail"] =
 		{
