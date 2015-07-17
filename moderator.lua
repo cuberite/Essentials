@@ -1,8 +1,20 @@
 function HandleSpawnMobCommand(Split,Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <mobtype> [player]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <mobtype[:data]> [player]")
 	end
-	Mob = cMonster:StringToMobType(Split[2])
+
+	local IsBaby = false
+	local Mob = Split[2]
+
+	if string.find(Mob, ":") then
+		Mob, data = string.match(Mob, "(%w+):(%w+)")
+		if data == "baby" then
+			IsBaby = true
+		end
+	end
+
+	Mob = cMonster:StringToMobType(Mob)
+
 	if Mob == -1 then
 		Player:SendMessageFailure("Unknown mob type")
 	else
@@ -10,10 +22,10 @@ function HandleSpawnMobCommand(Split,Player)
 			pos = GetPlayerLookPos(Player)
 			if pos.x == 0 and pos.y == 0 and pos.z == 0 then
 				--If the player is looking to the air, spawn the mob
-				Player:GetWorld():SpawnMob(Player:GetPosX() + 5, Player:GetPosY(), Player:GetPosZ() + 5, Mob)
+				Player:GetWorld():SpawnMob(Player:GetPosX() + 5, Player:GetPosY(), Player:GetPosZ() + 5, Mob, IsBaby)
 			else
 				--If he's not, spawn the mob where he's looking
-				Player:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob)
+				Player:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob, IsBaby)
 			end
 			Player:SendMessageSuccess("Mob spawned")
 		elseif Player:HasPermission("es.spawnmob.other") then
@@ -21,9 +33,9 @@ function HandleSpawnMobCommand(Split,Player)
 				if (OtherPlayer:GetName() == Split[3]) then
 					pos = GetPlayerLookPos(OtherPlayer)
 					if pos.x == 0 and pos.y == 0 and pos.z == 0 then
-						OtherPlayer:GetWorld():SpawnMob(OtherPlayer:GetPosX() + 5, OtherPlayer:GetPosY(), OtherPlayer:GetPosZ(), Mob)
+						OtherPlayer:GetWorld():SpawnMob(OtherPlayer:GetPosX() + 5, OtherPlayer:GetPosY(), OtherPlayer:GetPosZ(), Mob, IsBaby)
 					else
-						OtherPlayer:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob)
+						OtherPlayer:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob, IsBaby)
 					end
 					Player:SendMessageSuccess("Spawned mob near "..Split[3])
 					return true
@@ -56,7 +68,7 @@ function HandleBurnCommand(Split, Player)
 		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], BurnPlayer))) then
 			Player:SendMessageFailure("Player not found")
 		end
-	end                  
+	end
 	return true
 end
 
@@ -165,7 +177,7 @@ function HandleAntiOchCommand(Split,Player)
 	if pos.x == 0 and pos.y == 0 and pos.z == 0 then
 		Player:SendMessageFailure("You're not looking at a block (or it's too far)")
 	else
-		--Spawn tnt    
+		--Spawn tnt
 		Player:GetWorld():SpawnPrimedTNT(pos.x, pos.y, pos.z, 35)
 	end
 	return true
