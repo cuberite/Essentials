@@ -41,7 +41,7 @@ function HandleTPHereCommand(Split, Player)
 			end
 			OtherPlayer:TeleportToEntity( Player )
 			Player:SendMessageSuccess( OtherPlayer:GetName() .. " teleported to you." )
-			Player:SendMessageSuccess( "You teleported to " .. Player:GetName() )
+			OtherPlayer:SendMessageSuccess( "You teleported to " .. Player:GetName() )
 			flag = 1
 		end
 		
@@ -80,7 +80,7 @@ function HandleTPACommand( Split, Player )
 			if Split[1] == "/tpa" then
 				OtherPlayer:SendMessage( Player:GetName() .. cChatColor.Plain .. " has requested to teleport to you." )
 			else
-				OtherPlayer:SendMessage( Player:GetName() .. cChatColor.Plain .. " has requested you to teleport to them." )
+				OtherPlayer:SendMessage( Player:GetName() .. cChatColor.Plain .. " has requested you to teleport to him." )
 			end
 			
 			if TpRequestTimeLimit > 0 then
