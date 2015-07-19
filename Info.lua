@@ -45,7 +45,7 @@ g_PluginInfo =
 		["/back"] =
 		{
 			Permission =  "es.back",
-			HelpString =  "Return to last death/teleport position.",
+			HelpString =  "Return to last known position.",
 			Handler =  HandleBackCommand,
 		},
 		["/biome"] =
@@ -106,7 +106,7 @@ g_PluginInfo =
 		{
 			Permission = "es.fly",  
 			Handler =  HandleFlyCommand,  
-			HelpString = "Enable flying.",  
+			HelpString = "Toggle flying.",  
 			Category = "Cheat",
 		},
 		["/flyspeed"] =
@@ -167,7 +167,7 @@ g_PluginInfo =
 			Permission =  "es.locate",
 			HelpString =  "Get your current coords.",
 			Handler =  HandleLocateCommand,
-			Alias = { "/getpos", "/whereami", }
+			Alias = { "/getpos", "/whereami", "/getloc", "/coords", "/position" }
 		},
 		["/more"] =
 		{
@@ -247,7 +247,7 @@ g_PluginInfo =
 		["/tpa"] =
 		{
 			Permission =  "es.tpa",
-			HelpString =  "Request teleport to another player position's.",
+			HelpString =  "Request teleport to someone's position.",
 			Handler =  HandleTPACommand,
 		},
 		["/tpaccept"] =
