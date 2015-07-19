@@ -48,13 +48,16 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/setwarp | /createwarp | es.setwarp | | Create a warp at your location.|
 |/shout | | es.shout | | Chat in a range of 128 blocks.|
 |/spawnmob | /mob | es.spawnmob | es.spawnmob.other | Spawn a mob.|
+|/top | | es.top | | Teleport to the highest block.|
 |/tpa | | es.tpa | | Request teleport to someone's position.|
 |/tpaccept | | es.tpa | | Accept teleport request.|
 |/tpahere | | es.tpa | | Request teleport to your position.|
 |/tpdeny | | es.tpa | | Deny teleport request.|
 |/tphere | /bring | es.tp | | Teleport a player to your position.|
+|/tps | /lag | es.tps | | Measure server lag.|
 |/unjail | | es.unjail | | Unjail a player.|
 |/unmute | | es.unmute | | Unmute a player.|
+|/vanish | /hide | es.walkspeed | | Change a player's walking speed.|
 |/walkspeed | /wspeed | es.walkspeed | | Change a player's walking speed.|
 |/warp | | es.warp | | Moves player to location of warp [Tag].|
 |/warps | | es.listwarp | | Lists all warps.|

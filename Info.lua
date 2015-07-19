@@ -244,6 +244,12 @@ g_PluginInfo =
 			Handler =  HandleSpawnMobCommand,
 			Alias = "/mob"
 		},
+		["/top"] =
+		{
+			Permission =  "es.top",
+			HelpString =  "Teleport to the highest block.",
+			Handler =  HandleTopCommand,
+		},
 		["/tpa"] =
 		{
 			Permission =  "es.tpa",
@@ -275,6 +281,13 @@ g_PluginInfo =
 			Handler =  HandleTPHereCommand,
 			Alias = "/bring"
 		},
+		["/tps"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Measure server lag.",
+			Handler =  HandleTPSCommand,
+			Alias = "/lag"
+		},
 		["/unjail"] =
 		{
 			Permission =  "es.unjail",
@@ -286,6 +299,13 @@ g_PluginInfo =
 			Permission =  "es.unmute",
 			HelpString =  "Unmute a player.",
 			Handler =  HandleUnmuteCommand,
+		},
+		["/vanish"] =
+		{
+			Permission =  "es.vanish",
+			HelpString =  "Toggle visibility",
+			Handler =  HandleVanishCommand,
+			Alias = "/hide"
 		},
 		["/walkspeed"] =
 		{

@@ -145,3 +145,11 @@ function IsEnchantable()
 		return true;
 	end
 end
+
+function GetAverageNum(Table)
+	local Sum = 0
+	for i,Num in ipairs(Table) do
+		Sum = Sum + Num
+	end
+	return (Sum / #Table)
+end

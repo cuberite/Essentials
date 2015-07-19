@@ -6,6 +6,8 @@ ticks = {}
 timer = {}
 BackCoords = {}
 TpRequestTimeLimit = 0
+TpsCache = {}
+GlobalTps = {}
 
 --Initialize the plugin
 function Initialize(Plugin)
@@ -24,6 +26,7 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_WORLD_TICK, OnWorldTick);
+	cPluginManager:AddHook(cPluginManager.HOOK_TICK, OnTick);
 
 	RegisterPluginInfoCommands();
 

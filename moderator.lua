@@ -182,3 +182,30 @@ function HandleAntiOchCommand(Split,Player)
 	end
 	return true
 end
+
+--- Handles console tps command, wrapper to HandleTpsCommand function
+--  Necessary due to MCServer now supplying additional parameters
+--  
+function HandleConsoleTPS(Split, FullCmd)
+	return HandleTpsCommand(Split)
+end
+
+
+function HandleTPSCommand(Split, Player)
+	if (Player ~= nil) then
+		Player:SendMessageInfo("Global TPS: " .. GetAverageNum(GlobalTps))
+		for WorldName, WorldTps in pairs(TpsCache) do
+			Player:SendMessageInfo("World '" .. WorldName .. "': " .. GetAverageNum(WorldTps) .. " TPS");
+		end
+	else
+		LOG("Global TPS: " .. GetAverageNum(GlobalTps))
+		for WorldName, WorldTps in pairs(TpsCache) do
+			LOG("World '" .. WorldName .. "': " .. GetAverageNum(WorldTps) .. " TPS");
+		end
+	end
+	return true
+end
+
+
+
+
