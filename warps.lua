@@ -16,7 +16,6 @@ function HandleWarpCommand( Split, Player )
 			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
 		else
-			SetBackCoordinates(Player)
 			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
 		end

@@ -35,7 +35,6 @@ function HandleTPHereCommand(Split, Player)
 	if #Split == 2 then
 
 		local teleport = function( OtherPlayer )
-			SetBackCoordinates(OtherPlayer)
 			if OtherPlayer:GetWorld():GetName() ~= Player:GetWorld():GetName() then
 				OtherPlayer:MoveToWorld( Player:GetWorld():GetName() )
 			end
@@ -137,12 +136,10 @@ function HandleTPAcceptCommand( Split, Player )
 			end
 			
 			if TeleportRequests[Player:GetUniqueID()].Type == "/tpa" then
-				SetBackCoordinates(OtherPlayer)
 				OtherPlayer:TeleportToEntity( Player )
 				Player:SendMessageSuccess(OtherPlayer:GetName() .. " teleported to you." )
 				OtherPlayer:SendMessageSuccess("You teleported to " .. Player:GetName() )
 			elseif TeleportRequests[Player:GetUniqueID()].Type == "/tpahere" then
-				SetBackCoordinates(Player)
 				Player:TeleportToEntity( OtherPlayer )
 				OtherPlayer:SendMessageSuccess(Player:GetName() .. " teleported to you." )
 				Player:SendMessageSuccess("You teleported to " .. OtherPlayer:GetName() )
@@ -204,7 +201,6 @@ function HandleBackCommand( Split, Player )
 		return true
 	end
 
-	SetBackCoordinates(Player)
 	local OnAllChunksAvaliable = function()
 		Player:TeleportToCoords(BackPosition.x, BackPosition.y, BackPosition.z)
 		Player:SendMessageSuccess("Teleported back to your last known position")
@@ -220,7 +216,6 @@ function HandleTopCommand( Split, Player )
 
 	local PlayerPos = Player:GetPosition()
 	local Height = World:GetHeight( math.floor( PlayerPos.x ), math.floor( PlayerPos.z ) )
-	SetBackCoordinates( Player )
 	Player:TeleportToCoords( PlayerPos.x, Height+1, PlayerPos.z )
 	SendMessageSuccess( Player, "Teleported to the topmost block" )
 

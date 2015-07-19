@@ -152,3 +152,11 @@ function OnTick(TimeDelta)
 
 	table.insert(GlobalTps, 1000 / TimeDelta)
 end
+
+function OnEntityTeleport(Entity, OldPosition, NewPosition)
+	if Entity:IsPlayer() then
+		Player = tolua.cast(Entity, "cPlayer")
+		BackCoords[Player:GetName()] = Vector3d(OldPosition)
+	end
+	return false
+end
