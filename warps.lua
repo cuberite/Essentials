@@ -15,8 +15,6 @@ function HandleWarpCommand( Split, Player )
 			Player:MoveToWorld(warps[Tag]["w"])
 			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-			name = Player:GetName()
-			Player:GetWorld():ScheduleTask(10, Schedule)
 		else
 			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
