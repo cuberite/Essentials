@@ -307,13 +307,6 @@ g_PluginInfo =
 			HelpString =  "Lists all warps.",
 			Handler =  HandleListWarpCommand,
 		},
-		["/whereami"] =
-		{
-			Permission =  "es.getpos",
-			HelpString =  "Get your current location in the world.",
-			Handler =  HandleGetPosCommand,
-			Alias = { "/getpos", "/getlocation", "/getloc", "/coords", "/position", }
-		},
 		["/whisper"] =
 		{
 			Permission =  "es.whisper",
