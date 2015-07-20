@@ -67,7 +67,7 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
 end
 
 function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
-	if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsDiggingEnabled == false) then 
+	if (INI:GetValue(Player:GetName(),   "Jailed") == "true") and (IsDiggingEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else
@@ -76,7 +76,7 @@ function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockT
 end
 
 function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType)
-	if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsPlaceEnabled == false) then 
+	if (INI:GetValue(Player:GetName(),   "Jailed") == "true") and (IsPlaceEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else 
@@ -87,7 +87,7 @@ end
 function OnExecuteCommand(Player, CommandSplit)
 	if Player == nil then
 		return false
-	elseif (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (AreCommandsEnabled == false) then
+	elseif (INI:GetValue(Player:GetName(),   "Jailed") == "true") and (AreCommandsEnabled == false) then
 		Player:SendMessageWarning("You are jailed") 
 		return true
 	else 
@@ -96,10 +96,10 @@ function OnExecuteCommand(Player, CommandSplit)
 end
 
 function OnChat(Player, Message)
-	if (UsersIni:GetValue(Player:GetName(),   "Muted") == "true") then 
+	if (INI:GetValue(Player:GetName(),   "Muted") == "true") then 
 		Player:SendMessageWarning("You are muted")
 		return true
-	elseif (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsChatEnabled == false) then 
+	elseif (INI:GetValue(Player:GetName(),   "Jailed") == "true") and (IsChatEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else 

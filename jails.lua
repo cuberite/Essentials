@@ -1,6 +1,5 @@
 function HandleJailCommand( Split, Player )
-	local UsersIni = cIniFile()
-	if UsersIni:ReadFile("users.ini") == false then
+	if INI:ReadFile("users.ini") == false then
 		LOG( "Could not read users.ini!" )
 	end
 	if #Split < 2 and #Split < 3 then
@@ -23,8 +22,9 @@ function HandleJailCommand( Split, Player )
 			end
 			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 			OtherPlayer:SendMessageWarning('You have been jailed')
-			UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
-			UsersIni:WriteFile("users.ini")
+			INI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
+			INI:WriteFile("users.ini")
+			INI:ReadFile("jails.ini")
 			Jailed = true
 		return true
 		end
@@ -43,8 +43,7 @@ function HandleJailCommand( Split, Player )
 end
 
 function HandleUnJailCommand( Split, Player )
-	local UsersIni = cIniFile()
-	if UsersIni:ReadFile("users.ini") == false then
+	if INI:ReadFile("users.ini") == false then
 		LOG( "Could not read users.ini!" )
 	end
 	if #Split < 2 then
@@ -58,8 +57,9 @@ function HandleUnJailCommand( Split, Player )
 			World = OtherPlayer:GetWorld()
 			OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
 			OtherPlayer:SendMessageSuccess('You have been unjailed')
-			UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
-			UsersIni:WriteFile("users.ini")
+			INI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
+			INI:WriteFile("users.ini")
+			INI:ReadFile("jails.ini")
 			UnJailed = true
 			return true
 		end

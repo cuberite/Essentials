@@ -35,16 +35,16 @@ function Initialize(Plugin)
 	RegisterPluginInfoConsoleCommands();
 
 	--Read the warps (stored in ini file)
-	local WarpsINI = cIniFile()
-	if (WarpsINI:ReadFile("warps.ini")) then
-		warpNum = WarpsINI:GetNumKeys();
+	INI = cIniFile()
+	if (INI:ReadFile("warps.ini")) then
+		warpNum = INI:GetNumKeys();
 		for i=0, warpNum do
-			local Tag = WarpsINI:GetKeyName(i)
+			local Tag = INI:GetKeyName(i)
 			warps[Tag] = {}
-			warps[Tag]["w"] = WarpsINI:GetValue( Tag , "w")
-			warps[Tag]["x"] = WarpsINI:GetValueI( Tag , "x")
-			warps[Tag]["y"] = WarpsINI:GetValueI( Tag , "y")
-			warps[Tag]["z"] = WarpsINI:GetValueI( Tag , "z")
+			warps[Tag]["w"] = INI:GetValue( Tag , "w")
+			warps[Tag]["x"] = INI:GetValueI( Tag , "x")
+			warps[Tag]["y"] = INI:GetValueI( Tag , "y")
+			warps[Tag]["z"] = INI:GetValueI( Tag , "z")
 		end
 	end
 
@@ -53,21 +53,27 @@ function Initialize(Plugin)
 	homeDir = Plugin:GetLocalFolder().."/homes"
 
 	--Read jails (from ini file)
-	local jailsINI = cIniFile()
-	if (jailsINI:ReadFile("jails.ini")) then
-		jailNum = jailsINI:GetNumKeys();
+	if (INI:ReadFile("jails.ini")) then
+		jailNum = INI:GetNumKeys();
 		for i=0, jailNum do
-			local Tag = jailsINI:GetKeyName(i)
+			local Tag = INI:GetKeyName(i)
 			jails[Tag] = {}
-			jails[Tag]["w"] = jailsINI:GetValue( Tag , "w")
-			jails[Tag]["x"] = jailsINI:GetValueI( Tag , "x")
-			jails[Tag]["y"] = jailsINI:GetValueI( Tag , "y")
-			jails[Tag]["z"] = jailsINI:GetValueI( Tag , "z")
+			jails[Tag]["w"] = INI:GetValue( Tag , "w")
+			jails[Tag]["x"] = INI:GetValueI( Tag , "x")
+			jails[Tag]["y"] = INI:GetValueI( Tag , "y")
+			jails[Tag]["z"] = INI:GetValueI( Tag , "z")
 		end
 	end
 
-	UsersIni = cIniFile()
-	UsersIni:ReadFile("users.ini")
+	INI:ReadFile("users.ini")
+
+	--Read tpa timeout config--
+	INI:ReadFile("settings.ini")
+	TpRequestTimeLimit = INI:GetValueSetI("Teleport", "RequestTimeLimit", 0)
+	if INI:GetNumKeyComments("Teleport") == 0 then
+		INI:AddKeyComment("Teleport", "RequestTimeLimit: Time after which tpa/tpahere will timeout, 0 - disabled");
+	end
+	INI:WriteFile("settings.ini")
 
 	--If there's no home folder, plugin will create it
 	if cFile:IsFolder(homeDir) ~= true then
