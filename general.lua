@@ -20,7 +20,7 @@ end
 
 function HandleLocateCommand(Split,Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Your position: X:"..Player:GetPosX()..", Y:"..Player:GetPosY()..", Z:"..Player:GetPosZ())
+		Player:SendMessageInfo("Your position: X:"..Player:GetPosX()..", Y:"..Player:GetPosY()..", Z:"..Player:GetPosZ().." in world "..Player:GetWorld():GetName())
 	elseif Player:HasPermission("es.locate.other") then
 		local GetPos = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then

@@ -30,6 +30,8 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_ENTITY_TELEPORT, OnEntityTeleport);
 
 	RegisterPluginInfoCommands();
+	
+	RegisterPluginInfoConsoleCommands();
 
 	--Read the warps (stored in ini file)
 	local WarpsINI = cIniFile()

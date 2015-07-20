@@ -369,14 +369,21 @@ g_PluginInfo =
 			},
 		},
 	},
+	
+	
+	
 	ConsoleCommands =
 	{		
 		["tps"] =
 		{
-			Handler =  HandleConsoleTPS,
 			HelpString =  " - Returns the tps (ticks per second) from the server.",
+			Handler =  HandleConsoleTPS,
+			Alias = "lag",
 		},
 	},  
+	
+	
+	
 	Permissions = 
 	{
 		["es.biome.other"] =

@@ -187,7 +187,7 @@ end
 --  Necessary due to MCServer now supplying additional parameters
 --  
 function HandleConsoleTPS(Split, FullCmd)
-	return HandleTpsCommand(Split)
+	return HandleTPSCommand(Split)
 end
 
 
