@@ -160,3 +160,10 @@ function OnEntityTeleport(Entity, OldPosition, NewPosition)
 	end
 	return false
 end
+
+function OnKilled(Victim, TDI, DeathMessage)
+	if Victim:IsPlayer() then
+		Player = tolua.cast(Victim, "cPlayer")
+		BackCoords = Vector3d(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ())
+	end
+end

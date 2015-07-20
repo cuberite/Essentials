@@ -28,6 +28,7 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_WORLD_TICK, OnWorldTick);
 	cPluginManager:AddHook(cPluginManager.HOOK_TICK, OnTick);
 	cPluginManager:AddHook(cPluginManager.HOOK_ENTITY_TELEPORT, OnEntityTeleport);
+	cPluginManager:AddHook(cPluginManager.HOOK_KILLED, OnKilled);
 
 	RegisterPluginInfoCommands();
 	
