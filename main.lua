@@ -35,16 +35,16 @@ function Initialize(Plugin)
 	RegisterPluginInfoConsoleCommands();
 
 	--Read the warps (stored in ini file)
-	INI = cIniFile()
-	if (INI:ReadFile("warps.ini")) then
-		warpNum = INI:GetNumKeys();
+	WarpsINI = cIniFile()
+	if (WarpsINI:ReadFile("warps.ini")) then
+		warpNum = WarpsINI:GetNumKeys();
 		for i=0, warpNum do
-			local Tag = INI:GetKeyName(i)
+			local Tag = WarpsINI:GetKeyName(i)
 			warps[Tag] = {}
-			warps[Tag]["w"] = INI:GetValue( Tag , "w")
-			warps[Tag]["x"] = INI:GetValueI( Tag , "x")
-			warps[Tag]["y"] = INI:GetValueI( Tag , "y")
-			warps[Tag]["z"] = INI:GetValueI( Tag , "z")
+			warps[Tag]["w"] = WarpsINI:GetValue( Tag , "w")
+			warps[Tag]["x"] = WarpsINI:GetValueI( Tag , "x")
+			warps[Tag]["y"] = WarpsINI:GetValueI( Tag , "y")
+			warps[Tag]["z"] = WarpsINI:GetValueI( Tag , "z")
 		end
 	end
 
@@ -53,27 +53,30 @@ function Initialize(Plugin)
 	homeDir = Plugin:GetLocalFolder().."/homes"
 
 	--Read jails (from ini file)
-	if (INI:ReadFile("jails.ini")) then
-		jailNum = INI:GetNumKeys();
+	JailsINI = cIniFile()
+	if (JailsINI:ReadFile("jails.ini")) then
+		jailNum = JailsINI:GetNumKeys();
 		for i=0, jailNum do
-			local Tag = INI:GetKeyName(i)
+			local Tag = JailsINI:GetKeyName(i)
 			jails[Tag] = {}
-			jails[Tag]["w"] = INI:GetValue( Tag , "w")
-			jails[Tag]["x"] = INI:GetValueI( Tag , "x")
-			jails[Tag]["y"] = INI:GetValueI( Tag , "y")
-			jails[Tag]["z"] = INI:GetValueI( Tag , "z")
+			jails[Tag]["w"] = JailsINI:GetValue( Tag , "w")
+			jails[Tag]["x"] = JailsINI:GetValueI( Tag , "x")
+			jails[Tag]["y"] = JailsINI:GetValueI( Tag , "y")
+			jails[Tag]["z"] = JailsINI:GetValueI( Tag , "z")
 		end
 	end
 
-	INI:ReadFile("users.ini")
+	UsersINI = cIniFile()
+	UsersINI:ReadFile("users.ini")
 
 	--Read tpa timeout config--
-	INI:ReadFile("settings.ini")
-	TpRequestTimeLimit = INI:GetValueSetI("Teleport", "RequestTimeLimit", 0)
-	if INI:GetNumKeyComments("Teleport") == 0 then
-		INI:AddKeyComment("Teleport", "RequestTimeLimit: Time after which tpa/tpahere will timeout, 0 - disabled");
+	SettingsINI = cIniFile()
+	SettingsINI:ReadFile("settings.ini")
+	TpRequestTimeLimit = SettingsINI:GetValueSetI("Teleport", "RequestTimeLimit", 0)
+	if SettingsINI:GetNumKeyComments("Teleport") == 0 then
+		SettingsINI:AddKeyComment("Teleport", "RequestTimeLimit: Time after which tpa/tpahere will timeout, 0 - disabled");
 	end
-	INI:WriteFile("settings.ini")
+	SettingsINI:WriteFile("settings.ini")
 
 	--If there's no home folder, plugin will create it
 	if cFile:IsFolder(homeDir) ~= true then

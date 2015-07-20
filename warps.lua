@@ -49,22 +49,22 @@ function HandleSetWarpCommand( Split, Player)
 		warps[Tag] = {}
 	end
 	
-	INI:ReadFile("warps.ini")
+	WarpsINI:ReadFile("warps.ini")
 	
-	if (INI:FindKey(Tag)<0) then
+	if (WarpsINI:FindKey(Tag)<0) then
 		warps[Tag]["w"] = World
 		warps[Tag]["x"] = pX
 		warps[Tag]["y"] = pY
 		warps[Tag]["z"] = pZ
 	end
 
-	if (INI:FindKey(Tag)<0) then
-		INI:AddKeyName(Tag);
-		INI:SetValue( Tag , "w" , World)
-		INI:SetValue( Tag , "x" , pX)
-		INI:SetValue( Tag , "y" , pY)
-		INI:SetValue( Tag , "z" , pZ)
-		INI:WriteFile("warps.ini");
+	if (WarpsINI:FindKey(Tag)<0) then
+		WarpsINI:AddKeyName(Tag);
+		WarpsINI:SetValue( Tag , "w" , World)
+		WarpsINI:SetValue( Tag , "x" , pX)
+		WarpsINI:SetValue( Tag , "y" , pY)
+		WarpsINI:SetValue( Tag , "z" , pZ)
+		WarpsINI:WriteFile("warps.ini");
 	
 		Player:SendMessageSuccess("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
 	else
@@ -83,12 +83,12 @@ function HandleDelWarpCommand( Split, Player)
 	local Tag = Split[2]
 	warps[Tag] = nil
 	
-	local INI = cIniFile()
-	INI:ReadFile("warps.ini")
+	local WarpsINI = cIniFile()
+	WarpsINI:ReadFile("warps.ini")
 	
-	if (INI:FindKey(Tag)>-1) then
-		INI:DeleteKey(Tag);
-		INI:WriteFile("warps.ini");
+	if (WarpsINI:FindKey(Tag)>-1) then
+		WarpsINI:DeleteKey(Tag);
+		WarpsINI:WriteFile("warps.ini");
 	else
 		Player:SendMessageFailure("Warp \"" .. Tag .. "\" was not found.")
 		return true

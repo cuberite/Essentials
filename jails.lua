@@ -1,5 +1,5 @@
 function HandleJailCommand( Split, Player )
-	if INI:ReadFile("users.ini") == false then
+	if JailsINI:ReadFile("users.ini") == false then
 		LOG( "Could not read users.ini!" )
 	end
 	if #Split < 2 and #Split < 3 then
@@ -22,9 +22,9 @@ function HandleJailCommand( Split, Player )
 			end
 			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 			OtherPlayer:SendMessageWarning('You have been jailed')
-			INI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
-			INI:WriteFile("users.ini")
-			INI:ReadFile("jails.ini")
+			JailsINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
+			JailsINI:WriteFile("users.ini")
+			JailsINI:ReadFile("jails.ini")
 			Jailed = true
 		return true
 		end
@@ -43,7 +43,7 @@ function HandleJailCommand( Split, Player )
 end
 
 function HandleUnJailCommand( Split, Player )
-	if INI:ReadFile("users.ini") == false then
+	if JailsINI:ReadFile("users.ini") == false then
 		LOG( "Could not read users.ini!" )
 	end
 	if #Split < 2 then
@@ -57,9 +57,9 @@ function HandleUnJailCommand( Split, Player )
 			World = OtherPlayer:GetWorld()
 			OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
 			OtherPlayer:SendMessageSuccess('You have been unjailed')
-			INI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
-			INI:WriteFile("users.ini")
-			INI:ReadFile("jails.ini")
+			JailsINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
+			JailsINI:WriteFile("users.ini")
+			JailsINI:ReadFile("jails.ini")
 			UnJailed = true
 			return true
 		end
@@ -91,23 +91,22 @@ function HandleSetJailCommand( Split, Player)
 		jails[Tag] = {}
 	end
 
-	local jailsINI = cIniFile()
-	jailsINI:ReadFile("jails.ini")
+	JailsINI:ReadFile("jails.ini")
 
-	if (jailsINI:FindKey(Tag)<0) then
+	if (JailsINI:FindKey(Tag)<0) then
 		jails[Tag]["w"] = World
 		jails[Tag]["x"] = pX
 		jails[Tag]["y"] = pY
 		jails[Tag]["z"] = pZ
 	end
 
-	if (jailsINI:FindKey(Tag)<0) then
-		jailsINI:AddKeyName(Tag);
-		jailsINI:SetValue( Tag , "w" , World)
-		jailsINI:SetValue( Tag , "x" , pX)
-		jailsINI:SetValue( Tag , "y" , pY)
-		jailsINI:SetValue( Tag , "z" , pZ)
-		jailsINI:WriteFile("jails.ini");
+	if (JailsINI:FindKey(Tag)<0) then
+		JailsINI:AddKeyName(Tag);
+		JailsINI:SetValue( Tag , "w" , World)
+		JailsINI:SetValue( Tag , "x" , pX)
+		JailsINI:SetValue( Tag , "y" , pY)
+		JailsINI:SetValue( Tag , "z" , pZ)
+		JailsINI:WriteFile("jails.ini");
 
 		Player:SendMessageSuccess("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
 		return true
@@ -128,12 +127,11 @@ function HandleDelJailCommand( Split, Player)
 	local Tag = Split[2]
 	jails[Tag] = nil
 
-	local jailsINI = cIniFile()
-	jailsINI:ReadFile("jails.ini")
+	JailsINI:ReadFile("jails.ini")
 
-	if (jailsINI:FindKey(Tag)>-1) then
-		jailsINI:DeleteKey(Tag);
-		jailsINI:WriteFile("jails.ini");
+	if (JailsINI:FindKey(Tag)>-1) then
+		JailsINI:DeleteKey(Tag);
+		JailsINI:WriteFile("jails.ini");
 	else
 		Player:SendMessageFailure("Jail \"" .. Tag .. "\" was not found.")
 		return true
