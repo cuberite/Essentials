@@ -88,6 +88,13 @@ g_PluginInfo =
 			Handler =  HandleDelWarpCommand,
 			Alias = { "/remwarp", "/rmwarp", }
 		},
+		["/depth"] =
+		{
+			Permission =  "es.depth",
+			HelpString =  "Displays your height relative to sea level.",
+			Handler =  HandleDepthCommand,
+			Alias = "/height"
+		},
                 ["/ext"] =
                 {
                         Permission =  "es.ext",
