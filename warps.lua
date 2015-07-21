@@ -49,8 +49,6 @@ function HandleSetWarpCommand( Split, Player)
 		warps[Tag] = {}
 	end
 	
-	WarpsINI:ReadFile("warps.ini")
-	
 	if (WarpsINI:FindKey(Tag)<0) then
 		warps[Tag]["w"] = World
 		warps[Tag]["x"] = pX
@@ -82,9 +80,6 @@ function HandleDelWarpCommand( Split, Player)
 	end
 	local Tag = Split[2]
 	warps[Tag] = nil
-	
-	local WarpsINI = cIniFile()
-	WarpsINI:ReadFile("warps.ini")
 	
 	if (WarpsINI:FindKey(Tag)>-1) then
 		WarpsINI:DeleteKey(Tag);

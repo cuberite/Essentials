@@ -8,6 +8,8 @@ BackCoords = {}
 TpRequestTimeLimit = 0
 TpsCache = {}
 GlobalTps = {}
+Jailed = {}
+Muted = {}
 
 --Initialize the plugin
 function Initialize(Plugin)
@@ -29,6 +31,7 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_TICK, OnTick);
 	cPluginManager:AddHook(cPluginManager.HOOK_ENTITY_TELEPORT, OnEntityTeleport);
 	cPluginManager:AddHook(cPluginManager.HOOK_KILLED, OnKilled);
+	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoined);
 
 	RegisterPluginInfoCommands();
 	
@@ -70,7 +73,7 @@ function Initialize(Plugin)
 	UsersINI:ReadFile("users.ini")
 
 	--Read tpa timeout config--
-	SettingsINI = cIniFile()
+	local SettingsINI = cIniFile()
 	SettingsINI:ReadFile("settings.ini")
 	TpRequestTimeLimit = SettingsINI:GetValueSetI("Teleport", "RequestTimeLimit", 0)
 	if SettingsINI:GetNumKeyComments("Teleport") == 0 then

@@ -140,8 +140,8 @@ function HandleMuteCommand(Split, Player)
 		local MutePlayer = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then
 				--Mute the player
-				UsersIni:SetValue(OtherPlayer:GetName(),   "Muted",   "true")
-				UsersIni:WriteFile("users.ini")
+				UsersINI:SetValue(OtherPlayer:GetName(),   "Muted",   "true")
+				UsersINI:WriteFile("users.ini")
 				Player:SendMessageSuccess("Muted "..Split[2])
 				return true
 			end
@@ -159,8 +159,8 @@ function HandleUnmuteCommand(Split, Player)
 	else
 		local UnmutePlayer = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then
-				UsersIni:SetValue(OtherPlayer:GetName(),   "Muted",   "false")
-				UsersIni:WriteFile("users.ini")
+				UsersINI:SetValue(OtherPlayer:GetName(),   "Muted",   "false")
+				UsersINI:WriteFile("users.ini")
 				Player:SendMessageSuccess("Unuted "..Split[2])
 				return true
 			end

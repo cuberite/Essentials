@@ -1,7 +1,4 @@
 function HandleJailCommand( Split, Player )
-	if JailsINI:ReadFile("users.ini") == false then
-		LOG( "Could not read users.ini!" )
-	end
 	if #Split < 2 and #Split < 3 then
 		HandleListJailCommand( Split, Player )
 		return true
@@ -22,10 +19,11 @@ function HandleJailCommand( Split, Player )
 			end
 			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 			OtherPlayer:SendMessageWarning('You have been jailed')
-			JailsINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
-			JailsINI:WriteFile("users.ini")
-			JailsINI:ReadFile("jails.ini")
+			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
+			UsersINI:WriteFile("users.ini")
+			Jailed[OtherPlayer:GetName()] = true
 			Jailed = true
+			print(Jailed[OtherPlayer:GetName()])
 		return true
 		end
 	end
@@ -43,9 +41,6 @@ function HandleJailCommand( Split, Player )
 end
 
 function HandleUnJailCommand( Split, Player )
-	if JailsINI:ReadFile("users.ini") == false then
-		LOG( "Could not read users.ini!" )
-	end
 	if #Split < 2 then
 		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
 		return true
@@ -57,9 +52,9 @@ function HandleUnJailCommand( Split, Player )
 			World = OtherPlayer:GetWorld()
 			OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
 			OtherPlayer:SendMessageSuccess('You have been unjailed')
-			JailsINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
-			JailsINI:WriteFile("users.ini")
-			JailsINI:ReadFile("jails.ini")
+			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
+			UsersINI:WriteFile("users.ini")
+			Jailed[OtherPlayer:GetName()] = false
 			UnJailed = true
 			return true
 		end
@@ -90,8 +85,6 @@ function HandleSetJailCommand( Split, Player)
 	if jails[Tag] == nil then 
 		jails[Tag] = {}
 	end
-
-	JailsINI:ReadFile("jails.ini")
 
 	if (JailsINI:FindKey(Tag)<0) then
 		jails[Tag]["w"] = World
@@ -126,8 +119,6 @@ function HandleDelJailCommand( Split, Player)
 	end
 	local Tag = Split[2]
 	jails[Tag] = nil
-
-	JailsINI:ReadFile("jails.ini")
 
 	if (JailsINI:FindKey(Tag)>-1) then
 		JailsINI:DeleteKey(Tag);

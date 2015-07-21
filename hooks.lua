@@ -67,7 +67,7 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
 end
 
 function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
-	if (UsersINI:GetValue(Player:GetName(),   "Jailed") == "true") and (IsDiggingEnabled == false) then 
+	if (Jailed[Player:GetName()] == true) and (IsDiggingEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else
@@ -76,7 +76,7 @@ function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockT
 end
 
 function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType)
-	if (UsersINI:GetValue(Player:GetName(),   "Jailed") == "true") and (IsPlaceEnabled == false) then 
+	if (Jailed[Player:GetName()] == true) and (IsPlaceEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else 
@@ -87,7 +87,7 @@ end
 function OnExecuteCommand(Player, CommandSplit)
 	if Player == nil then
 		return false
-	elseif (UsersINI:GetValue(Player:GetName(),   "Jailed") == "true") and (AreCommandsEnabled == false) then
+	elseif (Jailed[Player:GetName()] == true) and (AreCommandsEnabled == false) then
 		Player:SendMessageWarning("You are jailed") 
 		return true
 	else 
@@ -96,10 +96,10 @@ function OnExecuteCommand(Player, CommandSplit)
 end
 
 function OnChat(Player, Message)
-	if (UsersINI:GetValue(Player:GetName(),   "Muted") == "true") then 
+	if Muted[Player:GetName()] == true then 
 		Player:SendMessageWarning("You are muted")
 		return true
-	elseif (UsersINI:GetValue(Player:GetName(),   "Jailed") == "true") and (IsChatEnabled == false) then 
+	elseif (Jailed[Player:GetName()] == true) and (IsChatEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else 
@@ -166,4 +166,8 @@ function OnKilled(Victim, TDI, DeathMessage)
 		Player = tolua.cast(Victim, "cPlayer")
 		BackCoords = Vector3d(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ())
 	end
+end
+
+function OnPlayerJoined(Player)
+	CheckPlayer(Player)
 end
