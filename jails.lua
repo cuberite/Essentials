@@ -9,26 +9,25 @@ function HandleJailCommand( Split, Player )
 	end
 	local Tag = Split[3]
 
-	Jailed = false
+	IsJailed = false
 	local JailPlayer = function(OtherPlayer)
 		if (OtherPlayer:GetName() == Split[2]) then
 			if (OtherPlayer:GetWorld():GetName() ~= jails[Tag]["w"]) then
 				OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 				OtherPlayer:MoveToWorld(jails[Tag]["w"])
-				Jailed = true
+				IsJailed = true
 			end
 			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 			OtherPlayer:SendMessageWarning('You have been jailed')
 			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
 			UsersINI:WriteFile("users.ini")
 			Jailed[OtherPlayer:GetName()] = true
-			Jailed = true
-			print(Jailed[OtherPlayer:GetName()])
+			IsJailed = true
 		return true
 		end
 	end
 	cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
-	if (Jailed) then
+	if (IsJailed) then
 		Player:SendMessageSuccess("Player "..Split[2].." is jailed")
 		return true
 	else
