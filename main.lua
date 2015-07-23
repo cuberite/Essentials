@@ -80,7 +80,9 @@ function Initialize(Plugin)
 		SettingsINI:AddKeyComment("Teleport", "RequestTimeLimit: Time after which tpa/tpahere will timeout, 0 - disabled");
 	end
 	SettingsINI:WriteFile("settings.ini")
-
+	
+	cRoot:Get():ForEachPlayer(CheckPlayer)
+	
 	--If there's no home folder, plugin will create it
 	if cFile:IsFolder(homeDir) ~= true then
 		cFile:CreateFolder(homeDir)
