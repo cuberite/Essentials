@@ -9,7 +9,7 @@ function HandleJailCommand( Split, Player )
 	end
 	local Tag = Split[3]
 
-	IsJailed = false
+	local IsJailed = false
 	local JailPlayer = function(OtherPlayer)
 		if (OtherPlayer:GetName() == Split[2]) then
 			if (OtherPlayer:GetWorld():GetName() ~= jails[Tag]["w"]) then
@@ -45,7 +45,7 @@ function HandleUnJailCommand( Split, Player )
 		return true
 	end
 
-	UnJailed = false
+	local UnJailed = false
 	local JailPlayer = function(OtherPlayer)
 		if (OtherPlayer:GetName() == Split[2]) then
 			World = OtherPlayer:GetWorld()
