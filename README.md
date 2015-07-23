@@ -18,6 +18,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 | Command | Aliases | Permission | Permission (affects other players) | Description |
 | ------- | ------- | ---------- | ---------------------------------- | ----------- |
 |/antioch | /grenade, /tnt | es.antioch | | Spawn a TNT in the location you're looking at.|
+|/back | | es.back | | Return to last known position.|
 |/biome | | es.biome | es.biome.other | Tells you the biome in which you are.|
 |/broadcast | /bcast, /bc, /say | es.broadcast | | Broadcast a message to all players.|
 |/burn | | es.burn | | Set a player on fire.|
@@ -26,6 +27,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/delwarp | /remwarp, /rmwarp | es.dropwarp | | Delete a warp.|
 |/ext | /extinguish | es.ext | | Extinguish a player.|
 |/feed | /eat | es.feed | es.feed.other | Satisfy the hunger.|
+|/fly | | es.fly | | Toggle flying.|
 |/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
 |/heal | | es.heal | es.heal.other | Heal a player.|
@@ -34,6 +36,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/jail | | es.jail | | Jail a player.|
 |/jails | | es.listjail | | Lists all jails.|
 |/lightning | /shock, /smite, /strike, /thor | es.lightning | | Damage the specified player with lightning.|
+|/locate | /getpos, /whereami, /getloc, /coords, /position | es.locate | es.locate.other | Get your current location in the world.|
 |/more | | es.more | es.more.other | Increases the item amount in the held stack to 64 items.|
 |/mute | /silence | es.mute | | Mute a player.|
 |/ping | /pong, /echo | es.ping | | Check if the server is alive.|
@@ -45,12 +48,19 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/setwarp | /createwarp | es.setwarp | | Create a warp at your location.|
 |/shout | | es.shout | | Chat in a range of 128 blocks.|
 |/spawnmob | /mob | es.spawnmob | es.spawnmob.other | Spawn a mob.|
+|/top | | es.top | | Teleport to the highest block.|
+|/tpa | | es.tpa | | Request teleport to someone's position.|
+|/tpaccept | | es.tpa | | Accept teleport request.|
+|/tpahere | | es.tpa | | Request teleport to your position.|
+|/tpdeny | | es.tpa | | Deny teleport request.|
+|/tphere | /bring | es.tp | | Teleport a player to your position.|
+|/tps | /lag | es.tps | | Measure server lag.|
 |/unjail | | es.unjail | | Unjail a player.|
 |/unmute | | es.unmute | | Unmute a player.|
+|/vanish | /hide | es.walkspeed | | Change a player's walking speed.|
 |/walkspeed | /wspeed | es.walkspeed | | Change a player's walking speed.|
 |/warp | | es.warp | | Moves player to location of warp [Tag].|
 |/warps | | es.listwarp | | Lists all warps.|
-|/whereami | /getpos, /getlocation, /getloc, /coords, /position | es.getpos | es.getpos.other | Get your current location in the world.|
 |/whisper | | es.whisper | | Chat in a range of 16 blocks.|
 |/whois | | es.whois | | Get information about the specified player.|
 |/xp | /exp | es.xp | | Manage xp for a player.|

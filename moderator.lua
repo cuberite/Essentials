@@ -140,8 +140,9 @@ function HandleMuteCommand(Split, Player)
 		local MutePlayer = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then
 				--Mute the player
-				UsersIni:SetValue(OtherPlayer:GetName(),   "Muted",   "true")
-				UsersIni:WriteFile("users.ini")
+				UsersINI:SetValue(OtherPlayer:GetName(),   "Muted",   "true")
+				UsersINI:WriteFile("users.ini")
+				Muted[Player:GetName()] = true
 				Player:SendMessageSuccess("Muted "..Split[2])
 				return true
 			end
@@ -159,8 +160,9 @@ function HandleUnmuteCommand(Split, Player)
 	else
 		local UnmutePlayer = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then
-				UsersIni:SetValue(OtherPlayer:GetName(),   "Muted",   "false")
-				UsersIni:WriteFile("users.ini")
+				UsersINI:SetValue(OtherPlayer:GetName(),   "Muted",   "false")
+				UsersINI:WriteFile("users.ini")
+				Muted[Player:GetName()] = false
 				Player:SendMessageSuccess("Unuted "..Split[2])
 				return true
 			end
@@ -182,3 +184,30 @@ function HandleAntiOchCommand(Split,Player)
 	end
 	return true
 end
+
+--- Handles console tps command, wrapper to HandleTpsCommand function
+--  Necessary due to MCServer now supplying additional parameters
+--  
+function HandleConsoleTPS(Split, FullCmd)
+	return HandleTPSCommand(Split)
+end
+
+
+function HandleTPSCommand(Split, Player)
+	if (Player ~= nil) then
+		Player:SendMessageInfo("Global TPS: " .. GetAverageNum(GlobalTps))
+		for WorldName, WorldTps in pairs(TpsCache) do
+			Player:SendMessageInfo("World '" .. WorldName .. "': " .. GetAverageNum(WorldTps) .. " TPS");
+		end
+	else
+		LOG("Global TPS: " .. GetAverageNum(GlobalTps))
+		for WorldName, WorldTps in pairs(TpsCache) do
+			LOG("World '" .. WorldName .. "': " .. GetAverageNum(WorldTps) .. " TPS");
+		end
+	end
+	return true
+end
+
+
+
+

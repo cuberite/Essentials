@@ -67,7 +67,7 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
 end
 
 function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
-	if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsDiggingEnabled == false) then 
+	if (Jailed[Player:GetName()] == true) and (IsDiggingEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else
@@ -76,7 +76,7 @@ function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockT
 end
 
 function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType)
-	if (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsPlaceEnabled == false) then 
+	if (Jailed[Player:GetName()] == true) and (IsPlaceEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else 
@@ -87,7 +87,7 @@ end
 function OnExecuteCommand(Player, CommandSplit)
 	if Player == nil then
 		return false
-	elseif (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (AreCommandsEnabled == false) then
+	elseif (Jailed[Player:GetName()] == true) and (AreCommandsEnabled == false) then
 		Player:SendMessageWarning("You are jailed") 
 		return true
 	else 
@@ -96,10 +96,10 @@ function OnExecuteCommand(Player, CommandSplit)
 end
 
 function OnChat(Player, Message)
-	if (UsersIni:GetValue(Player:GetName(),   "Muted") == "true") then 
+	if Muted[Player:GetName()] == true then 
 		Player:SendMessageWarning("You are muted")
 		return true
-	elseif (UsersIni:GetValue(Player:GetName(),   "Jailed") == "true") and (IsChatEnabled == false) then 
+	elseif (Jailed[Player:GetName()] == true) and (IsChatEnabled == false) then 
 		Player:SendMessageWarning("You are jailed")
 		return true
 	else 
@@ -108,6 +108,18 @@ function OnChat(Player, Message)
 end
 
 function OnWorldTick(World, TimeDelta)
+	--Tps checking code--
+	local WorldTps = TpsCache[World:GetName()]
+	if (WorldTps == nil) then
+		WorldTps = {}
+		TpsCache[World:GetName()] = WorldTps
+	end
+
+	if (#WorldTps >= 10) then
+		table.remove(WorldTps, 1)
+	end
+
+	table.insert(WorldTps, 1000 / TimeDelta)
 	--Check each 20 seconds if there's a sign above the player, if there is, teleport
 	if timer[World:GetName()] == nil then
 		timer[World:GetName()] = 0
@@ -130,4 +142,32 @@ function OnWorldTick(World, TimeDelta)
 	else
 	timer[World:GetName()] = timer[World:GetName()] + 1
 	end
+end
+
+
+function OnTick(TimeDelta)
+	if (#GlobalTps >= 10) then
+		table.remove(GlobalTps, 1)
+	end
+
+	table.insert(GlobalTps, 1000 / TimeDelta)
+end
+
+function OnEntityTeleport(Entity, OldPosition, NewPosition)
+	if Entity:IsPlayer() then
+		Player = tolua.cast(Entity, "cPlayer")
+		BackCoords[Player:GetName()] = Vector3d(OldPosition)
+	end
+	return false
+end
+
+function OnKilled(Victim, TDI, DeathMessage)
+	if Victim:IsPlayer() then
+		Player = tolua.cast(Victim, "cPlayer")
+		BackCoords = Vector3d(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ())
+	end
+end
+
+function OnPlayerJoined(Player)
+	CheckPlayer(Player)
 end

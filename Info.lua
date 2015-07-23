@@ -42,6 +42,12 @@ g_PluginInfo =
 			Handler = HandleAntiOchCommand,
 			Alias = { "/grenade", "/tnt", }
 		},
+		["/back"] =
+		{
+			Permission =  "es.back",
+			HelpString =  "Return to last known position.",
+			Handler =  HandleBackCommand,
+		},
 		["/biome"] =
 		{
 			Permission =  "es.biome",
@@ -96,6 +102,13 @@ g_PluginInfo =
 			Handler =  HandleFeedCommand,
 			Alias = "/eat"
 		},
+		["/fly"] =
+		{
+			Permission = "es.fly",  
+			Handler =  HandleFlyCommand,  
+			HelpString = "Toggle flying.",  
+			Category = "Cheat",
+		},
 		["/flyspeed"] =
 		{
 			Permission = "es.flyspeed",  
@@ -148,6 +161,13 @@ g_PluginInfo =
 			HelpString =  "Damage the specified player with lightning.",
 			Handler =  HandleLightningCommand,
 			Alias = { "/shock", "/strike", "/smite", "/thor", }
+		},
+		["/locate"] =
+		{
+			Permission =  "es.locate",
+			HelpString =  "Get your current coords.",
+			Handler =  HandleLocateCommand,
+			Alias = { "/getpos", "/whereami", "/getloc", "/coords", "/position" }
 		},
 		["/more"] =
 		{
@@ -224,6 +244,50 @@ g_PluginInfo =
 			Handler =  HandleSpawnMobCommand,
 			Alias = "/mob"
 		},
+		["/top"] =
+		{
+			Permission =  "es.top",
+			HelpString =  "Teleport to the highest block.",
+			Handler =  HandleTopCommand,
+		},
+		["/tpa"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Request teleport to someone's position.",
+			Handler =  HandleTPACommand,
+		},
+		["/tpaccept"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Accept teleport request.",
+			Handler =  HandleTPAcceptCommand,
+		},
+		["/tpahere"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Request teleport to your position.",
+			Handler =  HandleTPACommand,
+		},
+		["/tpdeny"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Deny teleport request.",
+			Handler =  HandleTPDenyCommand,
+		},
+		["/tphere"] =
+		{
+			Permission =  "es.tp",
+			HelpString =  "Teleport a player to your position.",
+			Handler =  HandleTPHereCommand,
+			Alias = "/bring"
+		},
+		["/tps"] =
+		{
+			Permission =  "es.tpa",
+			HelpString =  "Measure server lag.",
+			Handler =  HandleTPSCommand,
+			Alias = "/lag"
+		},
 		["/unjail"] =
 		{
 			Permission =  "es.unjail",
@@ -235,6 +299,13 @@ g_PluginInfo =
 			Permission =  "es.unmute",
 			HelpString =  "Unmute a player.",
 			Handler =  HandleUnmuteCommand,
+		},
+		["/vanish"] =
+		{
+			Permission =  "es.vanish",
+			HelpString =  "Toggle visibility",
+			Handler =  HandleVanishCommand,
+			Alias = "/hide"
 		},
 		["/walkspeed"] =
 		{
@@ -255,13 +326,6 @@ g_PluginInfo =
 			Permission =  "es.listwarp",
 			HelpString =  "Lists all warps.",
 			Handler =  HandleListWarpCommand,
-		},
-		["/whereami"] =
-		{
-			Permission =  "es.getpos",
-			HelpString =  "Get your current location in the world.",
-			Handler =  HandleGetPosCommand,
-			Alias = { "/getpos", "/getlocation", "/getloc", "/coords", "/position", }
 		},
 		["/whisper"] =
 		{
@@ -305,6 +369,21 @@ g_PluginInfo =
 			},
 		},
 	},
+	
+	
+	
+	ConsoleCommands =
+	{		
+		["tps"] =
+		{
+			HelpString =  " - Returns the tps (ticks per second) from the server.",
+			Handler =  HandleConsoleTPS,
+			Alias = "lag",
+		},
+	},  
+	
+	
+	
 	Permissions = 
 	{
 		["es.biome.other"] =
@@ -325,6 +404,11 @@ g_PluginInfo =
 		["es.feed.other"] =
 		{
 			Description = "Satisfy the hunger of another player.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.fly.other"] =
+		{
+			Description = "Toggle flying for other players.",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.getpos.other"] =

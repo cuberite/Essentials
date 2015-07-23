@@ -1,10 +1,4 @@
 function HandleWarpCommand( Split, Player )
-	local EachPlayer = function(Player)
-		Player:SetVisible(true)
-	end
-	local Schedule = function(World)
-		World:ForEachPlayer(EachPlayer)
-	end
 	if #Split < 2 then
 		--No warp given, list warps available.
 		HandleListWarpCommand( Split, Player )
@@ -16,25 +10,25 @@ function HandleWarpCommand( Split, Player )
 		Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
 		return true
 	end
-	if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
-		Player:SetVisible(false)
-		Player:MoveToWorld(warps[Tag]["w"])
-		Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-		Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-		name = Player:GetName()
-		Player:GetWorld():ScheduleTask(10, Schedule)
-	else
-		Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-		Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+	local OnAllChunksAvaliable = function()
+		if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
+			Player:MoveToWorld(warps[Tag]["w"])
+			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
+			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+		else
+			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
+			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+		end
+		if Player:GetGameMode() == 1  and clear_inv_when_going_from_creative_to_survival == true then
+			Player:GetInventory():Clear()
+		end
+			
+		if change_gm_when_changing_world == true then
+			Player:SetGameMode(Player:GetWorld():GetGameMode())
+			return true
+		end
 	end
-	if Player:GetGameMode() == 1  and clear_inv_when_going_from_creative_to_survival == true then
-		Player:GetInventory():Clear()
-	end
-		
-	if change_gm_when_changing_world == true then
-		Player:SetGameMode(Player:GetWorld():GetGameMode())
-		return true
-	end
+	cRoot:Get():GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
 	return true
 end
 
@@ -54,9 +48,6 @@ function HandleSetWarpCommand( Split, Player)
 	if warps[Tag] == nil then 
 		warps[Tag] = {}
 	end
-	
-	local WarpsINI = cIniFile()
-	WarpsINI:ReadFile("warps.ini")
 	
 	if (WarpsINI:FindKey(Tag)<0) then
 		warps[Tag]["w"] = World
@@ -89,9 +80,6 @@ function HandleDelWarpCommand( Split, Player)
 	end
 	local Tag = Split[2]
 	warps[Tag] = nil
-	
-	local WarpsINI = cIniFile()
-	WarpsINI:ReadFile("warps.ini")
 	
 	if (WarpsINI:FindKey(Tag)>-1) then
 		WarpsINI:DeleteKey(Tag);

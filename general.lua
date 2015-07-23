@@ -18,10 +18,10 @@ function HandleBiomeCommand(Split,Player)
 	return true
 end
 
-function HandleGetPosCommand(Split,Player)
+function HandleLocateCommand(Split,Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Your position: X:"..Player:GetPosX()..", Y:"..Player:GetPosY()..", Z:"..Player:GetPosZ())
-	elseif Player:HasPermission("es.getpos.other") then
+		Player:SendMessageInfo("Your position: X:"..Player:GetPosX()..", Y:"..Player:GetPosY()..", Z:"..Player:GetPosZ().." in world "..Player:GetWorld():GetName())
+	elseif Player:HasPermission("es.locate.other") then
 		local GetPos = function(OtherPlayer)
 			if (OtherPlayer:GetName() == Split[2]) then
 				Player:SendMessageInfo(Split[2].." position: X:"..OtherPlayer:GetPosX()..", Y:"..OtherPlayer:GetPosY()..", Z:"..OtherPlayer:GetPosZ())
@@ -89,3 +89,4 @@ function HandleShoutCommand(Split,Player)
 	world:ForEachEntityInBox(range, Send)
 	return true
 end
+

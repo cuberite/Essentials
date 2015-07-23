@@ -1,8 +1,4 @@
 function HandleJailCommand( Split, Player )
-	local UsersIni = cIniFile()
-	if UsersIni:ReadFile("users.ini") == false then
-		LOG( "Could not read users.ini!" )
-	end
 	if #Split < 2 and #Split < 3 then
 		HandleListJailCommand( Split, Player )
 		return true
@@ -13,24 +9,25 @@ function HandleJailCommand( Split, Player )
 	end
 	local Tag = Split[3]
 
-	Jailed = false
+	local IsJailed = false
 	local JailPlayer = function(OtherPlayer)
 		if (OtherPlayer:GetName() == Split[2]) then
 			if (OtherPlayer:GetWorld():GetName() ~= jails[Tag]["w"]) then
 				OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 				OtherPlayer:MoveToWorld(jails[Tag]["w"])
-				Jailed = true
+				IsJailed = true
 			end
 			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 			OtherPlayer:SendMessageWarning('You have been jailed')
-			UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
-			UsersIni:WriteFile("users.ini")
-			Jailed = true
+			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
+			UsersINI:WriteFile("users.ini")
+			Jailed[OtherPlayer:GetName()] = true
+			IsJailed = true
 		return true
 		end
 	end
 	cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
-	if (Jailed) then
+	if (IsJailed) then
 		Player:SendMessageSuccess("Player "..Split[2].." is jailed")
 		return true
 	else
@@ -43,23 +40,20 @@ function HandleJailCommand( Split, Player )
 end
 
 function HandleUnJailCommand( Split, Player )
-	local UsersIni = cIniFile()
-	if UsersIni:ReadFile("users.ini") == false then
-		LOG( "Could not read users.ini!" )
-	end
 	if #Split < 2 then
 		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
 		return true
 	end
 
-	UnJailed = false
+	local UnJailed = false
 	local JailPlayer = function(OtherPlayer)
 		if (OtherPlayer:GetName() == Split[2]) then
 			World = OtherPlayer:GetWorld()
 			OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
 			OtherPlayer:SendMessageSuccess('You have been unjailed')
-			UsersIni:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
-			UsersIni:WriteFile("users.ini")
+			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
+			UsersINI:WriteFile("users.ini")
+			Jailed[OtherPlayer:GetName()] = false
 			UnJailed = true
 			return true
 		end
@@ -91,23 +85,20 @@ function HandleSetJailCommand( Split, Player)
 		jails[Tag] = {}
 	end
 
-	local jailsINI = cIniFile()
-	jailsINI:ReadFile("jails.ini")
-
-	if (jailsINI:FindKey(Tag)<0) then
+	if (JailsINI:FindKey(Tag)<0) then
 		jails[Tag]["w"] = World
 		jails[Tag]["x"] = pX
 		jails[Tag]["y"] = pY
 		jails[Tag]["z"] = pZ
 	end
 
-	if (jailsINI:FindKey(Tag)<0) then
-		jailsINI:AddKeyName(Tag);
-		jailsINI:SetValue( Tag , "w" , World)
-		jailsINI:SetValue( Tag , "x" , pX)
-		jailsINI:SetValue( Tag , "y" , pY)
-		jailsINI:SetValue( Tag , "z" , pZ)
-		jailsINI:WriteFile("jails.ini");
+	if (JailsINI:FindKey(Tag)<0) then
+		JailsINI:AddKeyName(Tag);
+		JailsINI:SetValue( Tag , "w" , World)
+		JailsINI:SetValue( Tag , "x" , pX)
+		JailsINI:SetValue( Tag , "y" , pY)
+		JailsINI:SetValue( Tag , "z" , pZ)
+		JailsINI:WriteFile("jails.ini");
 
 		Player:SendMessageSuccess("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
 		return true
@@ -128,12 +119,9 @@ function HandleDelJailCommand( Split, Player)
 	local Tag = Split[2]
 	jails[Tag] = nil
 
-	local jailsINI = cIniFile()
-	jailsINI:ReadFile("jails.ini")
-
-	if (jailsINI:FindKey(Tag)>-1) then
-		jailsINI:DeleteKey(Tag);
-		jailsINI:WriteFile("jails.ini");
+	if (JailsINI:FindKey(Tag)>-1) then
+		JailsINI:DeleteKey(Tag);
+		JailsINI:WriteFile("jails.ini");
 	else
 		Player:SendMessageFailure("Jail \"" .. Tag .. "\" was not found.")
 		return true

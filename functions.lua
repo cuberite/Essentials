@@ -1,3 +1,15 @@
+function SendMessage(a_Player, a_Message)
+	a_Player:SendMessageInfo(a_Message)
+end
+
+function SendMessageSuccess(a_Player, a_Message)
+	a_Player:SendMessageSuccess(a_Message)
+end
+
+function SendMessageFailure(a_Player, a_Message)
+	a_Player:SendMessageFailure(a_Message)
+end
+
 function GetPlayerLookPos(Player)
 	local World = Player:GetWorld()
 	local Tracer = cTracer(World)
@@ -127,5 +139,22 @@ function IsEnchantable()
 		return true;
 	elseif (HeldItemType == 346) or (HeldItemType == 359) or (HeldItemType == 261) then
 		return true;
+	end
+end
+
+function GetAverageNum(Table)
+	local Sum = 0
+	for i,Num in ipairs(Table) do
+		Sum = Sum + Num
+	end
+	return (Sum / #Table)
+end
+
+function CheckPlayer(Player)
+	if UsersINI:GetValue(Player:GetName(),   "Jailed") == "true" then
+		Jailed[Player:GetName()] = true
+	end
+	if UsersINI:GetValue(Player:GetName(),   "Muted") == "true" then
+		Muted[Player:GetName()] = true
 	end
 end
