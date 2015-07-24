@@ -422,11 +422,6 @@ g_PluginInfo =
 			Description = "Toggle flying for other players.",
 			RecommendedGroups = "admins, mods",
 		},
-		["es.getpos.other"] =
-		{
-			Description = "Get the position of another player.",
-			RecommendedGroups = "admins, mods",
-		},
 		["es.heal.other"] =
 		{
 			Description = "Heal another player.",
@@ -437,6 +432,11 @@ g_PluginInfo =
 			Description = "Allows a player to have an unlimited amount of homes.",
 			RecommendedGroups = "mods, players",
 		},
+		["es.locate.other"] =
+		{
+			Description = "Get the position of another player.",
+			RecommendedGroups = "admins, mods",
+		},
 		["es.more.other"] =
 		{
 			Description = "Increases the item amount in another player's held stack to 64 items.",
@@ -445,6 +445,11 @@ g_PluginInfo =
 		["es.spawnmob.other"] =
 		{
 			Description = "Spawns a mob near a player.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.vanish.other"] =
+		{
+			Description = "Toggle vanish for a player.",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.warpsign"] =
