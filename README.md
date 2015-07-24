@@ -28,7 +28,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/depth | /height | es.depth | | Displays your height relative to sea level.|
 |/ext | /extinguish | es.ext | | Extinguish a player.|
 |/feed | /eat | es.feed | es.feed.other | Satisfy the hunger.|
-|/fly | | es.fly | | Toggle flying.|
+|/fly | | es.fly | es.fly.other | Toggle flying.|
 |/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
 |/heal | | es.heal | es.heal.other | Heal a player.|
@@ -58,7 +58,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/tps | /lag | es.tps | | Measure server lag.|
 |/unjail | | es.unjail | | Unjail a player.|
 |/unmute | | es.unmute | | Unmute a player.|
-|/vanish | /hide, /v | es.vanish | es.vanish.others | Toggle visibility.|
+|/vanish | /hide, /v | es.vanish | es.vanish.other | Toggle visibility.|
 |/walkspeed | /wspeed | es.walkspeed | | Change a player's walking speed.|
 |/warp | | es.warp | | Moves player to location of warp [Tag].|
 |/warps | | es.listwarp | | Lists all warps.|
