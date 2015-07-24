@@ -249,14 +249,14 @@ function HandleVanishCommand(Split, Player)
 	end
 	if (Split[2] == nil or Split[2] == Player:GetName()) then
 		ChangeVanish(Player)
-	elseif Player:HasPermission("es.vanish.others") then
+	elseif Player:HasPermission("es.vanish.other") then
 		if cRoot:Get():FindAndDoWithPlayer( Split[2], ChangeVanish ) then
 			Player:SendMessageSuccess( Split[2] ..  "s visibility has been toggled!")
 		else
 			Player:SendMessageFailure("Player not found")
 		end
 	else 
-		Player:SendMessageFailure("You need es.vanish.others permission to do that!")
+		Player:SendMessageFailure("You need es.vanish.other permission to do that!")
 	end
 	return true
 end
