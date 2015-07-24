@@ -18,6 +18,18 @@ function HandleBiomeCommand(Split,Player)
 	return true
 end
 
+function HandleDepthCommand(Split,Player)
+	local YPos = Player:GetPosY()
+	if YPos == 63 then
+		Player:SendMessageInfo("You are at sea level")
+	elseif YPos < 63 then
+		Player:SendMessageInfo("You are "..(63-YPos).." block(s) below sea level.")
+	else
+		Player:SendMessageInfo("You are "..(YPos-63).." block(s) above sea level.")
+	end
+	return true
+end
+
 function HandleLocateCommand(Split,Player)
 	if Split[2] == nil then
 		Player:SendMessageInfo("Your position: X:"..Player:GetPosX()..", Y:"..Player:GetPosY()..", Z:"..Player:GetPosZ().." in world "..Player:GetWorld():GetName())
