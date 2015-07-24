@@ -46,7 +46,7 @@ function HandleTPHereCommand(Split, Player)
 		end
 		return true
 	else
-		Player:SendMessage( "Usage: "..Split[1].." <player>" )
+		Player:SendMessageInfo( "Usage: "..Split[1].." <player>" )
 		return true
 	end
 end
