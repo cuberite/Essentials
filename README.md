@@ -1,7 +1,7 @@
 Essentials
 ===========
 
-This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.org/bukkit-plugins/essentials/) to MCServer, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.
+This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.org/bukkit-plugins/essentials/) to Cuberite, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.
 
 ### Features
 
@@ -18,7 +18,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 | Command | Aliases | Permission | Permission (affects other players) | Description |
 | ------- | ------- | ---------- | ---------------------------------- | ----------- |
 |/antioch | /grenade, /tnt | es.antioch | | Spawn a TNT in the location you're looking at.|
-|/back | | es.back | | Return to last known position.|
+|/back | /return | es.back | | Return to last known position.|
 |/biome | | es.biome | es.biome.other | Tells you the biome in which you are.|
 |/broadcast | /bcast, /bc, /say | es.broadcast | | Broadcast a message to all players.|
 |/burn | | es.burn | | Set a player on fire.|
@@ -28,7 +28,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/depth | /height | es.depth | | Displays your height relative to sea level.|
 |/ext | /extinguish | es.ext | | Extinguish a player.|
 |/feed | /eat | es.feed | es.feed.other | Satisfy the hunger.|
-|/fly | | es.fly | | Toggle flying.|
+|/fly | | es.fly | es.fly.other | Toggle flying.|
 |/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
 |/heal | | es.heal | es.heal.other | Heal a player.|
@@ -50,15 +50,15 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/shout | | es.shout | | Chat in a range of 128 blocks.|
 |/spawnmob | /mob | es.spawnmob | es.spawnmob.other | Spawn a mob.|
 |/top | | es.top | | Teleport to the highest block.|
-|/tpa | | es.tpa | | Request teleport to someone's position.|
-|/tpaccept | | es.tpa | | Accept teleport request.|
+|/tpa | /call, /tpask | es.tpa | | Request teleport to someone's position.|
+|/tpaccept | /tpyes | es.tpa | | Accept teleport request.|
 |/tpahere | | es.tpa | | Request teleport to your position.|
-|/tpdeny | | es.tpa | | Deny teleport request.|
-|/tphere | /bring | es.tp | | Teleport a player to your position.|
+|/tpdeny | /tpno | es.tpa | | Deny teleport request.|
+|/tphere | /bring, /s | es.tp | | Teleport a player to your position.|
 |/tps | /lag | es.tps | | Measure server lag.|
 |/unjail | | es.unjail | | Unjail a player.|
 |/unmute | | es.unmute | | Unmute a player.|
-|/vanish | /hide | es.walkspeed | | Change a player's walking speed.|
+|/vanish | /hide, /v | es.vanish | es.vanish.other | Toggle visibility.|
 |/walkspeed | /wspeed | es.walkspeed | | Change a player's walking speed.|
 |/warp | | es.warp | | Moves player to location of warp [Tag].|
 |/warps | | es.listwarp | | Lists all warps.|
