@@ -58,7 +58,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/tps | /lag | es.tps | | Measure server lag.|
 |/unjail | | es.unjail | | Unjail a player.|
 |/unmute | | es.unmute | | Unmute a player.|
-|/vanish | /hide, /v | es.walkspeed | | Change a player's walking speed.|
+|/vanish | /hide, /v | es.vanish | es.vanish.others | Toggle visibility.|
 |/walkspeed | /wspeed | es.walkspeed | | Change a player's walking speed.|
 |/warp | | es.warp | | Moves player to location of warp [Tag].|
 |/warps | | es.listwarp | | Lists all warps.|
