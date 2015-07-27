@@ -1,70 +1,90 @@
 function HandleHomeCommand(Split, Player)
-	username = Player:GetName()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true and file_exists(homeDir..'/'..username..'.'..Split[2]) == true then
-		coords = lines_from(homeDir..'/'..username..'.'..Split[2])
-		Player:SendMessageSuccess('Teleporting you to home...')
-		Player:TeleportToCoords(coords[1], coords[2], coords[3])
-		if Player:GetWorld():GetName() ~= coords[4] then
-			Player:MoveToWorld(coords[4])
-		end
-	elseif file_exists(homeDir..'/'..username..'.home') then
-		coords = lines_from(homeDir..'/'..username..'.home')
-		Player:SendMessageSuccess('Teleporting you to home...')
-		Player:TeleportToCoords(coords[1], coords[2], coords[3])
-		if Player:GetWorld():GetName() ~= coords[4] then
-			Player:MoveToWorld(coords[4])
-		end
-	else
-		Player:SendMessageFailure("Home doesn't exist")
+	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+
+	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
+		Split[2] = "home"
 	end
+
+	local homeSearch = database:prepare("SELECT * FROM Homes WHERE UserId=?1 AND Name=?2")
+	homeSearch:bind_values(UserId, Split[2])
+	if homeSearch:step() ~= sqlite3.ROW then
+		if Split[2] == "home" then
+			Player:SendMessageFailure("Home doesn't exist")
+		else
+			Player:SendMessageFailure("Home " .. Split[2] .. " doesn't exist")
+		end
+		return true
+	end
+	local homeData = homeSearch:get_values()
+	homeSearch:finalize()
+
+	Player:TeleportToCoords(homeData[4], homeData[5], homeData[6])
+	if Player:GetWorld():GetName() ~= homeData[3] then
+		Player:MoveToWorld(homeData[3])
+	end
+	Player:SendMessageSuccess('Teleporting you to home...')
 	return true
 end
 
 function HandleSetHomeCommand(Split, Player)
-	username = Player:GetName()
-	homeX = Player:GetPosX()
-	homeY = Player:GetPosY()
-	homeZ = Player:GetPosZ()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true then
-		local file = io.open(homeDir..'/'..username..'.'..Split[2], "w")
-		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
-		file:close()
-		Player:SendMessageSuccess('Home set! Use /home to go home!')	
-	else
-		local file = io.open(homeDir..'/'..username..'.home', "w")
-		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
-		file:close()
-		Player:SendMessageSuccess('Home set! Use /home to go home!')	
+	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local homeWorld = Player:GetWorld():GetName()
+	local homeX = Player:GetPosX()
+	local homeY = Player:GetPosY()
+	local homeZ = Player:GetPosZ()
+
+	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
+		Split[2] = "home"
 	end
+
+	local homeExists = true
+	local homeSearch = database:prepare("SELECT * FROM Homes WHERE UserId=?1 AND Name=?2")
+	homeSearch:bind_values(UserId, Split[2])
+	if homeSearch:step() ~= sqlite3.ROW then
+		homeExists = false
+	end
+	homeSearch:finalize()
+
+	if homeExists then
+		local updateHome = database:prepare("UPDATE Homes SET World=?3, X=?4, Y=?5, Z=?6 WHERE UserId=?1 AND Name=?2")
+		updateHome:bind_values(UserId, Split[2], homeWorld, homeX, homeY, homeZ)
+		updateHome:step()
+		updateHome:finalize()
+	else
+		local addHome = database:prepare("INSERT INTO Homes (UserId, Name, World, X, Y, Z) VALUES (?1, ?2, ?3, ?4, ?5, ?6)")
+		addHome:bind_values(UserId, Split[2], homeWorld, homeX, homeY, homeZ)
+		addHome:step()
+		addHome:finalize()
+	end
+
+	Player:SendMessageSuccess('Home set! Use /home to go home!')
 	return true
 end
 
 function HandleDelHomeCommand(Split, Player)
-	username = Player:GetName()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true then
-		os.remove(homeDir..'/'..username..'.'..Split[2], "w")
-		Player:SendMessageSuccess("Home removed")	
-	else
-		os.remove(homeDir..'/'..username..'.home', "w")
-		Player:SendMessageSuccess("Home removed")		
-	end
-	return true
-end
+	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
 
-function file_exists(file)
-	local f = io.open(file, "rb")
-	if f then
-		f:close()
+	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
+		Split[2] = "home"
+	end
+
+	local homeSearch = database:prepare("SELECT * FROM Homes WHERE UserId=?1 AND Name=?2")
+	homeSearch:bind_values(UserId, Split[2])
+	if homeSearch:step() ~= sqlite3.ROW then
+		if Split[2] == "home" then
+			Player:SendMessageFailure("Home doesn't exist")
+		else
+			Player:SendMessageFailure("Home " .. Split[2] .. " doesn't exist")
+		end
 		return true
 	end
-	return f ~= nil
-end
+	homeSearch:finalize()
 
-function lines_from(file)
-	if not file_exists(file) then return {} end
-	lines = {}
-	for line in io.lines(file) do 
-		lines[#lines + 1] = line
-	end
-	return lines
+	local deleteHome = database:prepare("DELETE FROM Homes WHERE UserId=?1 AND Name=?2")
+	deleteHome:bind_values(UserId, Split[2])
+	deleteHome:step()
+	deleteHome:finalize()
+
+	Player:SendMessageSuccess("Home removed")
+	return true
 end

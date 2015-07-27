@@ -1,111 +1,145 @@
 function HandleJailCommand( Split, Player )
-	if #Split < 2 and #Split < 3 then
+	if #Split == 1 then
 		HandleListJailCommand( Split, Player )
 		return true
 	end
-	if #Split < 2 or #Split < 3  then
+	if #Split ~= 3 then
 		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
 		return true
 	end
 	local Tag = Split[3]
 
-	local IsJailed = false
-	local JailPlayer = function(OtherPlayer)
-		if (OtherPlayer:GetName() == Split[2]) then
-			if (OtherPlayer:GetWorld():GetName() ~= jails[Tag]["w"]) then
-				OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
-				OtherPlayer:MoveToWorld(jails[Tag]["w"])
-				IsJailed = true
-			end
-			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
-			OtherPlayer:SendMessageWarning('You have been jailed')
-			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
-			UsersINI:WriteFile("users.ini")
-			Jailed[OtherPlayer:GetName()] = true
-			IsJailed = true
+	local jailSearchQuery = database:prepare("SELECT * FROM Jails WHERE Name=?")
+	jailSearchQuery:bind(1, Tag)
+	if jailSearchQuery:step() ~= sqlite3.ROW then
+		Player:SendMessageFailure('Jail "' .. Tag .. '" is invalid.')
 		return true
-		end
 	end
-	cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
-	if (IsJailed) then
-		Player:SendMessageSuccess("Player "..Split[2].." is jailed")
-		return true
-	else
-		Player:SendMessageFailure("Player not found")
-		if jails[Tag] == nil then 
-			Player:SendMessageFailure('Jail "' .. Tag .. '" is invalid.')
+	local jailData = jailSearchQuery:get_values()
+	jailSearchQuery:finalize()
+
+	local JailFailure = "Player not found"
+	local JailPlayer = function(OtherPlayer)
+		if (OtherPlayer:GetName() ~= Split[2]) then
 			return true
 		end
+
+		local UserId = GetUserIdFromUsername(OtherPlayer:GetName(), OtherPlayer:GetUUID())
+		if UserId == nil then
+			return true
+		end
+
+		local OldWorld = OtherPlayer:GetWorld():GetName()
+		local OldX = OtherPlayer:GetPosX()
+		local OldY = OtherPlayer:GetPosY()
+		local OldZ = OtherPlayer:GetPosZ()
+
+		if (OtherPlayer:GetWorld():GetName() ~= jailData[2]) then
+			OtherPlayer:TeleportToCoords( jailData[3] + 0.5 , jailData[4] , jailData[5] + 0.5)
+			OtherPlayer:MoveToWorld(jailData[2])
+		end
+		OtherPlayer:TeleportToCoords( jailData[3] + 0.5 , jailData[4] , jailData[5] + 0.5)
+		local addPrisoner = database:prepare("INSERT OR IGNORE INTO Prisoners (UserId, JailName, ExpiryTicks, OldWorld, OldX, OldY, OldZ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)")
+		addPrisoner:bind_values(UserId, jailData[1], -1, OldWorld, OldX, OldY, OldZ)
+		addPrisoner:step()
+		addPrisoner:finalize()
+		
+		local updatePrisoner = database:prepare("UPDATE Prisoners SET (JailName=?2,ExpiryTicks=?3) WHERE UserId=?1");
+		addPrisoner:bind_values(UserId, jailData[1], -1, OldWorld, OldX, OldY, OldZ)
+    addPrisoner:step()
+    addPrisoner:finalize()
+
+		OtherPlayer:SendMessageWarning('You have been jailed')
+		JailFailure = nil
+		return true
 	end
+	cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
+	if (JailFailure ~= nil) then
+		Player:SendMessageFailure(JailFailure)
+		return true
+	end
+
+	Player:SendMessageSuccess("Player "..Split[2].." is jailed")
+	return true
 end
 
 function HandleUnJailCommand( Split, Player )
-	if #Split < 2 then
-		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
+	if #Split ~= 2 then
+		Player:SendMessageInfo('Usage: '..Split[1]..' <player>')
 		return true
 	end
 
-	local UnJailed = false
+	local JailFailure = "Player not found"
 	local JailPlayer = function(OtherPlayer)
-		if (OtherPlayer:GetName() == Split[2]) then
-			World = OtherPlayer:GetWorld()
-			OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
-			OtherPlayer:SendMessageSuccess('You have been unjailed')
-			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
-			UsersINI:WriteFile("users.ini")
-			Jailed[OtherPlayer:GetName()] = false
-			UnJailed = true
+		if (OtherPlayer:GetName() ~= Split[2]) then
 			return true
 		end
+
+		local UserId = GetUserIdFromUsername(OtherPlayer:GetName(), OtherPlayer:GetUUID())
+		if UserId == nil then
+			return true
+		end
+
+		local prisonerSearchQuery = database:prepare("SELECT * FROM Prisoners WHERE UserId=?")
+		prisonerSearchQuery:bind(1, UserId)
+		if prisonerSearchQuery:step() ~= sqlite3.ROW then
+			JailFailure = OtherPlayer:GetName() .. ' is not in jail.'
+			return true
+		end
+		local prisonerData = prisonerSearchQuery:get_values()
+		prisonerSearchQuery:finalize()
+
+		local prisonerDelete = database:prepare("DELETE FROM Prisoners WHERE UserId=?")
+		prisonerDelete:bind(1, UserId)
+		prisonerDelete:step()
+		prisonerDelete:finalize()
+
+		if (OtherPlayer:GetWorld():GetName() ~= prisonerData[4]) then
+			OtherPlayer:MoveToWorld(prisonerData[4])
+		end
+
+		OtherPlayer:TeleportToCoords(prisonerData[5], prisonerData[6], prisonerData[7])
+		OtherPlayer:SendMessageSuccess('You have been unjailed')
+		JailFailure = nil
 	end
 	cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
-	if (UnJailed) then
-		Player:SendMessageSuccess("You unjailed "..Split[2])
-		return true
-	else
-		Player:SendMessageFailure("Player not found")
+	if (JailFailure ~= nil) then
+		Player:SendMessageFailure(JailFailure)
 		return true
 	end
+
+	Player:SendMessageSuccess("You unjailed "..Split[2])
+	return true
 end
 
 function HandleSetJailCommand( Split, Player)
 	local Server = cRoot:Get():GetServer()
 	local World = Player:GetWorld():GetName()
-	local pX = math.floor(Player:GetPosX())
-	local pY = math.floor(Player:GetPosY())
-	local pZ = math.floor(Player:GetPosZ())
+	local pX = Player:GetPosX()
+	local pY = Player:GetPosY()
+	local pZ = Player:GetPosZ()
 
-	if #Split < 2 then
+	if #Split ~= 2 then
 		Player:SendMessageInfo('Usage: '..Split[1]..' <jailname>')
 		return true
 	end
 	local Tag = Split[2]
 
-	if jails[Tag] == nil then 
-		jails[Tag] = {}
-	end
+	local searchQuery = database:prepare("SELECT * FROM Jails WHERE Name=?")
+	searchQuery:bind(1, Split[2])
 
-	if (JailsINI:FindKey(Tag)<0) then
-		jails[Tag]["w"] = World
-		jails[Tag]["x"] = pX
-		jails[Tag]["y"] = pY
-		jails[Tag]["z"] = pZ
-	end
-
-	if (JailsINI:FindKey(Tag)<0) then
-		JailsINI:AddKeyName(Tag);
-		JailsINI:SetValue( Tag , "w" , World)
-		JailsINI:SetValue( Tag , "x" , pX)
-		JailsINI:SetValue( Tag , "y" , pY)
-		JailsINI:SetValue( Tag , "z" , pZ)
-		JailsINI:WriteFile("jails.ini");
-
-		Player:SendMessageSuccess("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
-		return true
-	else
-		Player:SendMessageFailure('Jail "' .. Tag .. '" already exist')
+	if searchQuery:step() == sqlite3.ROW then
+		Player:SendMessageFailure('Jail "' .. Tag .. '" already exists')
 		return true
 	end
+	searchQuery:finalize()
+
+	local insertQuery = database:prepare("INSERT INTO Jails (Name, World, X, Y, Z) VALUES (?1, ?2, ?3, ?4, ?5)")
+	insertQuery:bind_values(Tag, World, pX, pY, pZ)
+	insertQuery:step()
+	insertQuery:finalize()
+
+	Player:SendMessageSuccess("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
 	return true
 end
 
@@ -117,15 +151,19 @@ function HandleDelJailCommand( Split, Player)
 		return true
 	end
 	local Tag = Split[2]
-	jails[Tag] = nil
 
-	if (JailsINI:FindKey(Tag)>-1) then
-		JailsINI:DeleteKey(Tag);
-		JailsINI:WriteFile("jails.ini");
-	else
+	local searchQuery = database:prepare("SELECT * FROM Jails WHERE Name=?")
+	searchQuery:bind(1, Split[2])
+	if searchQuery:step() ~= sqlite3.ROW then
 		Player:SendMessageFailure("Jail \"" .. Tag .. "\" was not found.")
 		return true
 	end
+	searchQuery:finalize()
+
+	local deleteQuery = database:prepare("DELETE FROM Jails WHERE Name=?")
+	deleteQuery:bind(1, Split[2])
+	deleteQuery:step()
+	deleteQuery:finalize()
 
 	Player:SendMessageSuccess("Jail \"" .. Tag .. "\" was removed.")
 	return true
@@ -133,11 +171,11 @@ end
 
 function HandleListJailCommand( Split, Player)
 	local jailStr = ""
-	local inc = 0
-	for k, v in pairs (jails) do
-		inc = inc + 1
-		jailStr = jailStr .. k .. ", "
+	function Callback(udata, cols, values, names)
+		jailStr = jailStr .. values[1] .. ", "
+		return 0
 	end
-	Player:SendMessageInfo('Jail: ' ..  cChatColor.LightGreen ..  jailStr)
+	database:exec("SELECT Name FROM Jails", Callback)
+	Player:SendMessageInfo('Jail(s): ' ..  cChatColor.LightGreen ..  string.sub(jailStr, 1, -3))
 	return true
 end
