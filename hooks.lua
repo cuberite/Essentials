@@ -67,44 +67,52 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
 end
 
 function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
-	if (Jailed[Player:GetName()] == true) and (IsDiggingEnabled == false) then 
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
+
+	if (not IsDiggingEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
 		Player:SendMessageWarning("You are jailed")
 		return true
-	else
-		return false
 	end
+	return false
 end
 
 function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType)
-	if (Jailed[Player:GetName()] == true) and (IsPlaceEnabled == false) then 
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
+
+	if (not IsPlaceEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
 		Player:SendMessageWarning("You are jailed")
 		return true
-	else 
-		return false
 	end
+	return false
 end
 
 function OnExecuteCommand(Player, CommandSplit)
 	if Player == nil then
 		return false
-	elseif (Jailed[Player:GetName()] == true) and (AreCommandsEnabled == false) then
-		Player:SendMessageWarning("You are jailed") 
-		return true
-	else 
-		return false
 	end
+
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
+
+	if (not AreCommandsEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
+		Player:SendMessageWarning("You are jailed")
+		return true
+	end
+	return false
 end
 
 function OnChat(Player, Message)
 	if Muted[Player:GetName()] == true then 
 		Player:SendMessageWarning("You are muted")
 		return true
-	elseif (Jailed[Player:GetName()] == true) and (IsChatEnabled == false) then 
+	end
+
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
+
+	if (not IsChatEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
 		Player:SendMessageWarning("You are jailed")
 		return true
-	else 
-		return false
 	end
+	return false
 end
 
 function OnWorldTick(World, TimeDelta)

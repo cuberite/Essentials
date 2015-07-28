@@ -1,6 +1,4 @@
 --Global variables
-warps = {}
-jails = {}
 lastsender = {}
 ticks = {}
 timer = {}
@@ -8,12 +6,11 @@ BackCoords = {}
 TpRequestTimeLimit = 0
 TpsCache = {}
 GlobalTps = {}
-Jailed = {}
 Muted = {}
+db = {}
 
 --Initialize the plugin
 function Initialize(Plugin)
-
 	dofile(cPluginManager:GetPluginsPath() .. "/InfoReg.lua")
 
 	Plugin:SetName(g_PluginInfo.Name)
@@ -37,37 +34,8 @@ function Initialize(Plugin)
 	
 	RegisterPluginInfoConsoleCommands();
 
-	--Read the warps (stored in ini file)
-	WarpsINI = cIniFile()
-	if (WarpsINI:ReadFile("warps.ini")) then
-		warpNum = WarpsINI:GetNumKeys();
-		for i=0, warpNum do
-			local Tag = WarpsINI:GetKeyName(i)
-			warps[Tag] = {}
-			warps[Tag]["w"] = WarpsINI:GetValue( Tag , "w")
-			warps[Tag]["x"] = WarpsINI:GetValueI( Tag , "x")
-			warps[Tag]["y"] = WarpsINI:GetValueI( Tag , "y")
-			warps[Tag]["z"] = WarpsINI:GetValueI( Tag , "z")
-		end
-	end
-
 	--Set dirs which will be used later on
 	localdir = Plugin:GetLocalFolder()
-	homeDir = Plugin:GetLocalFolder().."/homes"
-
-	--Read jails (from ini file)
-	JailsINI = cIniFile()
-	if (JailsINI:ReadFile("jails.ini")) then
-		jailNum = JailsINI:GetNumKeys();
-		for i=0, jailNum do
-			local Tag = JailsINI:GetKeyName(i)
-			jails[Tag] = {}
-			jails[Tag]["w"] = JailsINI:GetValue( Tag , "w")
-			jails[Tag]["x"] = JailsINI:GetValueI( Tag , "x")
-			jails[Tag]["y"] = JailsINI:GetValueI( Tag , "y")
-			jails[Tag]["z"] = JailsINI:GetValueI( Tag , "z")
-		end
-	end
 
 	UsersINI = cIniFile()
 	UsersINI:ReadFile("users.ini")
@@ -82,13 +50,58 @@ function Initialize(Plugin)
 	SettingsINI:WriteFile("settings.ini")
 	
 	cRoot:Get():ForEachPlayer(CheckPlayer)
-	
-	--If there's no home folder, plugin will create it
-	if cFile:IsFolder(homeDir) ~= true then
-		cFile:CreateFolder(homeDir)
-	end
+
+	--Open database and initialize tables if necessary
+	Database.open("essentials.sqlite3")
+	local status;
+	--Enable foreign key support for the database
+	Database.pragma("foreign_keys", "ON")
+	Database.initializeTable("Main", [[
+		UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+		UUID VARCHAR(36),
+		Username VARCHAR(16)
+	]])
+	Database.initializeTable("Jails", [[
+		Name VARCHAR(255) UNIQUE NOT NULL,
+		World VARCHAR(255) NOT NULL,
+		X SINGLE NOT NULL,
+		Y SINGLE NOT NULL,
+		Z SINGLE NOT NULL
+	]])
+	Database.initializeTable("Prisoners", [[
+		UserId INT UNIQUE,
+		JailName VARCHAR(255),
+		ExpiryTicks INT NOT NULL,
+		OldWorld VARCHAR(255) NOT NULL,
+		OldX SINGLE NOT NULL,
+		OldY SINGLE NOT NULL,
+		OldZ SINGLE NOT NULL,
+		FOREIGN KEY(UserId) REFERENCES Main(UserId),
+		FOREIGN KEY(JailName) REFERENCES Jails(Name)
+	]])
+	Database.initializeTable("Warps", [[
+		Name VARCHAR(255) UNIQUE NOT NULL,
+		World VARCHAR(255) NOT NULL,
+		X SINGLE NOT NULL,
+		Y SINGLE NOT NULL,
+		Z SINGLE NOT NULL
+	]])
+	Database.initializeTable("Homes", [[
+		UserId INT,
+		Name VARCHAR(255) NOT NULL,
+		World VARCHAR(255) NOT NULL,
+		X SINGLE NOT NULL,
+		Y SINGLE NOT NULL,
+		Z SINGLE NOT NULL,
+		FOREIGN KEY(UserId) REFERENCES Main(UserId)
+	]])
 
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 	--Finish!
+end
+
+function OnDisable()
+	Database:close()
+	LOG("Disabled Essentials!")
 end

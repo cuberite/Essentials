@@ -5,101 +5,75 @@ function HandleWarpCommand( Split, Player )
 		return true
 	end
 	local Tag = Split[2]
-	
-	if warps[Tag] == nil then 
+
+	local warpData = Database.getRow("Warps", "Name=?1", { Tag })
+	if warpData == nil then
 		Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
 		return true
 	end
+
 	local OnAllChunksAvaliable = function()
-		if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
-			Player:MoveToWorld(warps[Tag]["w"])
-			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-		else
-			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+		if (Player:GetWorld():GetName() ~= warpData[2]) then
+			Player:MoveToWorld(warpData[2])
 		end
-		if Player:GetGameMode() == 1  and clear_inv_when_going_from_creative_to_survival == true then
-			Player:GetInventory():Clear()
-		end
+		Player:TeleportToCoords(warpData[3], warpData[4], warpData[5])
+		Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
 			
 		if change_gm_when_changing_world == true then
+			if Player:GetGameMode() == 1 and Player:GetWorld():GetGameMode() == 0 and clear_inv_when_going_from_creative_to_survival == true then
+				Player:GetInventory():Clear()
+			end
 			Player:SetGameMode(Player:GetWorld():GetGameMode())
 			return true
 		end
 	end
-	cRoot:Get():GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
+	cRoot:Get():GetWorld(warpData[2]):ChunkStay({{warpData[3]/16, warpData[5]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
 	return true
 end
 
 function HandleSetWarpCommand( Split, Player)
-	local Server = cRoot:Get():GetServer()
 	local World = Player:GetWorld():GetName()
-	local pX = math.floor(Player:GetPosX())
-	local pY = math.floor(Player:GetPosY())
-	local pZ = math.floor(Player:GetPosZ())
+	local pX = Player:GetPosX()
+	local pY = Player:GetPosY()
+	local pZ = Player:GetPosZ()
 
 	if #Split < 2 then
 		Player:SendMessageInfo('Usage: '..Split[1]..' <warpname>')
 		return true
 	end
 	local Tag = Split[2]
-	
-	if warps[Tag] == nil then 
-		warps[Tag] = {}
-	end
-	
-	if (WarpsINI:FindKey(Tag)<0) then
-		warps[Tag]["w"] = World
-		warps[Tag]["x"] = pX
-		warps[Tag]["y"] = pY
-		warps[Tag]["z"] = pZ
-	end
 
-	if (WarpsINI:FindKey(Tag)<0) then
-		WarpsINI:AddKeyName(Tag);
-		WarpsINI:SetValue( Tag , "w" , World)
-		WarpsINI:SetValue( Tag , "x" , pX)
-		WarpsINI:SetValue( Tag , "y" , pY)
-		WarpsINI:SetValue( Tag , "z" , pZ)
-		WarpsINI:WriteFile("warps.ini");
+	Database.upsertRow("Warps", "Name=?1", { Name = "?1", World = "?2", X = "?3", Y = "?4", Z = "?5" }, { Tag, World, pX, pY, pZ })
 	
-		Player:SendMessageSuccess("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
-	else
-		Player:SendMessageFailure('Warp "' .. Tag .. '" already exists')
-	end
+	Player:SendMessageSuccess("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. math.floor(pX + 0.5) .. "' y:'" .. math.floor(pY + 0.5) .. "' z:'" .. math.floor(pZ + 0.5) .. "'")
 	return true
 end
 
 function HandleDelWarpCommand( Split, Player)
-	local Server = cRoot:Get():GetServer()
-	
 	if #Split < 2 then
 		Player:SendMessageInfo('Usage: '..Split[1]..' <warp>')
 		return true
 	end
 	local Tag = Split[2]
-	warps[Tag] = nil
-	
-	if (WarpsINI:FindKey(Tag)>-1) then
-		WarpsINI:DeleteKey(Tag);
-		WarpsINI:WriteFile("warps.ini");
-	else
+
+	if not Database.rowExists("Warps", "Name=?1", { Tag }) then
 		Player:SendMessageFailure("Warp \"" .. Tag .. "\" was not found.")
 		return true
 	end
-	
+
+	Database.deleteRow("Warps", "Name=?1", { Tag })
+
 	Player:SendMessageSuccess("Warp \"" .. Tag .. "\" was removed.")
 	return true
 end
 
 function HandleListWarpCommand( Split, Player)
 	local warpStr = ""
-	local inc = 0
-	for k, v in pairs (warps) do
-		inc = inc + 1
-		warpStr = warpStr .. k .. ", "
+	local rows = Database.getRows("Warps", "1", {})
+	for i=1, #rows do
+		warpStr = warpStr .. rows[i][1] .. ", "
 	end
-	Player:SendMessageInfo('Warps: ' ..  cChatColor.LightGreen ..  warpStr)
+
+	Player:SendMessageInfo('Warps: ' ..  cChatColor.LightGreen ..  string.sub(warpStr, 1, -3))
 	return true
 end

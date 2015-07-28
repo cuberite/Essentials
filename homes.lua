@@ -1,70 +1,67 @@
 function HandleHomeCommand(Split, Player)
-	username = Player:GetName()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true and file_exists(homeDir..'/'..username..'.'..Split[2]) == true then
-		coords = lines_from(homeDir..'/'..username..'.'..Split[2])
-		Player:SendMessageSuccess('Teleporting you to home...')
-		Player:TeleportToCoords(coords[1], coords[2], coords[3])
-		if Player:GetWorld():GetName() ~= coords[4] then
-			Player:MoveToWorld(coords[4])
-		end
-	elseif file_exists(homeDir..'/'..username..'.home') then
-		coords = lines_from(homeDir..'/'..username..'.home')
-		Player:SendMessageSuccess('Teleporting you to home...')
-		Player:TeleportToCoords(coords[1], coords[2], coords[3])
-		if Player:GetWorld():GetName() ~= coords[4] then
-			Player:MoveToWorld(coords[4])
-		end
-	else
-		Player:SendMessageFailure("Home doesn't exist")
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
+
+	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
+		Split[2] = "home"
 	end
+
+	local homeData = Database.getRow("Homes", "UserId=?1 AND Name=?2", {UserId, Split[2]})
+	if homeData == nil then
+		if Split[2] == "home" then
+			Player:SendMessageFailure("Home doesn't exist")
+		else
+			Player:SendMessageFailure("Home " .. Split[2] .. " doesn't exist")
+		end
+		return true
+	end
+
+	Player:TeleportToCoords(homeData[4], homeData[5], homeData[6])
+	if Player:GetWorld():GetName() ~= homeData[3] then
+		Player:MoveToWorld(homeData[3])
+	end
+	Player:SendMessageSuccess('Teleporting you to home...')
 	return true
 end
 
 function HandleSetHomeCommand(Split, Player)
-	username = Player:GetName()
-	homeX = Player:GetPosX()
-	homeY = Player:GetPosY()
-	homeZ = Player:GetPosZ()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true then
-		local file = io.open(homeDir..'/'..username..'.'..Split[2], "w")
-		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
-		file:close()
-		Player:SendMessageSuccess('Home set! Use /home to go home!')	
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
+	local homeWorld = Player:GetWorld():GetName()
+	local homeX = Player:GetPosX()
+	local homeY = Player:GetPosY()
+	local homeZ = Player:GetPosZ()
+
+	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
+		Split[2] = "home"
+	end
+
+	Database.upsertRow("Homes", "UserId=?1 AND Name=?2", { UserId = "?1", Name = "?2", World = "?3", X = "?4", Y = "?5", Z = "?6"}, { UserId, Split[2], homeWorld, homeX, homeY, homeZ })
+
+	if Split[2] == "home" then
+		Player:SendMessageSuccess('Home set! Use /home to go home!')
 	else
-		local file = io.open(homeDir..'/'..username..'.home', "w")
-		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
-		file:close()
-		Player:SendMessageSuccess('Home set! Use /home to go home!')	
+		Player:SendMessageSuccess("Home set! Use /home " .. Split[2] .. " to go home!")
 	end
 	return true
 end
 
 function HandleDelHomeCommand(Split, Player)
-	username = Player:GetName()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true then
-		os.remove(homeDir..'/'..username..'.'..Split[2], "w")
-		Player:SendMessageSuccess("Home removed")	
-	else
-		os.remove(homeDir..'/'..username..'.home', "w")
-		Player:SendMessageSuccess("Home removed")		
-	end
-	return true
-end
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 
-function file_exists(file)
-	local f = io.open(file, "rb")
-	if f then
-		f:close()
+	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
+		Split[2] = "home"
+	end
+
+	if not Database.rowExists("Homes", "UserId=?1 AND Name=?2", { UserId, Split[2] }) then
+		if Split[2] == "home" then
+			Player:SendMessageFailure("Home doesn't exist")
+		else
+			Player:SendMessageFailure("Home " .. Split[2] .. " doesn't exist")
+		end
 		return true
 	end
-	return f ~= nil
-end
 
-function lines_from(file)
-	if not file_exists(file) then return {} end
-	lines = {}
-	for line in io.lines(file) do 
-		lines[#lines + 1] = line
-	end
-	return lines
+	Database.deleteRow("Homes", "UserId=?1 AND Name=?2", { UserId, Split[2] })
+
+	Player:SendMessageSuccess("Home removed")
+	return true
 end
