@@ -67,30 +67,22 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
 end
 
 function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockType, BlockMeta)
-	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 
-	local prisonerSearch = database:prepare("SELECT * FROM Prisoners WHERE UserId=?")
-	prisonerSearch:bind(1, UserId)
-	if (prisonerSearch:step() == sqlite3.ROW) and not IsDiggingEnabled then
+	if (not IsDiggingEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
 		Player:SendMessageWarning("You are jailed")
-		prisonerSearch:finalize()
 		return true
 	end
-	prisonerSearch:finalize()
 	return false
 end
 
 function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ, BlockType)
-	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 
-	local prisonerSearch = database:prepare("SELECT * FROM Prisoners WHERE UserId=?")
-	prisonerSearch:bind(1, UserId)
-	if (prisonerSearch:step() == sqlite3.ROW) and not IsPlaceEnabled  then
+	if (not IsPlaceEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
 		Player:SendMessageWarning("You are jailed")
-		prisonerSearch:finalize()
 		return true
 	end
-	prisonerSearch:finalize()
 	return false
 end
 
@@ -99,16 +91,12 @@ function OnExecuteCommand(Player, CommandSplit)
 		return false
 	end
 
-	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 
-	local prisonerSearch = database:prepare("SELECT * FROM Prisoners WHERE UserId=?")
-	prisonerSearch:bind(1, UserId)
-	if (prisonerSearch:step() == sqlite3.ROW) and not AreCommandsEnabled then
+	if (not AreCommandsEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
 		Player:SendMessageWarning("You are jailed")
-		prisonerSearch:finalize()
 		return true
 	end
-	prisonerSearch:finalize()
 	return false
 end
 
@@ -118,16 +106,12 @@ function OnChat(Player, Message)
 		return true
 	end
 
-	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 
-	local prisonerSearch = database:prepare("SELECT * FROM Prisoners WHERE UserId=?")
-	prisonerSearch:bind(1, UserId)
-	if (prisonerSearch:step() == sqlite3.ROW) and not IsChatEnabled then
+	if (not IsChatEnabled) and (Database.rowExists("Prisoners", "UserId=?1", { UserId })) then
 		Player:SendMessageWarning("You are jailed")
-		prisonerSearch:finalize()
 		return true
 	end
-	prisonerSearch:finalize()
 	return false
 end
 

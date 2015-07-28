@@ -1,13 +1,12 @@
 function HandleHomeCommand(Split, Player)
-	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 
 	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
 		Split[2] = "home"
 	end
 
-	local homeSearch = database:prepare("SELECT * FROM Homes WHERE UserId=?1 AND Name=?2")
-	homeSearch:bind_values(UserId, Split[2])
-	if homeSearch:step() ~= sqlite3.ROW then
+	local homeData = Database.getRow("Homes", "UserId=?1 AND Name=?2", {UserId, Split[2]})
+	if homeData == nil then
 		if Split[2] == "home" then
 			Player:SendMessageFailure("Home doesn't exist")
 		else
@@ -15,8 +14,6 @@ function HandleHomeCommand(Split, Player)
 		end
 		return true
 	end
-	local homeData = homeSearch:get_values()
-	homeSearch:finalize()
 
 	Player:TeleportToCoords(homeData[4], homeData[5], homeData[6])
 	if Player:GetWorld():GetName() ~= homeData[3] then
@@ -27,7 +24,7 @@ function HandleHomeCommand(Split, Player)
 end
 
 function HandleSetHomeCommand(Split, Player)
-	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 	local homeWorld = Player:GetWorld():GetName()
 	local homeX = Player:GetPosX()
 	local homeY = Player:GetPosY()
@@ -37,40 +34,24 @@ function HandleSetHomeCommand(Split, Player)
 		Split[2] = "home"
 	end
 
-	local homeExists = true
-	local homeSearch = database:prepare("SELECT * FROM Homes WHERE UserId=?1 AND Name=?2")
-	homeSearch:bind_values(UserId, Split[2])
-	if homeSearch:step() ~= sqlite3.ROW then
-		homeExists = false
-	end
-	homeSearch:finalize()
+	Database.upsertRow("Homes", "UserId=?1 AND Name=?2", { UserId = "?1", Name = "?2", World = "?3", X = "?4", Y = "?5", Z = "?6"}, { UserId, Split[2], homeWorld, homeX, homeY, homeZ })
 
-	if homeExists then
-		local updateHome = database:prepare("UPDATE Homes SET World=?3, X=?4, Y=?5, Z=?6 WHERE UserId=?1 AND Name=?2")
-		updateHome:bind_values(UserId, Split[2], homeWorld, homeX, homeY, homeZ)
-		updateHome:step()
-		updateHome:finalize()
+	if Split[2] == "home" then
+		Player:SendMessageSuccess('Home set! Use /home to go home!')
 	else
-		local addHome = database:prepare("INSERT INTO Homes (UserId, Name, World, X, Y, Z) VALUES (?1, ?2, ?3, ?4, ?5, ?6)")
-		addHome:bind_values(UserId, Split[2], homeWorld, homeX, homeY, homeZ)
-		addHome:step()
-		addHome:finalize()
+		Player:SendMessageSuccess("Home set! Use /home " .. Split[2] .. " to go home!")
 	end
-
-	Player:SendMessageSuccess('Home set! Use /home to go home!')
 	return true
 end
 
 function HandleDelHomeCommand(Split, Player)
-	local UserId = GetUserIdFromUsername(Player:GetName(), Player:GetUUID())
+	local UserId = Database.getUserId(Player:GetName(), Player:GetUUID())
 
 	if not Player:HasPermission("es.home.unlimited") or Split[2] == nil then
 		Split[2] = "home"
 	end
 
-	local homeSearch = database:prepare("SELECT * FROM Homes WHERE UserId=?1 AND Name=?2")
-	homeSearch:bind_values(UserId, Split[2])
-	if homeSearch:step() ~= sqlite3.ROW then
+	if not Database.rowExists("Homes", "UserId=?1 AND Name=?2", { UserId, Split[2] }) then
 		if Split[2] == "home" then
 			Player:SendMessageFailure("Home doesn't exist")
 		else
@@ -78,12 +59,8 @@ function HandleDelHomeCommand(Split, Player)
 		end
 		return true
 	end
-	homeSearch:finalize()
 
-	local deleteHome = database:prepare("DELETE FROM Homes WHERE UserId=?1 AND Name=?2")
-	deleteHome:bind_values(UserId, Split[2])
-	deleteHome:step()
-	deleteHome:finalize()
+	Database.deleteRow("Homes", "UserId=?1 AND Name=?2", { UserId, Split[2] })
 
 	Player:SendMessageSuccess("Home removed")
 	return true

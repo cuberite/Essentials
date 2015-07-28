@@ -6,14 +6,11 @@ function HandleWarpCommand( Split, Player )
 	end
 	local Tag = Split[2]
 
-	local warpSearch = database:prepare("SELECT * FROM Warps WHERE Name=?")
-	warpSearch:bind(1, Tag)
-	if warpSearch:step() ~= sqlite3.ROW then
+	local warpData = Database.getRow("Warps", "Name=?1", { Tag })
+	if warpData == nil then
 		Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
 		return true
 	end
-	local warpData = warpSearch:get_values()
-	warpSearch:finalize()
 
 	local OnAllChunksAvaliable = function()
 		if (Player:GetWorld():GetName() ~= warpData[2]) then
@@ -46,15 +43,7 @@ function HandleSetWarpCommand( Split, Player)
 	end
 	local Tag = Split[2]
 
-	local addWarp = database:prepare("INSERT OR IGNORE INTO Warps (Name, World, X, Y, Z) VALUES (?1, ?2, ?3, ?4, ?5)")
-	addWarp:bind_values(Tag, World, pX, pY, pZ)
-  addWarp:step()
-	addWarp:finalize()
-	
-	local updateWarp = database:prepare("UPDATE Warps SET World=?2, X=?3, Y=?4, Z=?5 WHERE Name=?1")
-	updateWarp:bind_values(Tag, World, pX, pY, pZ)
-  updateWarp:step()
-  updateWarp:finalize()
+	Database.upsertRow("Warps", "Name=?1", { Name = "?1", World = "?2", X = "?3", Y = "?4", Z = "?5" }, { Tag, World, pX, pY, pZ })
 	
 	Player:SendMessageSuccess("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. math.floor(pX + 0.5) .. "' y:'" .. math.floor(pY + 0.5) .. "' z:'" .. math.floor(pZ + 0.5) .. "'")
 	return true
@@ -67,18 +56,12 @@ function HandleDelWarpCommand( Split, Player)
 	end
 	local Tag = Split[2]
 
-	local warpSearch = database:prepare("SELECT * FROM Warps WHERE Name=?")
-	warpSearch:bind(1, Tag)
-	if warpSearch:step() ~= sqlite3.ROW then
+	if not Database.rowExists("Warps", "Name=?1", { Tag }) then
 		Player:SendMessageFailure("Warp \"" .. Tag .. "\" was not found.")
 		return true
 	end
-	warpSearch:finalize()
 
-	local warpDelete = database:prepare("DELETE FROM Warps WHERE Name=?")
-	warpDelete:bind(1, Tag)
-	warpDelete:step()
-	warpDelete:finalize()
+	Database.deleteRow("Warps", "Name=?1", { Tag })
 
 	Player:SendMessageSuccess("Warp \"" .. Tag .. "\" was removed.")
 	return true
@@ -86,11 +69,11 @@ end
 
 function HandleListWarpCommand( Split, Player)
 	local warpStr = ""
-	function Callback(udata, cols, values, names)
-		warpStr = warpStr .. values[1] .. ", "
-		return 0
+	local rows = Database.getRows("Warps", "1", {})
+	for i=1, #rows do
+		warpStr = warpStr .. rows[i][1] .. ", "
 	end
-	database:exec("SELECT Name FROM Warps", Callback)
+
 	Player:SendMessageInfo('Warps: ' ..  cChatColor.LightGreen ..  string.sub(warpStr, 1, -3))
 	return true
 end

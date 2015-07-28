@@ -9,14 +9,11 @@ function HandleJailCommand( Split, Player )
 	end
 	local Tag = Split[3]
 
-	local jailSearchQuery = database:prepare("SELECT * FROM Jails WHERE Name=?")
-	jailSearchQuery:bind(1, Tag)
-	if jailSearchQuery:step() ~= sqlite3.ROW then
+	local jailData = Database.getRow("Jails", "Name=?1", { Tag })
+	if jailData == nil then
 		Player:SendMessageFailure('Jail "' .. Tag .. '" is invalid.')
 		return true
 	end
-	local jailData = jailSearchQuery:get_values()
-	jailSearchQuery:finalize()
 
 	local JailFailure = "Player not found"
 	local JailPlayer = function(OtherPlayer)
@@ -24,30 +21,32 @@ function HandleJailCommand( Split, Player )
 			return true
 		end
 
-		local UserId = GetUserIdFromUsername(OtherPlayer:GetName(), OtherPlayer:GetUUID())
+		local UserId = Database.getUserId(OtherPlayer:GetName(), OtherPlayer:GetUUID())
 		if UserId == nil then
 			return true
 		end
 
-		local OldWorld = OtherPlayer:GetWorld():GetName()
-		local OldX = OtherPlayer:GetPosX()
-		local OldY = OtherPlayer:GetPosY()
-		local OldZ = OtherPlayer:GetPosZ()
+		local OldWorld, OldX, OldY, OldZ;
+		local prisonerData = Database.getRow("Prisoners", "UserId=?1", { UserId })
+		if oldPrisonerData ~= nil then
+			OldWorld = oldPrisonerData[4]
+			OldX = prisonerData[5]
+			OldY = prisonerData[6]
+			OldZ = prisonerData[7]
+		else
+			OldWorld = OtherPlayer:GetWorld():GetName()
+			OldX = OtherPlayer:GetPosX()
+			OldY = OtherPlayer:GetPosY()
+			OldZ = OtherPlayer:GetPosZ()
+		end
 
 		if (OtherPlayer:GetWorld():GetName() ~= jailData[2]) then
 			OtherPlayer:TeleportToCoords( jailData[3] + 0.5 , jailData[4] , jailData[5] + 0.5)
 			OtherPlayer:MoveToWorld(jailData[2])
 		end
 		OtherPlayer:TeleportToCoords( jailData[3] + 0.5 , jailData[4] , jailData[5] + 0.5)
-		local addPrisoner = database:prepare("INSERT OR IGNORE INTO Prisoners (UserId, JailName, ExpiryTicks, OldWorld, OldX, OldY, OldZ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)")
-		addPrisoner:bind_values(UserId, jailData[1], -1, OldWorld, OldX, OldY, OldZ)
-		addPrisoner:step()
-		addPrisoner:finalize()
-		
-		local updatePrisoner = database:prepare("UPDATE Prisoners SET (JailName=?2,ExpiryTicks=?3) WHERE UserId=?1");
-		addPrisoner:bind_values(UserId, jailData[1], -1, OldWorld, OldX, OldY, OldZ)
-    addPrisoner:step()
-    addPrisoner:finalize()
+
+		Database.upsertRow("Prisoners", "UserId=?1", { UserId = "?1", JailName = "?2", ExpiryTicks = "?3", OldWorld = "?4", OldX = "?5", OldY = "?6", OldZ = "?7" }, { UserId, jailData[1], -1, OldWorld, OldX, OldY, OldZ })
 
 		OtherPlayer:SendMessageWarning('You have been jailed')
 		JailFailure = nil
@@ -75,24 +74,18 @@ function HandleUnJailCommand( Split, Player )
 			return true
 		end
 
-		local UserId = GetUserIdFromUsername(OtherPlayer:GetName(), OtherPlayer:GetUUID())
+		local UserId = Database.getUserId(OtherPlayer:GetName(), OtherPlayer:GetUUID())
 		if UserId == nil then
 			return true
 		end
 
-		local prisonerSearchQuery = database:prepare("SELECT * FROM Prisoners WHERE UserId=?")
-		prisonerSearchQuery:bind(1, UserId)
-		if prisonerSearchQuery:step() ~= sqlite3.ROW then
+		local prisonerData = Database.getRow("Prisoners", "UserId=?1", { UserId })
+		if prisonerData == nil then
 			JailFailure = OtherPlayer:GetName() .. ' is not in jail.'
 			return true
 		end
-		local prisonerData = prisonerSearchQuery:get_values()
-		prisonerSearchQuery:finalize()
 
-		local prisonerDelete = database:prepare("DELETE FROM Prisoners WHERE UserId=?")
-		prisonerDelete:bind(1, UserId)
-		prisonerDelete:step()
-		prisonerDelete:finalize()
+		Database.prisonerDelete("Prisoners", "UserId=?1", { UserId })
 
 		if (OtherPlayer:GetWorld():GetName() ~= prisonerData[4]) then
 			OtherPlayer:MoveToWorld(prisonerData[4])
@@ -125,19 +118,12 @@ function HandleSetJailCommand( Split, Player)
 	end
 	local Tag = Split[2]
 
-	local searchQuery = database:prepare("SELECT * FROM Jails WHERE Name=?")
-	searchQuery:bind(1, Split[2])
-
-	if searchQuery:step() == sqlite3.ROW then
+	if Database.rowExists("Jails", "Name=?1", { Split[2] }) then
 		Player:SendMessageFailure('Jail "' .. Tag .. '" already exists')
 		return true
 	end
-	searchQuery:finalize()
 
-	local insertQuery = database:prepare("INSERT INTO Jails (Name, World, X, Y, Z) VALUES (?1, ?2, ?3, ?4, ?5)")
-	insertQuery:bind_values(Tag, World, pX, pY, pZ)
-	insertQuery:step()
-	insertQuery:finalize()
+	Database.insertRow("Jails", { Name = "?1", World = "?2", X = "?3", Y = "?4", Z = "?5" }, { Tag, World, pX, pY, pZ })
 
 	Player:SendMessageSuccess("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
 	return true
@@ -152,18 +138,12 @@ function HandleDelJailCommand( Split, Player)
 	end
 	local Tag = Split[2]
 
-	local searchQuery = database:prepare("SELECT * FROM Jails WHERE Name=?")
-	searchQuery:bind(1, Split[2])
-	if searchQuery:step() ~= sqlite3.ROW then
+	if not Database.rowExists("Jails", "Name=?1", { Split[2] }) then
 		Player:SendMessageFailure("Jail \"" .. Tag .. "\" was not found.")
 		return true
 	end
-	searchQuery:finalize()
 
-	local deleteQuery = database:prepare("DELETE FROM Jails WHERE Name=?")
-	deleteQuery:bind(1, Split[2])
-	deleteQuery:step()
-	deleteQuery:finalize()
+	Database.deleteRow("Jails", "Name=?1", { Split[2] })
 
 	Player:SendMessageSuccess("Jail \"" .. Tag .. "\" was removed.")
 	return true
@@ -171,11 +151,11 @@ end
 
 function HandleListJailCommand( Split, Player)
 	local jailStr = ""
-	function Callback(udata, cols, values, names)
-		jailStr = jailStr .. values[1] .. ", "
-		return 0
+	local rows = Database.getRows("Jails", "1", {})
+	for i=1, #rows do
+		jailStr = jailStr .. rows[i][1] .. ", "
 	end
-	database:exec("SELECT Name FROM Jails", Callback)
+
 	Player:SendMessageInfo('Jail(s): ' ..  cChatColor.LightGreen ..  string.sub(jailStr, 1, -3))
 	return true
 end
