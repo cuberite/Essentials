@@ -19,7 +19,7 @@ function HandleJailCommand( Split, Player )
 			end
 			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
 			OtherPlayer:SendMessageWarning('You have been jailed')
-			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "true")
+			UsersINI:SetValue(OtherPlayer:GetUUID(),   "Jailed",   "true")
 			UsersINI:WriteFile("users.ini")
 			Jailed[OtherPlayer:GetName()] = true
 			IsJailed = true
@@ -51,7 +51,7 @@ function HandleUnJailCommand( Split, Player )
 			World = OtherPlayer:GetWorld()
 			OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
 			OtherPlayer:SendMessageSuccess('You have been unjailed')
-			UsersINI:SetValue(OtherPlayer:GetName(),   "Jailed",   "false")
+			UsersINI:SetValue(OtherPlayer:GetUUID(),   "Jailed",   "false")
 			UsersINI:WriteFile("users.ini")
 			Jailed[OtherPlayer:GetName()] = false
 			UnJailed = true

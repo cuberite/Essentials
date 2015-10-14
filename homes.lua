@@ -1,5 +1,5 @@
 function HandleHomeCommand(Split, Player)
-	username = Player:GetName()
+	username = Player:GetUUID()
 	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true and file_exists(homeDir..'/'..username..'.'..Split[2]) == true then
 		coords = lines_from(homeDir..'/'..username..'.'..Split[2])
 		Player:SendMessageSuccess('Teleporting you to home...')
@@ -21,7 +21,7 @@ function HandleHomeCommand(Split, Player)
 end
 
 function HandleSetHomeCommand(Split, Player)
-	username = Player:GetName()
+	username = Player:GetUUID()
 	homeX = Player:GetPosX()
 	homeY = Player:GetPosY()
 	homeZ = Player:GetPosZ()
@@ -40,7 +40,7 @@ function HandleSetHomeCommand(Split, Player)
 end
 
 function HandleDelHomeCommand(Split, Player)
-	username = Player:GetName()
+	username = Player:GetUUID()
 	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true then
 		os.remove(homeDir..'/'..username..'.'..Split[2], "w")
 		Player:SendMessageSuccess("Home removed")	
