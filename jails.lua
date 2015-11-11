@@ -21,7 +21,7 @@ function HandleJailCommand( Split, Player )
 			OtherPlayer:SendMessageWarning('You have been jailed')
 			UsersINI:SetValue(OtherPlayer:GetUUID(),   "Jailed",   "true")
 			UsersINI:WriteFile("users.ini")
-			Jailed[OtherPlayer:GetName()] = true
+			Jailed[OtherPlayer:GetUUID()] = true
 			IsJailed = true
 		return true
 		end
@@ -53,7 +53,7 @@ function HandleUnJailCommand( Split, Player )
 			OtherPlayer:SendMessageSuccess('You have been unjailed')
 			UsersINI:SetValue(OtherPlayer:GetUUID(),   "Jailed",   "false")
 			UsersINI:WriteFile("users.ini")
-			Jailed[OtherPlayer:GetName()] = false
+			Jailed[OtherPlayer:GetUUID()] = false
 			UnJailed = true
 			return true
 		end

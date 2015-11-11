@@ -151,10 +151,14 @@ function GetAverageNum(Table)
 end
 
 function CheckPlayer(Player)
-	if UsersINI:GetValue(Player:GetName(),   "Jailed") == "true" then
-		Jailed[Player:GetName()] = true
+	if UsersINI:GetValue(Player:GetUUID(),   "Jailed") == "true" then
+		Jailed[Player:GetUUID()] = true
+	else
+		Jailed[Player:GetUUID()] = false
 	end
-	if UsersINI:GetValue(Player:GetName(),   "Muted") == "true" then
-		Muted[Player:GetName()] = true
+	if UsersINI:GetValue(Player:GetUUID(),   "Muted") == "true" then
+		Muted[Player:GetUUID()] = true
+	else
+		Muted[Player:GetUUID()] = false
 	end
 end

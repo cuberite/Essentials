@@ -88,6 +88,9 @@ function Initialize(Plugin)
 		cFile:CreateFolder(homeDir)
 	end
 
+	--A list containing admin UUIDs which spies all commands
+	SocialSpyList = {}
+
 	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 	--Finish!

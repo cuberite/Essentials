@@ -17,6 +17,13 @@ g_PluginInfo =
 			warpname]],
 		},
 		{
+			Title = "Command Signs",
+			Contents = [[To create a command sign, use the following template. Note the whitespace.
+			[Command]
+			/first line 
+			second line]],
+		},
+		{
 			Title = "Enchant Signs",
 			Contents = [[To create an enchant sign, use the following template:
 			[Enchant]
@@ -35,6 +42,13 @@ g_PluginInfo =
 	},
 	Commands =
 	{
+		["/powertool"] = 
+		{
+			Permission = "es.powertool",
+			HelpString = "Assigns a command to the item you are holding",
+			Handler = HandlePowertoolCommand,
+			Alias = { "/pt" }
+		},
 		["/antioch"] =
 		{
 			Permission = "es.antioch",
@@ -203,6 +217,13 @@ g_PluginInfo =
 			HelpString = "Teleport a player where you are looking.",
 			Handler = HandlePlaceCommand,
 		},
+		["/powertool"] = 
+		{
+			Permission = "es.powertool",
+			HelpString = "Assigns a command to the item you are holding",
+			Handler = HandlePowertoolCommand,
+			Alias = { "/pt" }
+		},
 		["/repair"] =
 		{
 			Permission = "es.repair",
@@ -245,6 +266,13 @@ g_PluginInfo =
 			HelpString = "Chat in a range of 128 blocks.",
 			Handler = HandleShoutCommand,
 		},
+		["/socialspy"] = 
+		{
+			Permission = "es.socialspy",
+			HelpString = "Spy other players commands",
+			Handler = HandleSocialSpyCommand,
+			Alias = { "/spy" }
+		},		
 		["/spawnmob"] =
 		{
 			Permission = "es.spawnmob",
@@ -407,6 +435,11 @@ g_PluginInfo =
 			Description = "Allows a player to create a portal.",
 			RecommendedGroups = "admins, mods",
 		},
+		["es.commandsign"] =
+		{
+			Description = "Allows a player to create sign which executes commands",
+			RecommendedGroups = "admins, mods",
+		},		
 		["es.enchantsign"] =
 		{
 			Description = "Allows a player to create Enchant Signs.",
@@ -440,6 +473,16 @@ g_PluginInfo =
 		["es.more.other"] =
 		{
 			Description = "Increases the item amount in another player's held stack to 64 items.",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.powertool"] =
+		{
+			Description = "Allows a player to bind commands to Items. This let player set the name like with anvils",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.socialspy"] =
+		{
+			Description = "Allows a player to spy other players commands",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.spawnmob.other"] =
