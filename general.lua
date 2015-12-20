@@ -76,7 +76,7 @@ function HandleBroadcastCommand(Split,Player)
 		Player:SendMessageInfo("Usage: "..Split[1].." <message>")
 	else
 		--Send all Split[x]	
-		cRoot:Get():QueueExecuteConsoleCommand("say "..table.concat( Split , " " , 2 ))
+		cRoot:Get():BroadcastChat(cChatColor.Gold .. "[SERVER] " .. cChatColor.Yellow .. table.concat(Split, " ", 2))
 	end
 	return true
 end

@@ -1,6 +1,7 @@
 function HandleSpawnMobCommand(Split,Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <mobtype[:data]> [player]")
+		Player:SendMessageInfo("Usage: "..Split[1].." <mobtype[:baby]> [player]")
+		return true
 	end
 
 	local IsBaby = false
