@@ -387,7 +387,7 @@ g_PluginInfo =
 	{		
 		["tps"] =
 		{
-			HelpString =  " - Returns the tps (ticks per second) from the server.",
+			HelpString =  "Returns the tps (ticks per second) from the server.",
 			Handler =  HandleConsoleTPS,
 			Alias = "lag",
 		},
