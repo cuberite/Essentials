@@ -42,12 +42,14 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/mute | /silence | es.mute | | Mute a player.|
 |/ping | /pong, /echo | es.ping | | Check if the server is alive.|
 |/place | | es.place | | Teleport a player where you are looking.|
+|/powertool | /pt | es.powertool | | Bind a command to an item.|
 |/repair | /fix | es.repair | | Repair the item you are holding.|
 |/runspeed | /rspeed | es.runspeed | | Change a player's sprinting speed.|
 |/sethome | /createhome | es.sethome | | Set your home.|
 |/setjail | /createjail | es.setjail | | Create a jail at your location.|
 |/setwarp | /createwarp | es.setwarp | | Create a warp at your location.|
 |/shout | | es.shout | | Chat in a range of 128 blocks.|
+|/socialspy | /spy | es.socialspy | | See other players commands.|
 |/spawnmob | /mob | es.spawnmob | es.spawnmob.other | Spawn a mob.|
 |/top | | es.top | | Teleport to the highest block.|
 |/tpa | /call, /tpask | es.tpa | | Request teleport to someone's position.|
@@ -73,6 +75,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 | Permission | Description |
 | ---------- | ----------- |
 | es.warpsign | Allows a player to create Warp Signs |
+| es.commandsign | Allows a player to create Command Signs |
 | es.enchantsign | Allows a player to create Enchant Signs |
 | es.createportal | Allows a player to create a portal |
 | es.home.unlimited | Allows a player to have an unlimited amount of homes |
@@ -80,6 +83,15 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 ###Warp Sign Template
 [Warp]  
 Warpname
+
+###Command Sign Template
+[Command]
+/warp spawn
+
+###Command Sign Template
+[Command]
+/warp
+ spawn <-- notice the space befor the spawn (or at end of /warp)
 
 ###Enchant Sign Template
 [Enchant]  

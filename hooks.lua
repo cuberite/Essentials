@@ -8,6 +8,11 @@ end
 
 function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ)
 	World = Player:GetWorld()
+        if(not(Player:GetEquippedItem():IsCustomNameEmpty())) then
+		local pluginManager = cRoot:Get():GetPluginManager()
+		pluginManager:ExecuteCommand( Player, Player:GetEquippedItem().m_CustomName )
+		return true
+	end
 	--Check for a sign
 	if (BlockType == E_BLOCK_SIGN) then	
 		Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ)
@@ -39,6 +44,18 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
 					Player:SendMessageWarning("This item is not enchantable")
 				end
 			end
+		--If the sign is written like it should, execute the command
+		elseif Line1 == "[Command]" then
+			if Line3 ~= "" then
+				if Line4 ~= "" then
+					cPluginManager:Get():ExecuteCommand(Player, Line2..Line3..Line4)
+					return true
+				end
+				cPluginManager:Get():ExecuteCommand(Player, Line2..Line3)
+				return true
+			end
+			cPluginManager:Get():ExecuteCommand(Player, Line2)
+			return true
 		end
 	end
 end
@@ -63,6 +80,13 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
 		if (not(Player:HasPermission("es.enchantsign") == true)) then
 			return true
 		end
+	elseif Line1 == "[Command]" then
+		if (not(Player:HasPermission("es.commandsign") == true)) then
+			return true
+		elseif (Line2 == "") then
+			Player:SendMessageFailure('Must supply a command to execute.')
+			return true
+		end
 	end
 end
 
@@ -84,13 +108,18 @@ function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX
 	end
 end
 
-function OnExecuteCommand(Player, CommandSplit)
+function OnExecuteCommand(Player, CommandSplit, EntierCommand)
 	if Player == nil then
 		return false
 	elseif (Jailed[Player:GetUUID()] == true) and (AreCommandsEnabled == false) then
 		Player:SendMessageWarning("You are jailed") 
 		return true
-	else 
+	else
+		if #SocialSpyList ~= 0 then
+			for PlayerUUID, value in pairs(SocialSpyList) do
+				cRoot:DoWithPlayerByUUID(PlayerUUID, function(SocialSpyPlayer) return SocialSpyPlayer:SendMessagePrivateMsg(EntierCommand, Player) end)
+			end
+		end
 		return false
 	end
 end

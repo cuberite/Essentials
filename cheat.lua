@@ -1,3 +1,22 @@
+function HandleSocialSpyCommand(Split, Player)
+	if Split[2] == nil then
+		helperToggleSocialSpy(Player)
+	else
+		cRoot:FindAndDoWithPlayer(Split[2], helperToggleSocialSpy)
+	end
+	return true
+end
+
+function helperToggleSocialSpy(Player)
+	if SocialSpyList[Player:GetUUID()] ~= nil then
+		SocialSpyList[Player:GetUUID()] = nil
+		Player:SendMessageSuccess("Removed you from the list of players")
+	else
+		SocialSpyList[Player:GetUUID()] = true
+		Player:SendMessageSuccess("Added you to the list of players")
+	end
+end
+
 function HandleMoreCommand(Split,Player)
 	if Split[2] == nil then
 		HoldedItem = Player:GetEquippedItem()
@@ -33,6 +52,26 @@ function HandleMoreCommand(Split,Player)
 		end
 	end
 	return true
+end
+
+function HandlePowertoolCommand(Split, Player)
+	if Split[2] == nil then
+		Player:SendMessageFailure("Specify a command")
+		return true
+	end
+
+	HoldedItem = Player:GetEquippedItem()
+	command = table.concat( Split, " ", 2 )
+	if(not(HoldedItem:IsEmpty())) then
+		HoldedItem.m_CustomName = command
+		Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HoldedItem)
+		Player:SendMessageSuccess("Successfully bound command")
+		return true
+	else
+		--If player doesn't hold an item, notify
+		Player:SendMessageFailure("Please hold an item")
+		return true
+	end
 end
 
 function HandleRepairCommand(Split, Player)
