@@ -187,7 +187,7 @@ function HandleAntiOchCommand(Split,Player)
 end
 
 --- Handles console tps command, wrapper to HandleTpsCommand function
---  Necessary due to MCServer now supplying additional parameters
+--  Necessary due to Cuberite now supplying additional parameters
 --  
 function HandleConsoleTPS(Split, FullCmd)
 	return HandleTPSCommand(Split)
