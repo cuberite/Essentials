@@ -48,6 +48,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/setjail | /createjail | es.setjail | | Create a jail at your location.|
 |/setwarp | /createwarp | es.setwarp | | Create a warp at your location.|
 |/shout | | es.shout | | Chat in a range of 128 blocks.|
+|/skull | | es.skull | | Allows you to change a skull's skin.|
 |/spawnmob | /mob | es.spawnmob | es.spawnmob.other | Spawn a mob.|
 |/top | | es.top | | Teleport to the highest block.|
 |/tpa | /call, /tpask | es.tpa | | Request teleport to someone's position.|

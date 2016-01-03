@@ -245,6 +245,12 @@ g_PluginInfo =
 			HelpString = "Chat in a range of 128 blocks.",
 			Handler = HandleShoutCommand,
 		},
+		["/skull"] =                                                                                                                                            
+		{                                                                                                                                                       
+			Permission = "es.skull",                                                                                                                        
+			HelpString = "Allows you to change a skull's skin.",                                                                                      
+			Handler = HandleSkullCommand,                                                                                                                   
+		},
 		["/spawnmob"] =
 		{
 			Permission = "es.spawnmob",
