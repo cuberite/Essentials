@@ -209,29 +209,36 @@ function HandleTPSCommand(Split, Player)
 	return true
 end
 
-function HandleSkullCommand(Split, Player)                                                                                                                              
-	if Split[2] == nil then                                                                                                                                         
-		Player:SendMessageInfo("Usage: "..Split[1].." <username>")                                                                                            
-		return true                                                                                                                                             
-	end                                                                                                                                                             
-                                                                                                                                                                        
-	local pos = GetPlayerLookPos(Player)                                                                                                                                  
-                                                                                                                                                                        
-	local LookingAtHead = Player:GetWorld():DoWithMobHeadAt(                                                                                                              
-		pos.x, pos.y, pos.z,                                                                                                                                    
-		function (Head)                                                                                                                                         
-			ChangeHead = tolua.cast(Head, "cMobHeadEntity")                                                                                                 
-			ChangeHead:SetType(3)                                                                                                                           
-			ChangeHead:SetOwner(Split[2])                                                                                                                   
-		end                                                                                                                                                     
-	)                                                                                                                                                               
-                                                                                                                                                                        
-	if LookingAtHead == true then                                                                                                                                   
-		Player:SendMessageSuccess("Successfully changed the skull to "..ChangeHead:GetOwner().."'s")
-		Player:SendMessageInfo("Please reconnect to see the change")                                                                                            
-		return true                                                                                                                                             
-	else                                                                                                                                                            
-		Player:SendMessageInfo("You have to look at a skull to change its owner")                                                                               
-		return true                                                                                                                                             
-	end                                                                                                                                                             
+function HandleSkullCommand(Split, Player)
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: "..Split[1].." <username>")
+		return true
+	end
+
+	local pos = GetPlayerLookPos(Player)
+
+	local LookingAtHead = Player:GetWorld():DoWithMobHeadAt(
+		pos.x, pos.y, pos.z,
+		function (Head)
+			ChangeHead = tolua.cast(Head, "cMobHeadEntity")
+			ChangeHead:SetType(3)
+			if Player:GetWorld():DoWithPlayer(
+				Split[2],
+				function (Owner)
+					ChangeHead:SetOwner(Owner)
+				end
+			) then
+				Player:SendMessageSuccess("Successfully changed the skull to "..ChangeHead:GetOwnerName().."'s")
+				Player:SendMessageInfo("Please reconnect to see the change")
+			else
+				Player:SendMessageInfo("You have to use a username of a player, who is currently online")
+			end
+		end
+	)
+
+	if LookingAtHead == false then
+		Player:SendMessageInfo("You have to look at a skull to change its owner")
+	end
+
+	return true
 end
