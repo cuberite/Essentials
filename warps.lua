@@ -15,17 +15,13 @@ function HandleWarpCommand( Split, Player )
 			Player:MoveToWorld(warps[Tag]["w"])
 			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+			if change_gm_when_changing_world == true then
+				Player:SetGameMode(Player:GetWorld():GetGameMode())
+				return true
+			end
 		else
 			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-		end
-		if Player:GetGameMode() == 1  and clear_inv_when_going_from_creative_to_survival == true then
-			Player:GetInventory():Clear()
-		end
-			
-		if change_gm_when_changing_world == true then
-			Player:SetGameMode(Player:GetWorld():GetGameMode())
-			return true
 		end
 	end
 	cRoot:Get():GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
