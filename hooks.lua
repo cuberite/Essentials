@@ -8,6 +8,10 @@ end
 
 function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ)
 	World = Player:GetWorld()
+	if(not(Player:GetEquippedItem():IsCustomNameEmpty())) then
+		cRoot:Get():GetPluginManager():ExecuteCommand( Player, Player:GetEquippedItem().m_CustomName )
+		return true
+	end
 	--Check for a sign
 	if (BlockType == E_BLOCK_SIGN) then	
 		Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ)
@@ -39,6 +43,18 @@ function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
 					Player:SendMessageWarning("This item is not enchantable")
 				end
 			end
+		--If the sign is written like it should, execute the command
+		elseif Line1 == "[Command]" then
+			if Line3 ~= "" then
+				if Line4 ~= "" then
+					cPluginManager:Get():ExecuteCommand(Player, Line2..Line3..Line4)
+					return true
+				end
+				cPluginManager:Get():ExecuteCommand(Player, Line2..Line3)
+				return true
+			end
+			cPluginManager:Get():ExecuteCommand(Player, Line2)
+			return true
 		end
 	end
 end
@@ -61,6 +77,13 @@ function OnUpdatingSign(World, BlockX, BlockY, BlockZ, Line1, Line2, Line3, Line
 		end
 	elseif Line1 == "[Enchant]" then
 		if (not(Player:HasPermission("es.enchantsign") == true)) then
+			return true
+		end
+	elseif Line1 == "[Command]" then
+		if (not(Player:HasPermission("es.commandsign") == true)) then
+			return true
+		elseif (Line2 == "") then
+			Player:SendMessageFailure('Must supply a command to execute.')
 			return true
 		end
 	end
@@ -90,8 +113,16 @@ function OnExecuteCommand(Player, CommandSplit)
 	elseif (Jailed[Player:GetUUID()] == true) and (AreCommandsEnabled == false) then
 		Player:SendMessageWarning("You are jailed") 
 		return true
-	else 
-		return false
+	end
+
+	local DisplayCommand = function(OtherPlayer)
+		if SocialSpyList[OtherPlayer:GetUUID()] ~= nil then
+			OtherPlayer:SendMessage(cChatColor.Gray .. "[" .. cChatColor.LightGray .. Player:GetName() .. cChatColor.Gray .. "] " .. cChatColor.White .. EntireCommand)
+		end
+	end
+
+	if CommandSplit[1] == "/msg" and CommandSplit[2] ~= nil and CommandSplit[3] ~= nil or CommandSplit[1] == "/r" and CommandSplit[2] ~= nil or CommandSplit[1] == "/tell" and CommandSplit[2] ~= nil and CommandSplit[3] ~= nil then
+		cRoot:Get():ForEachPlayer(DisplayCommand)
 	end
 end
 

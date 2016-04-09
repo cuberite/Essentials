@@ -10,6 +10,7 @@ TpsCache = {}
 GlobalTps = {}
 Jailed = {}
 Muted = {}
+SocialSpyList = {}
 
 --Initialize the plugin
 function Initialize(Plugin)

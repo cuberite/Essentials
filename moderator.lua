@@ -242,3 +242,18 @@ function HandleSkullCommand(Split, Player)
 
 	return true
 end
+
+function HandleSocialSpyCommand(Split, Player)
+	ToggleSocialSpy(Player)
+	return true
+end
+
+function ToggleSocialSpy(Player)
+	if SocialSpyList[Player:GetUUID()] ~= nil then
+		SocialSpyList[Player:GetUUID()] = nil
+		Player:SendMessageSuccess("Successfully disabled SocialSpy")
+	else
+		SocialSpyList[Player:GetUUID()] = true
+		Player:SendMessageSuccess("Successfully enabled SocialSpy")
+	end
+end
