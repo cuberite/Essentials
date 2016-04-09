@@ -260,3 +260,33 @@ function HandleVanishCommand(Split, Player)
 	end
 	return true
 end
+
+function HandlePowertoolCommand(Split, Player)
+	if Split[2] == nil then                                                                                                                                         
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <command> [arguments ...]")                                                                           
+		return true
+	end
+
+	HeldItem = Player:GetEquippedItem()
+
+	string.startswith = function(self, str) 
+    	return self:find('^' .. str) ~= nil
+	end
+
+	if table.concat( Split, " ", 2 ):startswith('/') == true then
+		Command = table.concat( Split, " ", 2 )
+	else
+		Command = "/" .. table.concat( Split, " ", 2 )
+	end
+
+	if(not(HeldItem:IsEmpty())) then
+		HeldItem.m_CustomName = Command
+		Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HeldItem)
+		Player:SendMessageSuccess("Successfully bound command to item")
+		return true
+	else
+		--If player doesn't hold an item, notify
+		Player:SendMessageFailure("Please hold an item")
+		return true
+	end
+end

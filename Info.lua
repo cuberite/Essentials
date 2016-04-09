@@ -17,6 +17,13 @@ g_PluginInfo =
 			warpname]],
 		},
 		{
+			Title = "Command Signs",
+			Contents = [[To create a command sign, use the following template. Note the spaces.
+			[Command]
+			/first line 
+			second line]],
+		},
+		{
 			Title = "Enchant Signs",
 			Contents = [[To create an enchant sign, use the following template:
 			[Enchant]
@@ -96,13 +103,13 @@ g_PluginInfo =
 			Handler = HandleDepthCommand,
 			Alias = "/height"
 		},
-                ["/ext"] =
-                {
-                        Permission = "es.ext",
-                        HelpString = "Extinguish a player.",
-                        Handler = HandleExtinguishCommand,
-                        Alias = "/extinguish"
-                },
+		["/ext"] =
+		{
+			Permission = "es.ext",
+			HelpString = "Extinguish a player.",
+			Handler = HandleExtinguishCommand,
+			Alias = "/extinguish"
+		},
 		["/feed"] =
 		{
 			Permission = "es.feed",
@@ -203,6 +210,13 @@ g_PluginInfo =
 			HelpString = "Teleport a player where you are looking.",
 			Handler = HandlePlaceCommand,
 		},
+		["/powertool"] = 
+		{
+			Permission = "es.powertool",
+			HelpString = "Binds a command to the item you are holding.",
+			Handler = HandlePowertoolCommand,
+			Alias = "/pt"
+		},
 		["/repair"] =
 		{
 			Permission = "es.repair",
@@ -251,6 +265,12 @@ g_PluginInfo =
 			HelpString = "Allows you to change a skull's skin.",                                                                                      
 			Handler = HandleSkullCommand,                                                                                                                   
 		},
+		["/socialspy"] = 
+		{
+			Permission = "es.socialspy",
+			HelpString = "Displays other players' private messages.",
+			Handler = HandleSocialSpyCommand,
+		},	
 		["/spawnmob"] =
 		{
 			Permission = "es.spawnmob",
@@ -408,6 +428,11 @@ g_PluginInfo =
 			Description = "Shows you in which biome another player is.",
 			RecommendedGroups = "admins, mods",
 		},
+		["es.commandsign"] =
+		{
+			Description = "Allows a player to create signs which execute commands.",
+			RecommendedGroups = "admins, mods",
+		},		
 		["es.createportal"] =
 		{
 			Description = "Allows a player to create a portal.",
