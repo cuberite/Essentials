@@ -125,15 +125,18 @@ function OnWorldTick(World, TimeDelta)
 		timer[World:GetName()] = 0
 	elseif timer[World:GetName()] == 20 then
 		local ForEachPlayer = function(Player)
-			blocktype = Player:GetWorld():GetBlock(Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ())
-			if blocktype == 63 or blocktype == 78 then
-				Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), Player:GetPosY() - 2, Player:GetPosZ())
-				if (Line1 == "[Portal]") then
-					if Line4 ~= "" then
-						Player:TeleportToCoords(Line2, Line3, Line4)
-					else
-						cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
-				end    
+			local YBelowUs2 = Player:GetPosY() - 2
+			if YBelowUs2 >= 0 then
+				blocktype = Player:GetWorld():GetBlock(Player:GetPosX(), YBelowUs2, Player:GetPosZ())
+				if blocktype == 63 or blocktype == 78 then
+					Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), YBelowUs2, Player:GetPosZ())
+					if (Line1 == "[Portal]") then
+						if Line4 ~= "" then
+							Player:TeleportToCoords(Line2, Line3, Line4)
+						else
+							cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
+					end    
+				end
 			end
 		end           
 	end
