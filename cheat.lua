@@ -290,3 +290,47 @@ function HandlePowertoolCommand(Split, Player)
 		return true
 	end
 end
+
+function HandleFireballCommand(Split, Player)
+	local World = Player:GetWorld()
+	local X = Player:GetPosX()
+	local Y = Player:GetPosY() + 1.5
+	local Z = Player:GetPosZ()
+	local Speed = Player:GetLookVector() * 30
+	if Split[2] == "small" then
+		World:CreateProjectile(X, Y, Z, cProjectileEntity.pkFireCharge, Player, Player:GetEquippedItem(), Speed)
+		return true
+	else
+		World:CreateProjectile(X, Y, Z, cProjectileEntity.pkGhastFireball, Player, Player:GetEquippedItem(), Speed)
+		return true
+	end
+end
+
+function HandleNukeCommand(Split, Player)
+	local SpawnNuke = function(OtherPlayer)
+		local X = OtherPlayer:GetPosX()
+		local Y = OtherPlayer:GetPosY() + 35
+		local Z = OtherPlayer:GetPosZ()
+		OtherPlayer:SendMessageInfo("May death rain upon them")
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z - 2, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z + 2, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z - 2, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z + 2, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z - 2, 52)
+		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z + 2, 52)
+	end
+	if Split[2] == nil then
+		cRoot:Get():ForEachPlayer(SpawnNuke)
+		return true
+	end
+	if cRoot:Get():FindAndDoWithPlayer(Split[2], SpawnNuke) then
+		Player:SendMessageSuccess("Successfully spawned nuke above player")
+		return true
+	else
+		Player:SendMessageFailure("Player \"" .. Split[2] ..  "\" not found")
+		return true
+	end
+end

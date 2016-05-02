@@ -91,7 +91,11 @@ function HandleExtinguishCommand(Split, Player)
 end
 
 function HandlePingCommand(Split, Player)
-	Player:SendMessage(cChatColor.Green.. "Pong!")
+	if Split[2] ~= nil then
+		Player:SendMessage(table.concat(Split, " ", 2))
+	else
+		Player:SendMessage(cChatColor.Green.. "Pong!")
+	end
 	return true
 end
 
@@ -180,6 +184,10 @@ function HandleAntiOchCommand(Split,Player)
 	if pos.x == 0 and pos.y == 0 and pos.z == 0 then
 		Player:SendMessageFailure("You're not looking at a block (or it's too far)")
 	else
+		if Split[2] ~= nil then
+			cRoot:Get():BroadcastChat("...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,")
+			cRoot:Get():BroadcastChat("who being naughty in My sight, shall snuff it.")
+		end
 		--Spawn tnt
 		Player:GetWorld():SpawnPrimedTNT(pos.x, pos.y, pos.z, 35)
 	end
