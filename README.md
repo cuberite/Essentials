@@ -28,6 +28,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/depth | /height | es.depth | | Displays your height relative to sea level.|
 |/ext | /extinguish | es.ext | | Extinguish a player.|
 |/feed | /eat | es.feed | es.feed.other | Satisfy the hunger.|
+|/fireball | | es.fireball | | Shoots a fireball.|
 |/fly | | es.fly | es.fly.other | Toggle flying.|
 |/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
@@ -40,6 +41,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/locate | /getpos, /whereami, /getloc, /coords, /position | es.locate | es.locate.other | Get your current location in the world.|
 |/more | | es.more | es.more.other | Increases the item amount in the held stack to 64 items.|
 |/mute | /silence | es.mute | | Mute a player.|
+|/nuke | | es.nuke | | Spawns a nuke above players.|
 |/ping | /pong, /echo | es.ping | | Check if the server is alive.|
 |/place | | es.place | | Teleport a player where you are looking.|
 |/powertool | /pt | es.powertool | | Binds a command to the item you are holding.|

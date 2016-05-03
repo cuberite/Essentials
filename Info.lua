@@ -117,6 +117,12 @@ g_PluginInfo =
 			Handler = HandleFeedCommand,
 			Alias = "/eat"
 		},
+		["/fireball"] =
+		{
+			Permission = "es.fireball",
+			HelpString = "Shoots a fireball.",
+			Handler = HandleFireballCommand,
+		},
 		["/fly"] =
 		{
 			Permission = "es.fly",  
@@ -196,6 +202,12 @@ g_PluginInfo =
 			HelpString = "Mute a player.",
 			Handler = HandleMuteCommand,
 			Alias = "/silence"
+		},
+		["/nuke"] =
+		{
+			Permission = "es.nuke",
+			HelpString = "Spawns a nuke above players.",
+			Handler = HandleNukeCommand,
 		},
 		["/ping"] =
 		{
