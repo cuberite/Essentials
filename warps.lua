@@ -10,7 +10,10 @@ function HandleWarpCommand( Split, Player )
 		Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
 		return true
 	end
-	local OnAllChunksAvaliable = function()
+	local OnChunkAvailable = function( ChunkX, ChunkZ )
+		-- Dummy function, can't give nil as a function pointer to ChunkStay
+	end
+	local OnAllChunksAvailable = function()
 		if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
 			Player:MoveToWorld(warps[Tag]["w"])
 			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
@@ -24,7 +27,7 @@ function HandleWarpCommand( Split, Player )
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
 		end
 	end
-	cRoot:Get():GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
+	cRoot:Get():GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvailable)
 	return true
 end
 
