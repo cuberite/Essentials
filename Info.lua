@@ -373,7 +373,7 @@ g_PluginInfo =
 		["/warps"] =
 		{
 			Permission = "es.listwarp",
-			HelpString = "Lists all warps.",
+			HelpString = "Lists all warps. Accept optionnal search terms.",
 			Handler = HandleListWarpCommand,
 		},
 		["/whisper"] =

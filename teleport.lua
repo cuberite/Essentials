@@ -152,15 +152,14 @@ end
 
 function HandleBackCommand( Split, Player )
 	local BackPosition = BackCoords[Player:GetName()]
-	if (BackPosition == nil) then
+	if not(BackPosition) then
 		Player:SendMessageFailure("No known last position")
 		return true
 	end
-	local OnAllChunksAvaliable = function()
-		Player:TeleportToCoords(BackPosition.x, BackPosition.y, BackPosition.z)
-		Player:SendMessageSuccess("Teleported back to your last known position")
-	end
-	Player:GetWorld():ChunkStay({{BackPosition.x/16, BackPosition.z/16}}, OnChunkAvailable, OnAllChunksAvaliable)
+	BackIgnoreNextTP[Player:GetUniqueID()] = true
+	LoadChunkAndTeleport(Player, BackPosition, {function()
+		Player:SendMessage("Teleported you back to last known position")
+	end})
 	return true
 end
 

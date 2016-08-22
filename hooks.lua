@@ -7,14 +7,14 @@ function OnTakeDamage(Receiver, TDI)
 end
 
 function OnPlayerRightClick(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, CursorY, CursorZ)
-	World = Player:GetWorld()
+	local World = Player:GetWorld()
 	if(not(Player:GetEquippedItem():IsCustomNameEmpty())) then
 		cRoot:Get():GetPluginManager():ExecuteCommand( Player, Player:GetEquippedItem().m_CustomName )
 		return true
 	end
 	--Check for a sign
-	if (BlockType == E_BLOCK_SIGN) then	
-		Read, Line1, Line2, Line3, Line4 = World:GetSignLines( BlockX, BlockY, BlockZ)
+	local isSign, Line1, Line2, Line3, Line4 = World:GetSignLines(BlockX, BlockY, BlockZ)
+	if isSign then
 		--If the sign is written like it should, teleport the player
 		if Line1 == "[SignWarp]" or Line1 == "[Warp]" then
 			cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
@@ -138,12 +138,41 @@ function OnChat(Player, Message)
 	end
 end
 
+function EverySecond(World)
+
+	-- Check if there's a Portal sign two blocks above any player and teleport if so
+	local ScanForPortalSign = function(Player)
+		local YBelowUs2 = Player:GetPosY() - 2
+		if YBelowUs2 >= 0 then
+			local pX = math.floor(Player:GetPosX())
+			local pZ = math.floor(Player:GetPosZ())
+			local isSign, Line1, Line2, Line3, Line4 = World:GetSignLines(pX, YBelowUs2, pZ)
+			if isSign then
+				if (Line1 == "[Portal]") then
+					BackIgnoreNextTP[Player:GetUniqueID()] = true
+					if Line4 ~= "" then
+						local SignDestination = { position = Vector3d(1.0* Line2, 1.0* Line3, 1.0* Line4) }
+						LoadChunkAndTeleport(Player, SignDestination)
+					else
+						cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
+					end
+				end
+			end
+		end
+	end -- scanPortal()
+	World:ForEachPlayer(ScanForPortalSign)
+
+	World:ScheduleTask(20, EverySecond)
+end
+
 function OnWorldTick(World, TimeDelta)
+	local WorldName = World:GetName()
+
 	--Tps checking code--
-	local WorldTps = TpsCache[World:GetName()]
+	local WorldTps = TpsCache[WorldName]
 	if (WorldTps == nil) then
 		WorldTps = {}
-		TpsCache[World:GetName()] = WorldTps
+		TpsCache[WorldName] = WorldTps
 	end
 
 	if (#WorldTps >= 10) then
@@ -151,31 +180,7 @@ function OnWorldTick(World, TimeDelta)
 	end
 
 	table.insert(WorldTps, 1000 / TimeDelta)
-	--Check each 20 seconds if there's a sign above the player, if there is, teleport
-	if timer[World:GetName()] == nil then
-		timer[World:GetName()] = 0
-	elseif timer[World:GetName()] == 20 then
-		local ForEachPlayer = function(Player)
-			local YBelowUs2 = Player:GetPosY() - 2
-			if YBelowUs2 >= 0 then
-				blocktype = Player:GetWorld():GetBlock(Player:GetPosX(), YBelowUs2, Player:GetPosZ())
-				if blocktype == 63 or blocktype == 78 then
-					Read, Line1, Line2, Line3, Line4 = World:GetSignLines( Player:GetPosX(), YBelowUs2, Player:GetPosZ())
-					if (Line1 == "[Portal]") then
-						if Line4 ~= "" then
-							Player:TeleportToCoords(Line2, Line3, Line4)
-						else
-							cPluginManager:Get():ExecuteCommand(Player, "/warp "..Line2)
-					end    
-				end
-			end
-		end           
-	end
-	World:ForEachPlayer(ForEachPlayer)
-	timer[World:GetName()] = 0
-	else
-	timer[World:GetName()] = timer[World:GetName()] + 1
-	end
+
 end
 
 
@@ -187,10 +192,55 @@ function OnTick(TimeDelta)
 	table.insert(GlobalTps, 1000 / TimeDelta)
 end
 
+function RecordBackCoords( Player, Coordinates )
+	local Coords
+
+	if not(Coordinates) then
+		Coords = {
+			w = Player:GetWorld():GetName(),
+			position = Vector3d(Player:GetPosition():Floor()),
+			facing = GetFacing(Player)
+		}
+	else
+		Coords = {
+			w = Player:GetWorld():GetName(),
+			position = Vector3d(Coordinates:Floor()),
+			facing = GetFacing(Player)
+		}
+	end
+	BackCoords[Player:GetName()] = Coords
+end
+
+local function CallAwaitingPostWarpActions(Player)
+	local PlayerUID = Player:GetUniqueID()
+	local PostActions = AwaitingPostWarpActions[PlayerUID]
+	if PostActions then
+		AwaitingPostWarpActions[PlayerUID] = nil
+		for _, fn in ipairs(PostActions) do
+			fn(Player)
+		end
+	end
+end
+
+function OnEntityChangedWorld(Entity, OldWorld)
+	if Entity:IsPlayer() then
+		local Player = tolua.cast(Entity, "cPlayer")
+		CallAwaitingPostWarpActions(Player)
+	end
+end
+
 function OnEntityTeleport(Entity, OldPosition, NewPosition)
 	if Entity:IsPlayer() then
-		Player = tolua.cast(Entity, "cPlayer")
-		BackCoords[Player:GetName()] = Vector3d(OldPosition)
+		local Player = tolua.cast(Entity, "cPlayer")
+		local PlayerUID = Player:GetUniqueID()
+
+		if BackIgnoreNextTP[PlayerUID] then
+			BackIgnoreNextTP[PlayerUID] = nil
+		else
+			RecordBackCoords( Player, OldPosition )
+		end
+
+		CallAwaitingPostWarpActions(Player)
 	end
 	return false
 end
@@ -198,7 +248,13 @@ end
 function OnKilled(Victim, TDI, DeathMessage)
 	if Victim:IsPlayer() then
 		Player = tolua.cast(Victim, "cPlayer")
-		BackCoords = Vector3d(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ())
+		RecordBackCoords(Player)
+	end
+end
+
+function OnPlayerSpawned(Player)
+	if not(BackCoords[Player:GetName()]) then
+		RecordBackCoords(Player)
 	end
 end
 

@@ -40,6 +40,10 @@ function GetPlayerLookPos(OtherPlayer)
 	return Tracer.BlockHitPosition
 end
 
+function GetFacing(Entity)
+	return( math.floor( ((Entity:GetYaw() + 180 + 45) % 360) / 90) )
+end
+
 function GetStringFromBiome(Biome)
 	if Biome == 0 then
 		return "ocean"
