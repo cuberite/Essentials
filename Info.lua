@@ -138,6 +138,13 @@ g_PluginInfo =
 			Alias = "/fspeed",
 			Category = "Cheat",
 		},
+                ["/god"] =
+		{
+			Permission = "es.god",
+			HelpString = "Makes you invulnerable.",
+			Handler = HandleGodCommand,
+			Alias = { "/godmode", "/tgm", }
+		},
 		["/hat"] =
 		{
 			Permission = "es.hat",

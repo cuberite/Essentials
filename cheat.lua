@@ -299,11 +299,10 @@ function HandleFireballCommand(Split, Player)
 	local Speed = Player:GetLookVector() * 30
 	if Split[2] == "small" then
 		World:CreateProjectile(X, Y, Z, cProjectileEntity.pkFireCharge, Player, Player:GetEquippedItem(), Speed)
-		return true
 	else
 		World:CreateProjectile(X, Y, Z, cProjectileEntity.pkGhastFireball, Player, Player:GetEquippedItem(), Speed)
-		return true
 	end
+	return true
 end
 
 function HandleNukeCommand(Split, Player)
@@ -312,25 +311,47 @@ function HandleNukeCommand(Split, Player)
 		local Y = OtherPlayer:GetPosY() + 35
 		local Z = OtherPlayer:GetPosZ()
 		OtherPlayer:SendMessageInfo("May death rain upon them")
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z - 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z + 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z - 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z + 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z - 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z + 2, 52)
+		for x = -3, 3, 3 do
+			for z = -3, 3, 3 do
+				OtherPlayer:GetWorld():SpawnPrimedTNT(X + x, Y, Z + z, 52)
+			end
+		end
+		if Split[2] ~= nil then
+			Player:SendMessageSuccess("Successfully spawned nuke above player " ..OtherPlayer:GetName())
+		end
 	end
 	if Split[2] == nil then
 		cRoot:Get():ForEachPlayer(SpawnNuke)
-		return true
-	end
-	if cRoot:Get():FindAndDoWithPlayer(Split[2], SpawnNuke) then
-		Player:SendMessageSuccess("Successfully spawned nuke above player")
-		return true
 	else
-		Player:SendMessageFailure("Player \"" .. Split[2] ..  "\" not found")
-		return true
+		if not cRoot:Get():FindAndDoWithPlayer(Split[2], SpawnNuke) then
+			Player:SendMessageFailure("Player \"" .. Split[2] ..  "\" not found")
+		end
 	end
+	return true
+end
+
+function HandleGodCommand(Split, Player)
+	local EnableGod = function(OtherPlayer)
+		if OtherPlayer:GetInvulnerableTicks() == 0 then
+			OtherPlayer:SetInvulnerableTicks(6048000)
+			OtherPlayer:SendMessageInfo("God mode enabled")
+			if Split[2] ~= nil then
+				Player:SendMessageSuccess("Successfully enabled God mode for " ..OtherPlayer:GetName())
+			end
+		else
+			OtherPlayer:SetInvulnerableTicks(0)
+			OtherPlayer:SendMessageInfo("God mode disabled")
+			if Split[2] ~= nil then
+				Player:SendMessageSuccess("Successfully disabled God mode for " ..OtherPlayer:GetName())
+			end
+		end
+	end
+	if Split[2] == nil then
+		EnableGod(Player)
+	elseif Player:HasPermission("es.god.other") then
+		if not cRoot:Get():FindAndDoWithPlayer(Split[2], EnableGod) then
+			Player:SendMessageFailure("Player \"" .. Split[2] ..  "\" not found")
+		end
+	end
+	return true
 end

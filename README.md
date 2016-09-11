@@ -31,6 +31,7 @@ This plugin aims to port commands from [Bukkit's Essentials](http://dev.bukkit.o
 |/fireball | | es.fireball | | Shoots a fireball.|
 |/fly | | es.fly | es.fly.other | Toggle flying.|
 |/flyspeed | /fspeed | es.flyspeed | | Change a player's flying speed.|
+|/god | | es.god | es.god.other | Makes you invulnerable.|
 |/hat | /head | es.hat | | Use your equipped item as a helmet.|
 |/heal | | es.heal | es.heal.other | Heal a player.|
 |/home | | es.home | | Teleport to your home.|
