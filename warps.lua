@@ -12,8 +12,8 @@ function HandleWarpCommand( Split, Player )
 	end
 	local OnAllChunksAvaliable = function()
 		if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
-			Player:MoveToWorld(warps[Tag]["w"])
-			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
+			Player:MoveToWorld(cRoot:Get():GetWorld(warps[Tag]["w"]), true,
+				Vector3d(warps[Tag]["x"] + 0.5, warps[Tag]["y"], warps[Tag]["z"] + 0.5))
 			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
 			if change_gm_when_changing_world == true then
 				Player:SetGameMode(Player:GetWorld():GetGameMode())
