@@ -58,10 +58,10 @@ function HandleBurnCommand(Split, Player)
 			if (OtherPlayer:GetName() == Split[2]) then
 				if Split[3] == nil then
 					--Burn the player for 10s
-					Player:StartBurning(200)
+					OtherPlayer:StartBurning(200)
 				else
 					--Burn the player for the specified time
-					Player:StartBurning(Split[3] * 20)
+					OtherPlayer:StartBurning(Split[3] * 20)
 				end
 				return true
 			end
