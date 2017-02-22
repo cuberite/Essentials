@@ -156,11 +156,14 @@ function HandleBackCommand( Split, Player )
 		Player:SendMessageFailure("No known last position")
 		return true
 	end
-	local OnAllChunksAvaliable = function()
+	local OnChunkAvailable = function( ChunkX, ChunkZ )
+		-- Dummy function, can't give nil as a function pointer to ChunkStay
+	end
+	local OnAllChunksAvailable = function()
 		Player:TeleportToCoords(BackPosition.x, BackPosition.y, BackPosition.z)
 		Player:SendMessageSuccess("Teleported back to your last known position")
 	end
-	Player:GetWorld():ChunkStay({{BackPosition.x/16, BackPosition.z/16}}, OnChunkAvailable, OnAllChunksAvaliable)
+	Player:GetWorld():ChunkStay({{BackPosition.x/16, BackPosition.z/16}}, OnChunkAvailable, OnAllChunksAvailable)
 	return true
 end
 
