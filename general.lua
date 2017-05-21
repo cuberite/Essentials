@@ -1,104 +1,121 @@
-function HandleBiomeCommand(Split,Player)
+function HandleBiomeCommand(Split, Player)
+	local GetBiome = function(OtherPlayer)
+		--Get the name of the biome where the player is and store it in a variable
+		local Biome = BiomeToString(OtherPlayer:GetWorld():GetBiomeAt(math.floor(OtherPlayer:GetPosX()), math.floor(OtherPlayer:GetPosZ())))
+		if Split[2] then
+			Player:SendMessageInfo("Player \"" .. OtherPlayer:GetName() .. "\" is in " .. Biome)
+		else
+			OtherPlayer:SendMessageInfo("You're in " .. Biome)
+		end
+	end
 	if Split[2] == nil then
-	--Get the name of the biome where the player is and store it in a variable
-		biome = GetStringFromBiome(Player:GetWorld():GetBiomeAt(Player:GetPosX(), Player:GetPosZ()))
-		Player:SendMessageInfo("You're in ".. biome)
+		GetBiome(Player)
 	elseif Player:HasPermission("es.biome.other") then
-		local GetBiome = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				biome = GetStringFromBiome(OtherPlayer:GetWorld():GetBiomeAt(OtherPlayer:GetPosX(), OtherPlayer:GetPosZ()))
-				Player:SendMessageInfo(Split[2].. " is in ".. biome)
-				return true
-			end
-		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], GetBiome))) then
-			Player:SendMessageFailure("Player not found")
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], GetBiome) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
-function HandleDepthCommand(Split,Player)
-	local YPos = Player:GetPosY()
-	if YPos == 63 then
+function HandleDepthCommand(Split, Player)
+	local PosY = Player:GetPosY()
+	if PosY > 63 then
+		Player:SendMessageInfo("You are "..(PosY-63).." block(s) above sea level")
+	elseif PosY < 63 then
+		Player:SendMessageInfo("You are "..(63-PosY).." block(s) below sea level")
+	else
 		Player:SendMessageInfo("You are at sea level")
-	elseif YPos < 63 then
-		Player:SendMessageInfo("You are "..(63-YPos).." block(s) below sea level.")
-	else
-		Player:SendMessageInfo("You are "..(YPos-63).." block(s) above sea level.")
 	end
 	return true
 end
 
-function HandleLocateCommand(Split,Player)
+function HandleLocateCommand(Split, Player)
+	local GetPos = function(OtherPlayer)
+		local PosX = math.floor(OtherPlayer:GetPosX())
+		local PosY = math.floor(OtherPlayer:GetPosY())
+		local PosZ = math.floor(OtherPlayer:GetPosZ())
+		local World = OtherPlayer:GetWorld():GetName()
+		if Split[2] then
+			Player:SendMessageInfo("Position of player \"" .. OtherPlayer:GetName() .. "\": X:" .. PosX .. ", Y:" .. PosY .. ", Z:" .. PosZ .. " in world \"" .. World .. "\"")
+		else
+			OtherPlayer:SendMessageInfo("Your position: X:" .. PosX .. ", Y:" .. PosY .. ", Z:" .. PosZ .. " in world \"" .. World .. "\"")
+		end
+	end
 	if Split[2] == nil then
-		Player:SendMessageInfo("Your position: X:"..Player:GetPosX()..", Y:"..Player:GetPosY()..", Z:"..Player:GetPosZ().." in world "..Player:GetWorld():GetName())
+		GetPos(Player)
 	elseif Player:HasPermission("es.locate.other") then
-		local GetPos = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				Player:SendMessageInfo(Split[2].."'s position: X:"..OtherPlayer:GetPosX()..", Y:"..OtherPlayer:GetPosY()..", Z:"..OtherPlayer:GetPosZ().." in world "..OtherPlayer:GetWorld():GetName())
-				return true
-			end
-		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], GetPos))) then
-			Player:SendMessageFailure("Player not found")
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], GetPos) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
-function HandleWhoisCommand(Split,Player)
-	if Split[2] == nil then
-		--Get Player information and show it as a mesage	
-		Player:SendMessageInfo("Your username is "..Player:GetName())
-		Player:SendMessageInfo("Your IP is "..Player:GetIP())
-		Player:SendMessageInfo("Your ping is "..Player:GetClientHandle():GetPing())
-		Player:SendMessageInfo("Your language is "..Player:GetClientHandle():GetLocale())
-	else
-		local GetInfo = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				Player:SendMessageInfo("Username: "..OtherPlayer:GetName())
-				Player:SendMessageInfo("IP: "..OtherPlayer:GetIP())
-				Player:SendMessageInfo("Ping: "..OtherPlayer:GetClientHandle():GetPing())
-				Player:SendMessageInfo("Language: "..OtherPlayer:GetClientHandle():GetLocale())
-				return true
-			end
+function HandleWhoisCommand(Split, Player)
+	local GetInfo = function(OtherPlayer)
+		Player:SendMessageInfo("Username: " .. OtherPlayer:GetName())
+		Player:SendMessageInfo("UUID: " .. OtherPlayer:GetUUID())
+		Player:SendMessageInfo("IP: " .. OtherPlayer:GetIP())
+		if OtherPlayer:IsFlying() then
+			Player:SendMessageInfo("Flying: true")
+		else
+			Player:SendMessageInfo("Flying: false")
 		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], GetInfo))) then
-			Player:SendMessageFailure("Player not found")
+		if GodModeList[OtherPlayer:GetUUID()] == nil then
+			Player:SendMessageInfo("God Mode: disabled")
+		else
+			Player:SendMessageInfo("God Mode: enabled")
+		end
+		if OtherPlayer:IsVisible() then
+			Player:SendMessageInfo("Hidden: false")
+		else
+			Player:SendMessageInfo("Hidden: true")
+		end
+		Player:SendMessageInfo("Ping: " .. OtherPlayer:GetClientHandle():GetPing())
+		Player:SendMessageInfo("Language: " .. OtherPlayer:GetClientHandle():GetLocale())
+	end
+	if Split[2] == nil then	
+		GetInfo(Player)
+	else
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], GetInfo) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
-function HandleBroadcastCommand(Split,Player)
+function HandleBroadcastCommand(Split, Player)
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <message>")
-	else
-		--Send all Split[x]	
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <message ...>")
+	else	
 		cRoot:Get():BroadcastChat(cChatColor.Gold .. "[SERVER] " .. cChatColor.Yellow .. table.concat(Split, " ", 2))
 	end
 	return true
 end
 
-function HandleShoutCommand(Split,Player)
+function HandleShoutCommand(Split, Player)
+	local PosX = Player:GetPosX()
+	local PosY = Player:GetPosY()
+	local PosZ = Player:GetPosZ()
+	local World = Player:GetWorld()
+
 	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <message>")
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <message ...>")
 	elseif Split[1] == "/shout" then
-		range = cBoundingBox(Player:GetPosX() - 128, Player:GetPosX() + 128, Player:GetPosY() - 128, Player:GetPosY() + 128, Player:GetPosZ() - 128, Player:GetPosZ() + 128)
-		action = "[SHOUT]"
+		Range = cBoundingBox(PosX - 128, PosX + 128, PosY - 128, PosY + 128, PosZ - 128, PosZ + 128)
+		Action = "[SHOUT]"
 	elseif Split[1] == "/whisper" then
-		range = cBoundingBox(Player:GetPosX() - 16, Player:GetPosX() + 16, Player:GetPosY() - 16, Player:GetPosY() + 16, Player:GetPosZ() - 16, Player:GetPosZ() + 16)
-		action = "[WHISPER]"
+		Range = cBoundingBox(PosX - 16, PosX + 16, PosY - 16, PosY + 16, PosZ - 16, PosZ + 16)
+		Action = "[WHISPER]"
 	end
-	world = Player:GetWorld()
-	local Send = function(Entity)
+
+	local SendMessage = function(Entity)
 		if Entity:IsPlayer() then
-			Player = tolua.cast(Entity, "cPlayer")
-			Player:SendMessage(cChatColor.Yellow..""..action..""..cChatColor.White.." <"..Player:GetName().."> "..table.concat( Split , " " , 2 ))
+			Entity:SendMessage(cChatColor.Yellow .. Action .. cChatColor.White .. " <" .. Player:GetName() .. "> " .. table.concat(Split , " " , 2))
 		end
 	end
-	world:ForEachEntityInBox(range, Send)
+	World:ForEachEntityInBox(Range, SendMessage)
 	return true
 end
 

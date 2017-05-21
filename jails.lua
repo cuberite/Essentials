@@ -1,143 +1,104 @@
-function HandleJailCommand( Split, Player )
-	if #Split < 2 and #Split < 3 then
-		HandleListJailCommand( Split, Player )
-		return true
-	end
-	if #Split < 2 or #Split < 3  then
-		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
-		return true
-	end
-	local Tag = Split[3]
-
-	local IsJailed = false
+function HandleJailCommand(Split, Player)
 	local JailPlayer = function(OtherPlayer)
-		if (OtherPlayer:GetName() == Split[2]) then
-			if (OtherPlayer:GetWorld():GetName() ~= jails[Tag]["w"]) then
-				OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
-				OtherPlayer:MoveToWorld(jails[Tag]["w"])
-				IsJailed = true
-			end
-			OtherPlayer:TeleportToCoords( jails[Tag]["x"] + 0.5 , jails[Tag]["y"] , jails[Tag]["z"] + 0.5)
-			OtherPlayer:SendMessageWarning('You have been jailed')
-			UsersINI:SetValue(OtherPlayer:GetUUID(),   "Jailed",   "true")
-			UsersINI:WriteFile("users.ini")
-			Jailed[OtherPlayer:GetUUID()] = true
-			IsJailed = true
-		return true
+		if Jailed[OtherPlayer:GetUUID()] then
+			Player:SendMessageFailure("Player \"" .. OtherPlayer:GetName() .. "\" is jailed")
 		end
+		if OtherPlayer:GetWorld():GetName() ~= Jails[Split[3]]["w"] then
+			OtherPlayer:MoveToWorld(cRoot:Get():GetWorld(Jails[Split[3]]["w"]), true, Vector3d(Jails[Split[3]]["x"] + 0.5, Jails[Split[3]]["y"], Jails[Split[3]]["z"] + 0.5))
+		else
+			OtherPlayer:TeleportToCoords(Jails[Split[3]]["x"] + 0.5, Jails[Split[3]]["y"], Jails[Split[3]]["z"] + 0.5)
+		end
+		UsersINI:SetValue(OtherPlayer:GetUUID(), "Jailed", "true")
+		UsersINI:WriteFile("users.ini")
+		Jailed[OtherPlayer:GetUUID()] = true
+		OtherPlayer:SendMessageInfo("You have been jailed")
 	end
-	cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
-	if (IsJailed) then
-		Player:SendMessageSuccess("Player "..Split[2].." is jailed")
-		return true
+	if Split[2] == nil then
+		HandleListJailCommand(Split, Player)
+	elseif Split[3] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <player> <jail>")
+	elseif Jails[Split[3]] == nil then
+		Player:SendMessageFailure("Jail \"" .. Split[3] .. "\" is invalid")
 	else
-		Player:SendMessageFailure("Player not found")
-		if jails[Tag] == nil then 
-			Player:SendMessageFailure('Jail "' .. Tag .. '" is invalid.')
-			return true
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
+	return true
 end
 
-function HandleUnJailCommand( Split, Player )
-	if #Split < 2 then
-		Player:SendMessageInfo('Usage: '..Split[1]..' <player> <jail>')
-		return true
+function HandleUnJailCommand(Split, Player)
+	local UnjailPlayer = function(OtherPlayer)
+		local World = OtherPlayer:GetWorld()
+		OtherPlayer:TeleportToCoords(World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
+		UsersINI:SetValue(OtherPlayer:GetUUID(), "Jailed", "false")
+		UsersINI:WriteFile("users.ini")
+		Jailed[OtherPlayer:GetUUID()] = false
+		OtherPlayer:SendMessageInfo("You have been unjailed")
+		Player:SendMessageSuccess("Successfully unjailed player \"" .. OtherPlayer:GetName() .. "\"")
 	end
-
-	local UnJailed = false
-	local JailPlayer = function(OtherPlayer)
-		if (OtherPlayer:GetName() == Split[2]) then
-			World = OtherPlayer:GetWorld()
-			OtherPlayer:TeleportToCoords( World:GetSpawnX(), World:GetSpawnY(), World:GetSpawnZ())
-			OtherPlayer:SendMessageSuccess('You have been unjailed')
-			UsersINI:SetValue(OtherPlayer:GetUUID(),   "Jailed",   "false")
-			UsersINI:WriteFile("users.ini")
-			Jailed[OtherPlayer:GetUUID()] = false
-			UnJailed = true
-			return true
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <player> <jail>")
+	else
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], UnjailPlayer) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
-	cRoot:Get():FindAndDoWithPlayer(Split[2], JailPlayer);
-	if (UnJailed) then
-		Player:SendMessageSuccess("You unjailed "..Split[2])
-		return true
-	else
-		Player:SendMessageFailure("Player not found")
-		return true
-	end
+	return true
 end
 
-function HandleSetJailCommand( Split, Player)
-	local Server = cRoot:Get():GetServer()
+function HandleSetJailCommand(Split, Player)
 	local World = Player:GetWorld():GetName()
-	local pX = math.floor(Player:GetPosX())
-	local pY = math.floor(Player:GetPosY())
-	local pZ = math.floor(Player:GetPosZ())
-
-	if #Split < 2 then
-		Player:SendMessageInfo('Usage: '..Split[1]..' <jailname>')
+	local PosX = math.floor(Player:GetPosX())
+	local PosY = math.floor(Player:GetPosY())
+	local PosZ = math.floor(Player:GetPosZ())
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <name>")
 		return true
 	end
-	local Tag = Split[2]
-
-	if jails[Tag] == nil then 
-		jails[Tag] = {}
+	if Jails[Split[2]] == nil then 
+		Jails[Split[2]] = {}
 	end
-
-	if (JailsINI:FindKey(Tag)<0) then
-		jails[Tag]["w"] = World
-		jails[Tag]["x"] = pX
-		jails[Tag]["y"] = pY
-		jails[Tag]["z"] = pZ
-	end
-
-	if (JailsINI:FindKey(Tag)<0) then
-		JailsINI:AddKeyName(Tag);
-		JailsINI:SetValue( Tag , "w" , World)
-		JailsINI:SetValue( Tag , "x" , pX)
-		JailsINI:SetValue( Tag , "y" , pY)
-		JailsINI:SetValue( Tag , "z" , pZ)
-		JailsINI:WriteFile("jails.ini");
-
-		Player:SendMessageSuccess("Jail \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
-		return true
+	if JailsINI:FindKey(Split[2])<0 then
+		Jails[Split[2]]["w"] = World
+		Jails[Split[2]]["x"] = PosX
+		Jails[Split[2]]["y"] = PosY
+		Jails[Split[2]]["z"] = PosZ
+		JailsINI:AddKeyName(Split[2])
+		JailsINI:SetValue(Split[2] , "w" , World)
+		JailsINI:SetValue(Split[2] , "x" , PosX)
+		JailsINI:SetValue(Split[2] , "y" , PosY)
+		JailsINI:SetValue(Split[2] , "z" , PosZ)
+		JailsINI:WriteFile("jails.ini")
+		Player:SendMessageSuccess("Jail \"" .. Split[2] .. "\" set to world:\"" .. World .. "\", X:" .. PosX .. ", Y:" .. PosY .. ", Z:" .. PosZ)
 	else
-		Player:SendMessageFailure('Jail "' .. Tag .. '" already exist')
-		return true
+		Player:SendMessageFailure("Jail \"" .. Split[2] .. "\" already exists")
 	end
 	return true
 end
 
-function HandleDelJailCommand( Split, Player)
-	local Server = cRoot:Get():GetServer()
-
-	if #Split < 2 then
-		Player:SendMessageInfo('Usage: '..Split[1]..' <jail>')
+function HandleDelJailCommand(Split, Player)
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <jail>")
 		return true
 	end
-	local Tag = Split[2]
-	jails[Tag] = nil
-
-	if (JailsINI:FindKey(Tag)>-1) then
-		JailsINI:DeleteKey(Tag);
-		JailsINI:WriteFile("jails.ini");
+	Jails[Split[2]] = nil
+	if JailsINI:FindKey(Split[2])>-1 then
+		JailsINI:DeleteKey(Split[2])
+		JailsINI:WriteFile("jails.ini")
 	else
-		Player:SendMessageFailure("Jail \"" .. Tag .. "\" was not found.")
+		Player:SendMessageFailure("Jail \"" .. Split[2] .. "\" was not found")
 		return true
 	end
-
-	Player:SendMessageSuccess("Jail \"" .. Tag .. "\" was removed.")
+	Player:SendMessageSuccess("Successfully removed jail \"" .. Split[2] .. "\"")
 	return true
 end
 
-function HandleListJailCommand( Split, Player)
-	local jailStr = ""
-	local inc = 0
-	for k, v in pairs (jails) do
-		inc = inc + 1
-		jailStr = jailStr .. k .. ", "
+function HandleListJailCommand(Split, Player)
+	local JailName = ""
+	for k, v in pairs (Jails) do
+		JailName = JailName .. k .. ", "
 	end
-	Player:SendMessageInfo('Jail: ' ..  cChatColor.LightGreen ..  jailStr)
+	Player:SendMessageInfo("Jails: " .. cChatColor.LightGreen .. JailName:sub(1, JailName:len() - 2))
 	return true
 end

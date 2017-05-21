@@ -5,30 +5,31 @@
 g_PluginInfo =
 {
 	Name = "Essentials",
-	Version = "0.2",
+	Version = "1",
+	Date = "2017-05-21",
 	Description = [[This plugin aims to port commands from Bukkit's Essentials to Cuberite, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.]],
 
 	AdditionalInfo =
 	{
 		{
-			Title = "Warp Signs",
-			Contents = [[To create a warp sign, use the following template:
+			Title = "Warp Sign Template",
+			Contents = [[
 			[Warp]
 			warpname]],
 		},
 		{
-			Title = "Command Signs",
-			Contents = [[To create a command sign, use the following template. Note the spaces.
+			Title = "Command Sign Template",
+			Contents = [[
 			[Command]
-			/first line 
-			second line]],
+			/tell player 
+ 			hello <-- Notice the space before "hello" (alternatively at end of "/tell player")]],
 		},
 		{
-			Title = "Enchant Signs",
-			Contents = [[To create an enchant sign, use the following template:
-			[Enchant]
-			EnchantmentID
-			EnchantmentLevel
+			Title = "Enchant Sign Template",
+			Contents = [[
+			[Enchant]  
+			EnchantmentID  
+			EnchantmentLevel  
 			RequiredXPLevelToEnchant]],
 		},
 		{
@@ -40,378 +41,433 @@ g_PluginInfo =
 			When walking on top of the block, you will get teleported to the specified warp.]],
 		},
 	},
+
 	Commands =
 	{
+		["/adventure"] =
+		{
+			Permission = "es.gm.adventure",
+			HelpString = "Changes a player's gamemode to adventure",
+			Handler = HandleGamemodeCommand,
+			Alias = "/gma"
+		},
 		["/antioch"] =
 		{
 			Permission = "es.antioch",
-			HelpString = "Spawn a TNT in the location you're looking at.",
+			HelpString = "Spawns a TNT at the position you're looking at",
 			Handler = HandleAntiOchCommand,
 			Alias = { "/grenade", "/tnt", }
 		},
 		["/back"] =
 		{
 			Permission = "es.back",
-			HelpString = "Return to last known position.",
+			HelpString = "Returns you to your previous position",
 			Handler = HandleBackCommand,
 			Alias = "/return"
 		},
 		["/biome"] =
 		{
 			Permission = "es.biome",
-			HelpString = "Tells you the biome in which you are.",
+			HelpString = "Tells you the biome in which you are",
 			Handler = HandleBiomeCommand,
 		},
 		["/broadcast"] =
 		{
 			Permission = "es.broadcast",
-			HelpString = "Broadcast a message to all players.",
+			HelpString = "Broadcasts a message to all players",
 			Handler = HandleBroadcastCommand,
 			Alias = { "/say", "/bcast", "/bc", }
 		},
 		["/burn"] =
 		{
 			Permission = "es.burn",
-			HelpString = "Set a player on fire.",
+			HelpString = "Sets a player on fire",
 			Handler = HandleBurnCommand,
+		},
+		["/creative"] =
+		{
+			Permission = "es.gm.creative",
+			HelpString = "Changes a player's gamemode to creative",
+			Handler = HandleGamemodeCommand,
+			Alias = "/gmc"
 		},
 		["/delhome"] =
 		{
 			Permission = "es.delhome",
-			HelpString = "Delete a home.",
+			HelpString = "Removes your home",
 			Handler = HandleDelHomeCommand,
 			Alias = { "/remhome", "/rmhome", }
 		},
 		["/deljail"] =
 		{
 			Permission = "es.deljail",
-			HelpString = "Delete a jail.",
+			HelpString = "Removes a jail",
 			Handler = HandleDelJailCommand,
 			Alias = { "/remjail", "/rmjail", }
 		},
 		["/delwarp"] =
 		{
 			Permission = "es.dropwarp",
-			HelpString = "Delete a warp.",
+			HelpString = "Removes a warp",
 			Handler = HandleDelWarpCommand,
 			Alias = { "/remwarp", "/rmwarp", }
 		},
 		["/depth"] =
 		{
 			Permission = "es.depth",
-			HelpString = "Displays your height relative to sea level.",
+			HelpString = "Displays your height relative to sea level",
 			Handler = HandleDepthCommand,
 			Alias = "/height"
 		},
 		["/ext"] =
 		{
 			Permission = "es.ext",
-			HelpString = "Extinguish a player.",
+			HelpString = "Extinguishes a player",
 			Handler = HandleExtinguishCommand,
 			Alias = "/extinguish"
 		},
 		["/feed"] =
 		{
 			Permission = "es.feed",
-			HelpString = "Satisfy the hunger.",
+			HelpString = "Satisfies the hunger",
 			Handler = HandleFeedCommand,
 			Alias = "/eat"
 		},
 		["/fireball"] =
 		{
 			Permission = "es.fireball",
-			HelpString = "Shoots a fireball.",
+			HelpString = "Shoots a fireball",
 			Handler = HandleFireballCommand,
 		},
 		["/fly"] =
 		{
-			Permission = "es.fly",  
-			Handler = HandleFlyCommand,  
-			HelpString = "Toggle flying.",  
-			Category = "Cheat",
+			Permission = "es.fly",
+			HelpString = "Enables or disables flying",
+			Handler = HandleFlyCommand,
 		},
 		["/flyspeed"] =
 		{
 			Permission = "es.flyspeed",
-			Handler = HandleFlySpeedCommand,
-			HelpString = "Change a player's flying speed.",
-			Alias = "/fspeed",
-			Category = "Cheat",
+			HelpString = "Changes a player's flying speed",
+			Handler = HandleSpeedCommand,
+		},
+		["/god"] =
+		{
+			Permission = "es.god",
+			HelpString = "Makes you immortal",
+			Handler = HandleGodCommand,
+			Alias = { "/godmode", "/tgm", }
 		},
 		["/hat"] =
 		{
 			Permission = "es.hat",
-			HelpString = "Use your equipped item as a helmet.",
+			HelpString = "Use your equipped item as a helmet",
 			Handler = HandleHatCommand,
 			Alias = "/head"
 		},
 		["/heal"] =
 		{
 			Permission = "es.heal",
-			HelpString = "Heal a player.",
+			HelpString = "Heals a player",
 			Handler =  HandleHealCommand,
 		},
 		["/home"] =
 		{
 			Permission = "es.home",
-			HelpString = "Teleport to your home.",
+			HelpString = "Teleports you home",
 			Handler = HandleHomeCommand,
 		},
 		["/itemdb"] =
 		{
 			Permission = "es.itemdb",
-			HelpString = "Displays the item information of an item you are holding.",
+			HelpString = "Displays the item information of an item you are holding",
 			Handler = HandleItemdbCommand,
 			Alias = { "/iteminfo", "/itemno", "/durability", "/dura", }
 		},
 		["/jail"] =
 		{
 			Permission = "es.jail",
-			HelpString = "Jail a player.",
+			HelpString = "Jails a player",
 			Handler = HandleJailCommand,
 		},
 		["/jails"] =
 		{
 			Permission = "es.listjail",
-			HelpString = "Lists all jails.",
+			HelpString = "Lists all available jails",
 			Handler = HandleListJailCommand,
 		},
 		["/lightning"] =
 		{
 			Permission = "es.lightning",
-			HelpString = "Damage the specified player with lightning.",
+			HelpString = "Spawns lightning near a player",
 			Handler = HandleLightningCommand,
 			Alias = { "/shock", "/strike", "/smite", "/thor", }
 		},
 		["/locate"] =
 		{
 			Permission = "es.locate",
-			HelpString = "Get your current coords.",
+			HelpString = "Displays your current coordinates",
 			Handler = HandleLocateCommand,
 			Alias = { "/getpos", "/whereami", "/getloc", "/coords", "/position" }
 		},
 		["/more"] =
 		{
 			Permission = "es.more",
-			HelpString = "Increases the item amount in the held stack to 64 items.",
+			HelpString = "Increases the item amount in the held stack to 64 items",
 			Handler = HandleMoreCommand,
 		},
 		["/mute"] =
 		{
 			Permission = "es.mute",
-			HelpString = "Mute a player.",
+			HelpString = "Mutes a player",
 			Handler = HandleMuteCommand,
 			Alias = "/silence"
 		},
 		["/nuke"] =
 		{
 			Permission = "es.nuke",
-			HelpString = "Spawns a nuke above players.",
+			HelpString = "Spawns a nuke above players",
 			Handler = HandleNukeCommand,
 		},
 		["/ping"] =
 		{
 			Permission = "es.ping",
-			HelpString = "Check if the server is alive.",
+			HelpString = "Displays a message if the server is alive",
 			Handler = HandlePingCommand,
 			Alias = { "/pong", "/echo", }
 		},
 		["/place"] =
 		{
 			Permission = "es.place",
-			HelpString = "Teleport a player where you are looking.",
+			HelpString = "Teleports a player where you are looking",
 			Handler = HandlePlaceCommand,
 		},
 		["/powertool"] = 
 		{
 			Permission = "es.powertool",
-			HelpString = "Binds a command to the item you are holding.",
+			HelpString = "Binds a command to the item you are holding",
 			Handler = HandlePowertoolCommand,
 			Alias = "/pt"
 		},
 		["/repair"] =
 		{
 			Permission = "es.repair",
-			HelpString = "Repair the item you are holding.",
+			HelpString = "Repairs the item you are holding",
 			Handler = HandleRepairCommand,
 			Alias = "/fix"
 		},
 		["/runspeed"] =
 		{
-			Permission = "es.runspeed",  
-			Handler = HandleRunSpeedCommand,  
-			HelpString = "Change a player's sprinting speed.", 
-			Alias = "/rspeed", 
-			Category = "Cheat",
+			Permission = "es.runspeed",
+			HelpString = "Changes a player's running speed",
+			Handler = HandleSpeedCommand,
 		},
 		["/sethome"] =
 		{
 			Permission = "es.sethome",
-			HelpString = "Set your home.",
+			HelpString = "Sets your home",
 			Handler = HandleSetHomeCommand,
 			Alias = "/createhome"
 		},
 		["/setjail"] =
 		{
 			Permission = "es.setjail",
-			HelpString = "Create a jail at your location.",
+			HelpString = "Creates a jail at your location",
 			Handler = HandleSetJailCommand,
 			Alias = "/createjail"
 		},
 		["/setwarp"] =
 		{
 			Permission = "es.setwarp",
-			HelpString = "Create a warp at your location.",
+			HelpString = "Creates a warp at your location",
 			Handler = HandleSetWarpCommand,
 			Alias = "/createwarp"
 		},
 		["/shout"] =
 		{
 			Permission = "es.shout",
-			HelpString = "Chat in a range of 128 blocks.",
+			HelpString = "Displays a chat message in a range of 128 blocks",
 			Handler = HandleShoutCommand,
 		},
-		["/skull"] =                                                                                                                                            
-		{                                                                                                                                                       
-			Permission = "es.skull",                                                                                                                        
-			HelpString = "Allows you to change a skull's skin.",                                                                                      
-			Handler = HandleSkullCommand,                                                                                                                   
+		["/skull"] =
+		{
+			Permission = "es.skull",
+			HelpString = "Allows you to change the skin of a skull",
+			Handler = HandleSkullCommand,
 		},
 		["/socialspy"] = 
 		{
 			Permission = "es.socialspy",
-			HelpString = "Displays other players' private messages.",
+			HelpString = "Displays other players' private messages",
 			Handler = HandleSocialSpyCommand,
 		},	
 		["/spawnmob"] =
 		{
 			Permission = "es.spawnmob",
-			HelpString = "Spawn a mob.",
+			HelpString = "Spawns a mob",
 			Handler = HandleSpawnMobCommand,
 			Alias = "/mob"
+		},
+		["/spectator"] =
+		{
+			Permission = "es.gm.spectator",
+			HelpString = "Changes a player's gamemode to spectator",
+			Handler = HandleGamemodeCommand,
+			Alias = "/gmsp"
+		},
+		["/speed"] =
+		{
+			Permission = "es.speed",
+			HelpString = "Changes a player's moving speed",
+			Handler = HandleSpeedCommand,
+			Subcommands =
+			{
+				fly =
+				{
+					HelpString = "Changes a player's flying speed",
+					Permission = "es.flyspeed",
+					Handler = HandleSpeedCommand,
+				},
+				walk =
+				{
+					HelpString = "Changes a player's walk speed",
+					Permission = "es.walkspeed",
+					Handler = HandleSpeedCommand,
+				},
+				run =
+				{
+					HelpString = "Changes a player's running speed",
+					Permission = "es.runspeed",
+					Handler = HandleSpeedCommand,
+				},
+			},
+		},
+		["/survival"] =
+		{
+			Permission = "es.gm.survival",
+			HelpString = "Changes a player's gamemode to survival",
+			Handler = HandleGamemodeCommand,
+			Alias = "/gms"
 		},
 		["/top"] =
 		{
 			Permission = "es.top",
-			HelpString = "Teleport to the highest block.",
+			HelpString = "Teleports you to the highest block",
 			Handler = HandleTopCommand,
 		},
 		["/tpa"] =
 		{
 			Permission = "es.tpa",
-			HelpString = "Request teleport to someone's position.",
+			HelpString = "Requests teleportation to a player",
 			Handler = HandleTPACommand,
 			Alias = { "/call", "/tpask", }
 		},
 		["/tpaccept"] =
 		{
 			Permission = "es.tpa",
-			HelpString = "Accept teleport request.",
-			Handler = HandleTPAcceptCommand,
+			HelpString = "Accepts teleportation request",
+			Handler = HandleTPAcceptDenyCommand,
 			Alias = "/tpyes"
 		},
 		["/tpahere"] =
 		{
 			Permission = "es.tpa",
-			HelpString = "Request teleport to your position.",
+			HelpString = "Requests teleportation of another player to you",
 			Handler = HandleTPACommand,
 		},
 		["/tpdeny"] =
 		{
 			Permission = "es.tpa",
-			HelpString = "Deny teleport request.",
-			Handler =  HandleTPDenyCommand,
+			HelpString = "Denies teleportation request",
+			Handler =  HandleTPAcceptDenyCommand,
 			Alias = "/tpno"
 		},
 		["/tphere"] =
 		{
 			Permission = "es.tp",
-			HelpString = "Teleport a player to your position.",
+			HelpString = "Teleports a player to you",
 			Handler = HandleTPHereCommand,
 			Alias = { "/bring", "/s", }
 		},
 		["/tps"] =
 		{
 			Permission = "es.tps",
-			HelpString = "Measure server lag.",
+			HelpString = "Returns the tps (ticks per second) from the server",
 			Handler = HandleTPSCommand,
 			Alias = "/lag"
 		},
 		["/unjail"] =
 		{
 			Permission = "es.unjail",
-			HelpString = "Unjail a player.",
+			HelpString = "Unjails a player",
 			Handler = HandleUnJailCommand,
 		},
 		["/unmute"] =
 		{
 			Permission = "es.unmute",
-			HelpString = "Unmute a player.",
+			HelpString = "Unmutes a player",
 			Handler = HandleUnmuteCommand,
 		},
 		["/vanish"] =
 		{
 			Permission = "es.vanish",
-			HelpString = "Toggle visibility",
+			HelpString = "Enables or disables player visibility",
 			Handler = HandleVanishCommand,
 			Alias = { "/hide", "/v", }
 		},
 		["/walkspeed"] =
 		{
-			Permission = "es.walkspeed",  
-			Handler = HandleWalkSpeedCommand,  
-			HelpString = "Change a player's flying speed.", 
-			Alias = "/wspeed", 
-			Category = "Cheat",
+			Permission = "es.walkspeed",
+			HelpString = "Changes a player's walking speed",
+			Handler = HandleSpeedCommand,
 		},
 		["/warp"] =
 		{
 			Permission = "es.warp",
-			HelpString = "Moves player to location of warp [Tag].",
+			HelpString = "Moves player to location of a warp",
 			Handler = HandleWarpCommand,
 		},
 		["/warps"] =
 		{
 			Permission = "es.listwarp",
-			HelpString = "Lists all warps.",
+			HelpString = "Lists all warps",
 			Handler = HandleListWarpCommand,
 		},
 		["/whisper"] =
 		{
 			Permission = "es.whisper",
-			HelpString = "Chat in a range of 16 blocks.",
+			HelpString = "Displays a chat message in a range of 16 blocks",
 			Handler = HandleShoutCommand,
 		},
 		["/whois"] =
 		{
 			Permission = "es.whois",
-			HelpString = "Get information about the specified player.",
+			HelpString = "Displays information about the specified player",
 			Handler = HandleWhoisCommand,
 		},
 		["/xp"] =
 		{
 			Permission = "es.xp",  
 			Handler = HandleXPCommand,  
-			HelpString = "Manage xp for a player.",
+			HelpString = "Manage XP for a player",
 			Alias = "/exp",
-			Category = "Cheat",
 			Subcommands =
 			{
 				show =
 				{
-					HelpString = "Show xp of specified player.",
+					HelpString = "Shows XP of a player",
 					Permission = "es.xp.show",
 					Handler = HandleXPCommand,
 				},
 				set =
 				{
-					HelpString = "Set player's current xp.",
+					HelpString = "Sets current XP of a player",
 					Permission = "es.xp.set",
 					Handler = HandleXPCommand,
 				},
 				give =
 				{
-					HelpString = "Give xp to the specified player.",
+					HelpString = "Gives XP to a player",
 					Permission = "es.xp.give",
 					Handler = HandleXPCommand,
 				},
@@ -425,7 +481,7 @@ g_PluginInfo =
 	{		
 		["tps"] =
 		{
-			HelpString =  "Returns the tps (ticks per second) from the server.",
+			HelpString =  "Returns the tps (ticks per second) from the server",
 			Handler =  HandleConsoleTPS,
 			Alias = "lag",
 		},
@@ -437,62 +493,82 @@ g_PluginInfo =
 	{
 		["es.biome.other"] =
 		{
-			Description = "Shows you in which biome another player is.",
+			Description = "Shows you in which biome another player is",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.commandsign"] =
 		{
-			Description = "Allows a player to create signs which execute commands.",
+			Description = "Allows a player to create signs which execute commands",
 			RecommendedGroups = "admins, mods",
 		},		
 		["es.createportal"] =
 		{
-			Description = "Allows a player to create a portal.",
+			Description = "Allows a player to create a portal",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.enchantsign"] =
 		{
-			Description = "Allows a player to create Enchant Signs.",
+			Description = "Allows a player to create Enchant Signs",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.feed.other"] =
 		{
-			Description = "Satisfy the hunger of another player.",
+			Description = "Satisfies the hunger of another player",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.fly.other"] =
 		{
-			Description = "Toggle flying for other players.",
+			Description = "Enables or disables flying for another player",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.gm.adventure.other"] =
+		{
+			Description = "Changes the gamemode of another player to adventure",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.gm.creative.other"] =
+		{
+			Description = "Changes the gamemode of another player to creative",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.gm.spectator.other"] =
+		{
+			Description = "Changes the gamemode of another player to spectator",
+			RecommendedGroups = "admins, mods",
+		},
+		["es.gm.survival.other"] =
+		{
+			Description = "Changes the gamemode of another player to survival",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.heal.other"] =
 		{
-			Description = "Heal another player.",
+			Description = "Heals another player",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.home.unlimited"] =
 		{
-			Description = "Allows a player to have an unlimited amount of homes.",
+			Description = "Allows a player to have an unlimited amount of homes",
 			RecommendedGroups = "mods, players",
 		},
 		["es.locate.other"] =
 		{
-			Description = "Get the position of another player.",
+			Description = "Displays the position of another player",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.more.other"] =
 		{
-			Description = "Increases the item amount in another player's held stack to 64 items.",
+			Description = "Increases the item amount in another player's held stack to 64 items",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.spawnmob.other"] =
 		{
-			Description = "Spawns a mob near a player.",
+			Description = "Spawns a mob near another player",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.vanish.other"] =
 		{
-			Description = "Toggle vanish for a player.",
+			Description = "Enables or disables visibility for another player",
 			RecommendedGroups = "admins, mods",
 		},
 		["es.warpsign"] =

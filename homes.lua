@@ -1,52 +1,58 @@
 function HandleHomeCommand(Split, Player)
-	username = Player:GetUUID()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true and file_exists(homeDir..'/'..username..'.'..Split[2]) == true then
-		coords = lines_from(homeDir..'/'..username..'.'..Split[2])
-		Player:SendMessageSuccess('Teleporting you to home...')
-		Player:TeleportToCoords(coords[1], coords[2], coords[3])
-		if Player:GetWorld():GetName() ~= coords[4] then
-			Player:MoveToWorld(coords[4])
+	local UUID = Player:GetUUID()
+	local World = Player:GetWorld():GetName()
+	if Split[2] and Player:HasPermission("es.home.unlimited") and file_exists(HomesFolder .. "/" .. UUID .. "." .. Split[2]) then
+		local Coords = lines_from(HomesFolder .. "/" .. UUID .. "." .. Split[2])
+		if World ~= Coords[4] then
+			Player:MoveToWorld(cRoot:Get():GetWorld(Coords[4]), true, Vector3d(Coords[1], Coords[2], Coords[3]))
+		else
+			Player:TeleportToCoords(Coords[1], Coords[2], Coords[3])
 		end
-	elseif file_exists(homeDir..'/'..username..'.home') then
-		coords = lines_from(homeDir..'/'..username..'.home')
-		Player:SendMessageSuccess('Teleporting you to home...')
-		Player:TeleportToCoords(coords[1], coords[2], coords[3])
-		if Player:GetWorld():GetName() ~= coords[4] then
-			Player:MoveToWorld(coords[4])
+		Player:SendMessageSuccess("Teleported you to \"" .. Split[2] .. "\" home")
+	elseif file_exists(HomesFolder .. "/" .. UUID .. ".home") then
+		local Coords = lines_from(HomesFolder .. "/" .. UUID .. ".home")
+		if World ~= Coords[4] then
+			Player:MoveToWorld(cRoot:Get():GetWorld(Coords[4]), true, Vector3d(Coords[1], Coords[2], Coords[3]))
+		else
+			Player:TeleportToCoords(Coords[1], Coords[2], Coords[3])
 		end
+		Player:SendMessageSuccess("Teleported you home")
 	else
-		Player:SendMessageFailure("Home doesn't exist")
+		Player:SendMessageFailure("That home doesn't exist")
 	end
 	return true
 end
 
 function HandleSetHomeCommand(Split, Player)
-	username = Player:GetUUID()
-	homeX = Player:GetPosX()
-	homeY = Player:GetPosY()
-	homeZ = Player:GetPosZ()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true then
-		local file = io.open(homeDir..'/'..username..'.'..Split[2], "w")
-		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
+	local UUID = Player:GetUUID()
+	local PosX = Player:GetPosX()
+	local PosY = Player:GetPosY()
+	local PosZ = Player:GetPosZ()
+	local World = Player:GetWorld():GetName()
+	if Split[2] and Player:HasPermission("es.home.unlimited") then
+		local file = io.open(HomesFolder .. "/" .. UUID .. "." .. Split[2], "w")
+		file:write(PosX .. "\n" .. PosY .. "\n" .. PosZ .. "\n" .. World)
 		file:close()
-		Player:SendMessageSuccess('Home set! Use /home to go home!')	
+		Player:SendMessageSuccess("Successfully set home \"" .. Split[2] .. "\". Use \"/home " .. Split[2] .. "\" to teleport to it.")	
 	else
-		local file = io.open(homeDir..'/'..username..'.home', "w")
-		file:write(homeX..'\n'..homeY..'\n'..homeZ..'\n'..Player:GetWorld():GetName())
+		local file = io.open(HomesFolder .. "/" .. UUID .. ".home", "w")
+		file:write(PosX .. "\n" .. PosY .. "\n" .. PosZ .. "\n" .. World)
 		file:close()
-		Player:SendMessageSuccess('Home set! Use /home to go home!')	
+		Player:SendMessageSuccess("Successfully set main home. Use \"/home\" to teleport to it.")	
 	end
 	return true
 end
 
 function HandleDelHomeCommand(Split, Player)
-	username = Player:GetUUID()
-	if Split[2] ~= nil and Player:HasPermission("es.home.unlimited") == true then
-		os.remove(homeDir..'/'..username..'.'..Split[2], "w")
-		Player:SendMessageSuccess("Home removed")	
+	local UUID = Player:GetUUID()
+	if Split[2] and Player:HasPermission("es.home.unlimited") and file_exists(HomesFolder .. "/" .. UUID .. "." .. Split[2]) then
+		os.remove(HomesFolder .. "/" .. UUID .. "." .. Split[2], "w")
+		Player:SendMessageSuccess("Successfully removed home \"" ..Split[2] .. "\"")	
+	elseif file_exists(HomesFolder .. "/" .. UUID .. ".home") then
+		os.remove(HomesFolder .. "/" .. UUID .. ".home", "w")
+		Player:SendMessageSuccess("Successfully removed main home")	
 	else
-		os.remove(homeDir..'/'..username..'.home', "w")
-		Player:SendMessageSuccess("Home removed")		
+		Player:SendMessageFailure("That home doesn't exist")
 	end
 	return true
 end
