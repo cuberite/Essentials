@@ -1,97 +1,89 @@
-function HandleSpawnMobCommand(Split,Player)
-	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <mobtype[:baby]> [player]")
-		return true
-	end
+function HandleSpawnMobCommand(Split, Player)
+	local SpawnMob = function(OtherPlayer)
+		local LookPos = GetPlayerLookPos(Player)
+		local PosX = OtherPlayer:GetPosX()
+		local PosY = OtherPlayer:GetPosY()
+		local PosZ = OtherPlayer:GetPosZ()
+		local World = OtherPlayer:GetWorld()
+		local IsBaby = false
 
-	local IsBaby = false
-	local Mob = Split[2]
+		-- Check if mob name contains :baby
+		if string.find(Split[2], ":") then
+			Split[2], data = string.match(Split[2], "(%w+):(%w+)")
+			if data == "baby" then
+				IsBaby = true
+			end
+		end
 
-	if string.find(Mob, ":") then
-		Mob, data = string.match(Mob, "(%w+):(%w+)")
-		if data == "baby" then
-			IsBaby = true
+		local MobID = cMonster:StringToMobType(Split[2])
+
+		if Split[3] or LookPos == nil then
+			World:SpawnMob(PosX + 2, PosY, PosZ + 2, MobID, IsBaby)
+		else
+			World:SpawnMob(LookPos.x, LookPos.y + 1, LookPos.z, MobID, IsBaby)
+		end
+
+		if MobID == -1 then
+			Player:SendMessageFailure("Unknown mob type \"" .. Split[2] .. "\"")
+		else
+			if Split[3] then
+				Player:SendMessageSuccess("Successfully spawned mob near player \"" .. OtherPlayer:GetName() .. "\"")
+			else
+				Player:SendMessageSuccess("Successfully spawned mob " .. Split[2])
+			end
 		end
 	end
 
-	Mob = cMonster:StringToMobType(Mob)
-
-	if Mob == -1 then
-		Player:SendMessageFailure("Unknown mob type")
-	else
-		if Split[3] == nil then
-			pos = GetPlayerLookPos(Player)
-			if pos.x == 0 and pos.y == 0 and pos.z == 0 then
-				--If the player is looking to the air, spawn the mob
-				Player:GetWorld():SpawnMob(Player:GetPosX() + 5, Player:GetPosY(), Player:GetPosZ() + 5, Mob, IsBaby)
-			else
-				--If he's not, spawn the mob where he's looking
-				Player:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob, IsBaby)
-			end
-			Player:SendMessageSuccess("Mob spawned")
-		elseif Player:HasPermission("es.spawnmob.other") then
-			local SpawnMob = function(OtherPlayer)
-				if (OtherPlayer:GetName() == Split[3]) then
-					pos = GetPlayerLookPos(OtherPlayer)
-					if pos.x == 0 and pos.y == 0 and pos.z == 0 then
-						OtherPlayer:GetWorld():SpawnMob(OtherPlayer:GetPosX() + 5, OtherPlayer:GetPosY(), OtherPlayer:GetPosZ(), Mob, IsBaby)
-					else
-						OtherPlayer:GetWorld():SpawnMob(pos.x, pos.y + 1, pos.z, Mob, IsBaby)
-					end
-					Player:SendMessageSuccess("Spawned mob near "..Split[3])
-					return true
-				end
-			end
-			if (not(cRoot:Get():FindAndDoWithPlayer(Split[3], SpawnMob))) then
-				Player:SendMessageFailure("Player not found")
-			end
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <mobtype[:baby]> [player]")
+	elseif Split[3] == nil then
+		SpawnMob(Player)
+	elseif Player:HasPermission("es.spawnmob.other") then
+		if Split[3] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[3], SpawnMob) then
+			Player:SendMessageFailure("Player \"" .. Split[3] .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleBurnCommand(Split, Player)
-	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <player> [seconds]")
-	else
-		local BurnPlayer = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				if Split[3] == nil then
-					--Burn the player for 10s
-					OtherPlayer:StartBurning(200)
-				else
-					--Burn the player for the specified time
-					OtherPlayer:StartBurning(Split[3] * 20)
-				end
-				return true
-			end
+	local BurnPlayer = function(OtherPlayer)
+		if Split[3] == nil then
+			--Burn the player for 10s
+			OtherPlayer:StartBurning(200)
+		else
+			--Burn the player for the specified time
+			OtherPlayer:StartBurning(Split[3] * 20)
 		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], BurnPlayer))) then
-			Player:SendMessageFailure("Player not found")
+		Player:SendMessageSuccess("Successfully set player \"" .. OtherPlayer:GetName() .. "\" on fire")
+	end
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <player> [seconds]")
+	else
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], BurnPlayer) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleExtinguishCommand(Split, Player)
+	local ExtPlayer = function(OtherPlayer)
+		OtherPlayer:StopBurning()
+		Player:SendMessageSuccess("Successfully extinguished player \"" .. OtherPlayer:GetName() .. "\"")
+	end
         if Split[2] == nil then
-                Player:SendMessageInfo("Usage: "..Split[1].." <player>")
+                Player:SendMessageInfo("Usage: " .. Split[1] .. " <player>")
         else
-                local found = cRoot:Get():FindAndDoWithPlayer(Split[2],function(ExtPlayer)
-                        if ExtPlayer:GetName() == Split[2] then
-                                ExtPlayer:StopBurning()
-                        end
-                        return true
-                end)
-                if not found then
-                        Player:SendMessageFailure("Player not found")
-                end
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], ExtPlayer) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
+		end
         end
         return true
 end
 
 function HandlePingCommand(Split, Player)
-	if Split[2] ~= nil then
+	if Split[2] then
 		Player:SendMessage(table.concat(Split, " ", 2))
 	else
 		Player:SendMessage(cChatColor.Green.. "Pong!")
@@ -100,38 +92,40 @@ function HandlePingCommand(Split, Player)
 end
 
 function HandleLightningCommand(Split, Player)
-	if (Split[3] == nil) then
-		Player:SendMessageInfo("Usage: "..Split[1].." <player> <damage> [-b]")
-	else
-		local ShockPlayer = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				--Create a thunderbolt above the player
-				OtherPlayer:GetWorld():CastThunderbolt(OtherPlayer:GetPosX(), OtherPlayer:GetPosY(), OtherPlayer:GetPosZ())
-				OtherPlayer:TakeDamage(dtPlugin, nil, Split[3], Split[3], 0)
-				Player:SendMessageSuccess("A lightning damaged "..Split[2])
-				if Split[4] == "-b" then
-					--Thunderbolts can burn! :D
-					OtherPlayer:StartBurning(200)
-				end
-				return true
+	local CreateLightning = function(OtherPlayer)
+		local LookPos = GetPlayerLookPos(Player)
+		if Split[2] == nil then
+			if LookPos == nil then
+				Player:GetWorld():CastThunderbolt(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ())
+			else
+				Player:GetWorld():CastThunderbolt(LookPos.x, LookPos.y, LookPos.z)
 			end
+		else
+			OtherPlayer:GetWorld():CastThunderbolt(OtherPlayer:GetPosX(), OtherPlayer:GetPosY(), OtherPlayer:GetPosZ())
+			OtherPlayer:SendMessageInfo("A lightning hit you")
+			OtherPlayer:TakeDamage(dtLightning, nil, 5, 5, 0)
 		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], ShockPlayer))) then
-			Player:SendMessageFailure("Player not found")
+	end
+	if Split[2] == nil then
+		CreateLightning(Player)
+	elseif Split[2] == "*" or Split[2] == "**" then
+		cRoot:Get():ForEachPlayer(CreateLightning)
+	else
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], CreateLightning) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleItemdbCommand(Split, Player)
-	item = cItem()
-	if (Split[2] == nil) then
-		itemstring = ItemToString(Player:GetEquippedItem())
-		item = Player:GetEquippedItem()
-		--Show item information
-		Player:SendMessageInfo("You are holding "..item.m_ItemCount.." "..itemstring..", ID: "..item.m_ItemType)
-	elseif StringToItem(Split[2], item) == true then
-		Player:SendMessageInfo(Split[2].." info: ID "..item.m_ItemType..", meta "..item.m_ItemDamage)
+	local Item = cItem()
+	if Split[2] == nil then
+		local ItemString = ItemToString(Player:GetEquippedItem())
+		local Item = Player:GetEquippedItem()
+		Player:SendMessageInfo("You are holding " .. Item.m_ItemCount .. " " .. ItemString .. ", ID: " .. Item.m_ItemType .. ":" .. Item.m_ItemDamage)
+	elseif StringToItem(Split[2], Item) then
+		Player:SendMessageInfo("Item: " .. ItemToString(Item) .. ", ID: " .. Item.m_ItemType .. ":" .. Item.m_ItemDamage)
 	else
 		Player:SendMessageFailure("Specify a valid item name")
 	end
@@ -139,129 +133,109 @@ function HandleItemdbCommand(Split, Player)
 end
 
 function HandleMuteCommand(Split, Player)
-	if (Split[2] == nil) then
-		Player:SendMessageInfo("Usage: "..Split[1].." <player>")
+	local MutePlayer = function(OtherPlayer)
+		--Mute the player
+		UsersINI:SetValue(OtherPlayer:GetUUID(), "Muted", "true")
+		UsersINI:WriteFile("users.ini")
+		Muted[OtherPlayer:GetUUID()] = true
+		OtherPlayer:SendMessageInfo("You have been muted")
+		Player:SendMessageSuccess("Successfully muted player \"" .. OtherPlayer:GetName() .. "\"")
+	end
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <player>")
 	else
-		local MutePlayer = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				--Mute the player
-				UsersINI:SetValue(OtherPlayer:GetUUID(),   "Muted",   "true")
-				UsersINI:WriteFile("users.ini")
-				Muted[OtherPlayer:GetUUID()] = true
-				Player:SendMessageSuccess("Muted "..Split[2])
-				return true
-			end
-		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], MutePlayer))) then
-			Player:SendMessageFailure("Player not found")
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], MutePlayer) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleUnmuteCommand(Split, Player)
-	if (Split[2] == nil) then
-		Player:SendMessageInfo("Usage: "..Split[1].." <player>")
+	local UnmutePlayer = function(OtherPlayer)
+		UsersINI:SetValue(OtherPlayer:GetUUID(), "Muted", "false")
+		UsersINI:WriteFile("users.ini")
+		Muted[OtherPlayer:GetUUID()] = false
+		OtherPlayer:SendMessageInfo("You have been unmuted")
+		Player:SendMessageSuccess("Successfully unmuted player \"" .. OtherPlayer:GetName() .. "\"")
+	end
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <player>")
 	else
-		local UnmutePlayer = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				UsersINI:SetValue(OtherPlayer:GetUUID(),   "Muted",   "false")
-				UsersINI:WriteFile("users.ini")
-				Muted[OtherPlayer:GetUUID()] = false
-				Player:SendMessageSuccess("Unmuted "..Split[2])
-				return true
-			end
-		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], UnmutePlayer))) then
-			Player:SendMessageFailure("Player not found")
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], UnmutePlayer) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
-function HandleAntiOchCommand(Split,Player)
-	pos = GetPlayerLookPosPlace(Player)
-	if pos.x == 0 and pos.y == 0 and pos.z == 0 then
-		Player:SendMessageFailure("You're not looking at a block (or it's too far)")
+function HandleAntiOchCommand(Split, Player)
+	local LookPos = GetPlayerLookPos(Player)
+	if LookPos == nil then
+		Player:SendMessageFailure("You're not looking at a block, or it's too far away")
 	else
-		if Split[2] ~= nil then
+		if Split[2] then
 			cRoot:Get():BroadcastChat("...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,")
 			cRoot:Get():BroadcastChat("who being naughty in My sight, shall snuff it.")
 		end
-		--Spawn tnt
-		Player:GetWorld():SpawnPrimedTNT(pos.x, pos.y, pos.z, 35)
+		Player:GetWorld():SpawnPrimedTNT(LookPos.x, LookPos.y, LookPos.z, 35)
 	end
 	return true
 end
 
---- Handles console tps command, wrapper to HandleTpsCommand function
---  Necessary due to Cuberite now supplying additional parameters
---  
-function HandleConsoleTPS(Split, FullCmd)
-	return HandleTPSCommand(Split)
+function HandleTPSCommand(Split, Player)
+	Player:SendMessageInfo("Global TPS: " .. GetAverageNum(GlobalTps))
+	for WorldName, WorldTps in pairs(TpsCache) do
+		Player:SendMessageInfo("World \"" .. WorldName .. "\": " .. GetAverageNum(WorldTps) .. " TPS");
+	end
+	return true
 end
 
-
-function HandleTPSCommand(Split, Player)
-	if (Player ~= nil) then
-		Player:SendMessageInfo("Global TPS: " .. GetAverageNum(GlobalTps))
-		for WorldName, WorldTps in pairs(TpsCache) do
-			Player:SendMessageInfo("World '" .. WorldName .. "': " .. GetAverageNum(WorldTps) .. " TPS");
-		end
-	else
-		LOG("Global TPS: " .. GetAverageNum(GlobalTps))
-		for WorldName, WorldTps in pairs(TpsCache) do
-			LOG("World '" .. WorldName .. "': " .. GetAverageNum(WorldTps) .. " TPS");
-		end
+function HandleConsoleTPS(Split)
+	LOG("Global TPS: " .. GetAverageNum(GlobalTps))
+	for WorldName, WorldTps in pairs(TpsCache) do
+		LOG("World \"" .. WorldName .. "\": " .. GetAverageNum(WorldTps) .. " TPS");
 	end
 	return true
 end
 
 function HandleSkullCommand(Split, Player)
-	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <username>")
-		return true
-	end
-
-	local pos = GetPlayerLookPos(Player)
-
-	local LookingAtHead = Player:GetWorld():DoWithMobHeadAt(
-		pos.x, pos.y, pos.z,
-		function (Head)
-			ChangeHead = tolua.cast(Head, "cMobHeadEntity")
-			ChangeHead:SetType(3)
-			if Player:GetWorld():DoWithPlayer(
-				Split[2],
-				function (Owner)
-					ChangeHead:SetOwner(Owner)
+	local UpdateHead = function(Head)
+		local Head = tolua.cast(Head, "cMobHeadEntity")
+		local OwnerUUID = cMojangAPI:GetUUIDFromPlayerName(Split[2])
+		local OwnerName = Split[2]
+		if OwnerUUID ~= "" then
+			cUrlClient:Get("https://sessionserver.mojang.com/session/minecraft/profile/" .. OwnerUUID,
+				function(Body, Data)
+					local OwnerTexture = Body:match('"value":"(.-)"')
+					Head:SetType(3)
+					Head:SetOwner(OwnerUUID, OwnerName, OwnerTexture, "")
+					Player:SendMessageSuccess("Successfully changed the skull to player " .. Head:GetOwnerName() .. "'s")
 				end
-			) then
-				Player:SendMessageSuccess("Successfully changed the skull to "..ChangeHead:GetOwnerName().."'s")
-				Player:SendMessageInfo("Please reconnect to see the change")
-			else
-				Player:SendMessageInfo("You have to use a username of a player, who is currently online")
-			end
+			)
+		else
+			Player:SendMessageInfo("There is no Minecraft account with that username")
 		end
-	)
-
-	if LookingAtHead == false then
+	end
+	local LookPos = GetPlayerLookPos(Player)
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <username>")
+	elseif not Player:GetWorld():DoWithMobHeadAt(LookPos.x, LookPos.y, LookPos.z, UpdateHead) then
 		Player:SendMessageInfo("You have to look at a skull to change its owner")
 	end
-
 	return true
 end
 
 function HandleSocialSpyCommand(Split, Player)
+	local ToggleSocialSpy = function(Player)
+		if SocialSpyList[Player:GetUUID()] then
+			SocialSpyList[Player:GetUUID()] = nil
+			Player:SendMessageSuccess("Successfully disabled SocialSpy")
+		else
+			SocialSpyList[Player:GetUUID()] = true
+			Player:SendMessageSuccess("Successfully enabled SocialSpy")
+		end
+	end
 	ToggleSocialSpy(Player)
 	return true
-end
-
-function ToggleSocialSpy(Player)
-	if SocialSpyList[Player:GetUUID()] ~= nil then
-		SocialSpyList[Player:GetUUID()] = nil
-		Player:SendMessageSuccess("Successfully disabled SocialSpy")
-	else
-		SocialSpyList[Player:GetUUID()] = true
-		Player:SendMessageSuccess("Successfully enabled SocialSpy")
-	end
 end

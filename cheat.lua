@@ -1,294 +1,265 @@
-function HandleMoreCommand(Split,Player)
-	if Split[2] == nil then
-		HoldedItem = Player:GetEquippedItem()
-		if(not(HoldedItem:IsEmpty())) then
-			--Set Equipped slot number to 64
-			HoldedItem.m_ItemCount = 64
-			Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HoldedItem)
-			Player:SendMessageSuccess("Item amount set to 64")
-			return true
-		else
-			--If player doesn't hold an item, notify
-			Player:SendMessageFailure("Please hold an item")
-			return true
-		end
-	end
-	local More = function(OtherPlayer)
-		if (OtherPlayer:GetName() == Split[2]) then
-			HoldedItem = Player:GetEquippedItem()
-			if(not(HoldedItem:IsEmpty())) then
-				HoldedItem.m_ItemCount = 64
-				Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HoldedItem)
-				OtherPlayer:SendMessageSuccess("Item amount set to 64")
-				Player:SendMessageSuccess(Split[2] .. " held item amount was set to 64")
+function HandleMoreCommand(Split, Player)
+	local AddMoreItems = function(OtherPlayer)
+		local HeldItem = Player:GetEquippedItem()
+		if HeldItem:IsEmpty() then
+			if Split[2] then
+				Player:SendMessageFailure("Player \"" .. OtherPlayer:GetName() .. "\" isn't holding an item")
 			else
-				Player:SendMessageFailure(Split[2] .. " isn't holding an item")
+				OtherPlayer:SendMessageFailure("Please hold an item")
 			end
-		return true
+		else
+			HeldItem.m_ItemCount = 64
+			Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HeldItem)
+			OtherPlayer:SendMessageSuccess("Held item number set to 64")
+			if Split[2] then
+				Player:SendMessageSuccess("Successfully set held item number of player \"" .. OtherPlayer:GetName() .. "\" to 64")
+			end
 		end
 	end
-	if(Player:HasPermission("es.more.other")) then
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], More))) then
-			Player:SendMessageFailure("Player not found")
+	if Split[2] == nil then
+		AddMoreItems(Player)
+	elseif Player:HasPermission("es.more.other") then
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], AddMoreItems) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleRepairCommand(Split, Player)
-	Item = Player:GetEquippedItem()
-	if(Item:IsDamageable()) then
+	local Item = Player:GetEquippedItem()
+	if Item:IsDamageable() then
 		--Give a new item with the same type than the actual but with 0 damage, this way we avoid relogging
 		Item.m_ItemDamage = 0
 		Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), Item)
-		Player:SendMessageSuccess("Item repaired")
+		Player:SendMessageSuccess("Successfully repaired item")
 	else
-		Player:SendMessageFailure("Please hold an item to repair")
+		Player:SendMessageFailure("Please hold a repairable item")
 	end
 	return true
 end
 
 function HandleFeedCommand(Split, Player)
-	if Split[2] == nil then
-		Player:SetFoodLevel(20)
-		Player:SendMessageSuccess("You have no more hunger!")
-	elseif(Player:HasPermission("es.feed.other")) then
-		local Feed = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				--Set player food level to 20 (max)
-				OtherPlayer:SetFoodLevel(20)
-				Player:SendMessageSuccess(Split[2].." has no more hunger")
-				return true
-			end
+	local Feed = function(OtherPlayer)
+		OtherPlayer:SetFoodLevel(20)
+		OtherPlayer:SendMessageSuccess("Your hunger has been satisfied")
+		if Split[2] and Split[2] ~= "*" and Split[2] ~= "**" then
+			Player:SendMessageSuccess("Successfully fed player \"" .. OtherPlayer:GetName() .. "\"")
 		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], Feed))) then
-			Player:SendMessageFailure("Player not found")
+	end
+	if Split[2] == nil then
+		Feed(Player)
+	elseif Split[2] == "*" or Split[2] == "**" then
+		cRoot:Get():ForEachPlayer(Feed)
+		Player:SendMessageInfo("Successfully fed all players")
+	elseif Player:HasPermission("es.feed.other") then
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], Feed) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleHealCommand(Split, Player)
-	if Split[2] == nil then
-		Player:SetFoodLevel(20)
-		Player:Heal(20)
-		Player:SendMessageSuccess("You have been healed")
-	elseif(Player:HasPermission("es.heal.other")) then
-		local Heal = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[2]) then
-				--Restore hunger and health
-				OtherPlayer:SetFoodLevel(20)
-				OtherPlayer:Heal(20)
-				Player:SendMessageSuccess(Split[2].." has been healed")
-				return true
-			end
+	local Heal = function(OtherPlayer)
+		OtherPlayer:SetFoodLevel(20)
+		OtherPlayer:Heal(20)
+		OtherPlayer:ClearEntityEffects()
+		OtherPlayer:SendMessageInfo("You have been healed")
+		if Split[2] and Split[2] ~= "*" and Split[2] ~= "**" then
+			Player:SendMessageSuccess("Successfully healed player \"" .. OtherPlayer:GetName() .. "\"")
 		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[2], Heal))) then
-			Player:SendMessageFailure("Player not found")
+	end
+	if Split[2] == nil then
+		Heal(Player)
+	elseif Split[2] == "*" or Split[2] == "**" then
+		cRoot:Get():ForEachPlayer(Heal)
+		Player:SendMessageSuccess("Successfully healed all players")
+	elseif Player:HasPermission("es.heal.other") then
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], Heal) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleXPCommand(Split, Player)
-	if( #Split <= 2 ) then
-		Player:SendMessageInfo("Usage: "..Split[1].." <show|set|give> [playername] [amount]")
-	elseif Split[2] == "show" and Player:HasPermission("es.xp.show") then 
-		local GetXP = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[3]) then
-				xp = OtherPlayer:GetCurrentXp()
-				--Get the xp level
-				level = xp/17
-				Player:SendMessageSuccess(Split[3].." current xp is "..xp)
+	local HandleXP = function(OtherPlayer)
+		if Split[2] == "show" then
+			Player:SendMessageSuccess("The current XP of player \"" .. OtherPlayer:GetName() .. "\" is ".. OtherPlayer:GetCurrentXp())
+		elseif Split[2] == "set" then
+			if tonumber(Split[4]) == nil then
+				Player:SendMessageFailure("\"" .. Split[4] .. "\" is not a valid number")
 			else
-				Player:SendMessageFailure("Player not found")
-			end    
-		end
-		cRoot:Get():FindAndDoWithPlayer(Split[3],GetXP);
-	elseif Split[2] == "set" and Split[4] ~= nil and Player:HasPermission("es.xp.set") then 
-		local SetXP = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[3]) then
-				--Set player XP to the specified amoount
+				--Set player XP to the specified amount
 				OtherPlayer:SetCurrentExperience(Split[4])
-				Player:SendMessageSuccess("Set "..Split[3].." xp to "..Split[4])
+				Player:SendMessageSuccess("Successfully set XP of player \"" .. OtherPlayer:GetName() .. "\" to ".. Split[4])
+			end
+		elseif Split[2] == "give" then
+			if tonumber(Split[4]) == nil then
+				Player:SendMessageFailure("\"" .. Split[4] .. "\" is not a valid number")
 			else
-				Player:SendMessageFailure("Player not found")
-			end    
-		end
-		cRoot:Get():FindAndDoWithPlayer(Split[3],SetXP);
-	elseif Split[2] == "set" and Split[4] == nil and Player:HasPermission("es.xp.set") then 
-		Player:SendMessageFailure("You must specify the experience to set")
-	elseif Split[2] == "give" and Split[4] ~= nil and Player:HasPermission("es.xp.set") then 
-		local GiveXP = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[3]) then
 				OtherPlayer:SetCurrentExperience(Player:GetCurrentXp() + Split[4])
-				Player:SendMessageSuccess("Gave "..Split[4].." xp to "..Split[3])
-			else
-				Player:SendMessageFailure("Player not found")
-			end    
+				Player:SendMessageSuccess("Successfully gave " .. Split[4] .. " XP to player \"" .. OtherPlayer:GetName() .. "\"")
+			end
 		end
-		cRoot:Get():FindAndDoWithPlayer(Split[3],GiveXP);
-	elseif Split[2] == "give" and Split[4] == nil and Player:HasPermission("es.xp.set") then 
-		Player:SendMessageFailure("You must specify the experience to give to the player")
+	end
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <show|set|give> <player> [value]")	
+	elseif Split[3] == nil or Split[2] ~= "show" and Split[4] == nil then
+		if Split[2] == "show" then
+			Player:SendMessageInfo("Usage: " .. Split[1] .. " " .. Split[2] .. " <player>")
+		else
+			Player:SendMessageInfo("Usage: " .. Split[1] .. " " .. Split[2] .. " <player> <value>")
+		end
+	else
+		if Split[3] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[3], HandleXP) then
+			Player:SendMessageFailure("Player \"" .. Split[3] .. "\" not found")
+		end
 	end
 	return true
 end
 
 function HandleHatCommand(Split, Player)
-	hat = cItem(Player:GetEquippedItem())
-	hat.m_ItemCount = 1
-	armorslot = Player:GetInventory():GetArmorSlot(0)
-	if (not(armorslot:IsEmpty())) then
-		Player:GetInventory():AddItem(armorslot)
+	local Hat = cItem(Player:GetEquippedItem())
+	Hat.m_ItemCount = 1
+	local ArmorSlot = Player:GetInventory():GetArmorSlot(0)
+	if not ArmorSlot:IsEmpty() then
+		Player:GetInventory():AddItem(ArmorSlot)
 	end
 	--Set chestplate slot to the item the player is holding
-	Player:GetInventory():SetArmorSlot(0, hat)
-	Player:GetInventory():RemoveOneEquippedItem()
-	Player:SendMessageSuccess("Enjoy your new helmet!")
-	return true
-end
-
-function HandleFlySpeedCommand(Split, Player)
-	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <speed> [player]")
-	elseif Split[3] == nil then
-		Player:SetFlyingMaxSpeed(Split[2])
-		Player:SendMessageInfo("Your fly speed has been set to "..Split[2])
+	if not Player:GetEquippedItem():IsEmpty() then
+		Player:GetInventory():SetArmorSlot(0, Hat)
+		Player:GetInventory():RemoveOneEquippedItem()
+		Player:SendMessageSuccess("Enjoy your new hat!")
 	else
-		local FlySpeed = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[3]) then
-				--Set new fly speed
-				OtherPlayer:SetFlyingMaxSpeed(Split[2])
-				Player:SendMessageSuccess(Split[3].." fly speed has been set to "..Split[2])
-				OtherPlayer:SendMessageInfo("Your fly speed has been set to "..Split[2])
-				return true
-			end
-		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[3], FlySpeed))) then
-			Player:SendMessageFailure("Player not found")
-		end
+		Player:SendMessageFailure("Please hold an item")
 	end
 	return true
 end
 
-function HandleWalkSpeedCommand(Split, Player)
-	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <speed> [player]")
-	elseif Split[3] == nil then
-		--Set new walk speed
-		Player:SetNormalMaxSpeed(Split[2])
-		Player:SendMessageInfo("Your walk speed has been set to "..Split[2])
-	else
-		local WalkSpeed = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[3]) then
-				OtherPlayer:SetNormalMaxSpeed(Split[2])
-				Player:SendMessageSuccess(Split[3].." walk speed has been set to "..Split[2])
-				OtherPlayer:SendMessageInfo("Your walk speed has been set to "..Split[2])
-				return true
+function HandleSpeedCommand(Split, Player)
+	local SpeedType = Split[1]:gsub("/", ""):gsub("speed", "")
+	local Speed = Split[2]
+	local PlayerName = Split[3]
+	if Split[1] == "/speed" then
+		SpeedType = Split[2]
+		Speed = Split[3]
+		PlayerName = Split[4]
+	end
+	local SetSpeed = function(OtherPlayer)
+		if tonumber(Speed) == nil then
+			Player:SendMessageFailure("\"" .. Speed .. "\" is not a valid number")
+		else
+			--Set new speed
+			if tonumber(Speed) > 100 then
+				Speed = 100
 			end
-		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[3], WalkSpeed))) then
-			Player:SendMessageFailure("Player not found")
+			if Split[1] == "/flyspeed" or Split[1] == "/speed" and Split[2] == "fly" then
+				OtherPlayer:SetFlyingMaxSpeed(Speed)
+			elseif Split[1] == "/walkspeed" or Split[1] == "/speed" and Split[2] == "walk" then
+				OtherPlayer:SetNormalMaxSpeed(Speed)
+			elseif Split[1] == "/runspeed" or Split[1] == "/speed" and Split[2] == "run" then
+				OtherPlayer:SetSprintingMaxSpeed(Speed)
+			end
+			OtherPlayer:SendMessageSuccess("Your " .. SpeedType .. " speed has been set to " .. Speed)
+			if PlayerName then
+				Player:SendMessageSuccess("Successfully set " .. SpeedType .. " speed of player \"" .. OtherPlayer:GetName() .. "\" to " .. Speed)
+			end
 		end
 	end
-	return true
-end
-
-function HandleRunSpeedCommand(Split, Player)
-	if Split[2] == nil then
-		Player:SendMessageInfo("Usage: "..Split[1].." <speed> [player]")
-	elseif Split[3] == nil then
-		--Set new sprinting speed
-		Player:SetSprintingMaxSpeed(Split[2])
-		Player:SendMessageInfo("Your sprinting speed has been set to "..Split[2])
-	else
-		local RunSpeed = function(OtherPlayer)
-			if (OtherPlayer:GetName() == Split[3]) then
-				OtherPlayer:SetSprintingMaxSpeed(Split[2])
-				Player:SendMessageSuccess(Split[3].." sprinting speed has been set to "..Split[2])
-				OtherPlayer:SendMessageInfo("Your sprinting speed has been set to "..Split[2])
-				return true
+	if Speed == nil then
+		if Split[1] == "/speed" then
+			if SpeedType then
+				Player:SendMessageInfo("Usage: " .. Split[1] .. " " .. SpeedType .. " <speed> [player]")
+			else
+				Player:SendMessageInfo("Usage: " .. Split[1] .. " <fly|walk|run> <speed> [player]")	
 			end
+		else
+			Player:SendMessageInfo("Usage: " .. Split[1] .. " <speed> [player]")
 		end
-		if (not(cRoot:Get():FindAndDoWithPlayer(Split[3], RunSpeed))) then
-			Player:SendMessageFailure("Player not found")
+	elseif PlayerName == nil then
+		SetSpeed(Player)
+	else
+		if PlayerName == "" or not cRoot:Get():FindAndDoWithPlayer(PlayerName, SetSpeed) then
+			Player:SendMessageFailure("Player \"" .. PlayerName .. "\" not found")
 		end
 	end
 	return true
 end
 
 function HandleFlyCommand(Split, Player)
-	local function ChangeFly( newPlayer )
-		newPlayer:SetCanFly(not newPlayer:CanFly());
-		newPlayer:SendMessageSuccess("Fly mode toggled!")
-		return true
-	end
-	if (Split[2] == nil or Split[2] == Player:GetName()) then
-		ChangeFly(Player)
-	elseif (Player:HasPermission("es.fly.other")) then
-		if cRoot:Get():FindAndDoWithPlayer( Split[2], ChangeFly ) then
-			Player:SendMessageSuccess("Fly mode for player " .. Split[2] ..  " toggled!")
+	local ToggleFly = function(OtherPlayer)
+		OtherPlayer:SetCanFly(not OtherPlayer:CanFly())
+		if OtherPlayer:CanFly() then
+			OtherPlayer:SendMessageSuccess("Fly mode has been enabled")
 		else
-			Player:SendMessageFailure("Player not found")
+			OtherPlayer:SendMessageSuccess("Fly mode has been disabled")
 		end
-	else 
-		Player:SendMessageFailure("You need es.fly.other permission to do that!")
+		if Split[2] then
+			if OtherPlayer:CanFly() then
+				Player:SendMessageSuccess("Successfully enabled fly mode for player \"" .. OtherPlayer:GetName() .. "\"")
+			else
+				Player:SendMessageSuccess("Successfully disabled fly mode for player \"" .. OtherPlayer:GetName() .. "\"")
+			end
+		end
+	end
+	if Split[2] == nil then
+		ToggleFly(Player)
+	elseif Player:HasPermission("es.fly.other") then
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], ToggleFly) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
+		end
 	end
 	return true
 end
 
 function HandleVanishCommand(Split, Player)
-	local function ChangeVanish( newPlayer )
-		newPlayer:SetVisible(not newPlayer:IsVisible());
-		if newPlayer:IsVisible() then
-			newPlayer:SendMessageSuccess("You aren't hidden anymore!")
+	local ToggleVanish = function(OtherPlayer)
+		OtherPlayer:SetVisible(not OtherPlayer:IsVisible())
+		if OtherPlayer:IsVisible() then
+			OtherPlayer:SendMessageSuccess("You aren't hidden anymore")
 		else
-			newPlayer:SendMessageSuccess("You are now hidden!")
+			OtherPlayer:SendMessageSuccess("You are now hidden")
 		end
-		return true
+		if Split[2] then
+			if OtherPlayer:IsVisible() then
+				Player:SendMessageSuccess("Successfully enabled visibility for player \"" .. OtherPlayer:GetName() .. "\"")
+			else
+				Player:SendMessageSuccess("Successfully disabled visibility for player \"" .. OtherPlayer:GetName() .. "\"")
+			end
+		end
 	end
-	if (Split[2] == nil or Split[2] == Player:GetName()) then
-		ChangeVanish(Player)
+	if Split[2] == nil then
+		ToggleVanish(Player)
 	elseif Player:HasPermission("es.vanish.other") then
-		if cRoot:Get():FindAndDoWithPlayer( Split[2], ChangeVanish ) then
-			Player:SendMessageSuccess( Split[2] ..  "s visibility has been toggled!")
-		else
-			Player:SendMessageFailure("Player not found")
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], ToggleVanish) then
+			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
-	else 
-		Player:SendMessageFailure("You need es.vanish.other permission to do that!")
 	end
 	return true
 end
 
 function HandlePowertoolCommand(Split, Player)
-	if Split[2] == nil then                                                                                                                                         
-		Player:SendMessageInfo("Usage: " .. Split[1] .. " <command> [arguments ...]")                                                                           
-		return true
-	end
-
-	HeldItem = Player:GetEquippedItem()
-
-	string.startswith = function(self, str) 
-    	return self:find('^' .. str) ~= nil
-	end
-
-	if table.concat( Split, " ", 2 ):startswith('/') == true then
-		Command = table.concat( Split, " ", 2 )
-	else
-		Command = "/" .. table.concat( Split, " ", 2 )
-	end
-
-	if(not(HeldItem:IsEmpty())) then
-		HeldItem.m_CustomName = Command
+	local HeldItem = Player:GetEquippedItem()
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <command> [arguments ...]")
+	elseif not HeldItem:IsEmpty() then
+		string.startswith = function(self, str) 
+			return self:find("^" .. str) ~= nil
+		end
+		if table.concat(Split, " ", 2):startswith("/") then
+			HeldItem.m_CustomName = table.concat(Split, " ", 2)
+		else
+			HeldItem.m_CustomName = "/" .. table.concat(Split, " ", 2)
+		end
 		Player:GetInventory():SetHotbarSlot(Player:GetInventory():GetEquippedSlotNum(), HeldItem)
 		Player:SendMessageSuccess("Successfully bound command to item")
-		return true
 	else
 		--If player doesn't hold an item, notify
 		Player:SendMessageFailure("Please hold an item")
-		return true
 	end
+	return true
 end
 
 function HandleFireballCommand(Split, Player)
@@ -299,11 +270,10 @@ function HandleFireballCommand(Split, Player)
 	local Speed = Player:GetLookVector() * 30
 	if Split[2] == "small" then
 		World:CreateProjectile(X, Y, Z, cProjectileEntity.pkFireCharge, Player, Player:GetEquippedItem(), Speed)
-		return true
 	else
 		World:CreateProjectile(X, Y, Z, cProjectileEntity.pkGhastFireball, Player, Player:GetEquippedItem(), Speed)
-		return true
 	end
+	return true
 end
 
 function HandleNukeCommand(Split, Player)
@@ -312,25 +282,95 @@ function HandleNukeCommand(Split, Player)
 		local Y = OtherPlayer:GetPosY() + 35
 		local Z = OtherPlayer:GetPosZ()
 		OtherPlayer:SendMessageInfo("May death rain upon them")
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z - 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X - 2, Y, Z + 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z - 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X + 2, Y, Z + 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z - 2, 52)
-		OtherPlayer:GetWorld():SpawnPrimedTNT(X, Y, Z + 2, 52)
+		for x = -3, 3, 3 do
+			for z = -3, 3, 3 do
+				OtherPlayer:GetWorld():SpawnPrimedTNT(X + x, Y, Z + z, 52)
+			end
+		end
+		if Split[2] then
+			Player:SendMessageSuccess("Successfully spawned nuke above player " ..OtherPlayer:GetName())
+		end
 	end
 	if Split[2] == nil then
 		cRoot:Get():ForEachPlayer(SpawnNuke)
-		return true
-	end
-	if cRoot:Get():FindAndDoWithPlayer(Split[2], SpawnNuke) then
-		Player:SendMessageSuccess("Successfully spawned nuke above player")
-		return true
 	else
-		Player:SendMessageFailure("Player \"" .. Split[2] ..  "\" not found")
-		return true
+		if not cRoot:Get():FindAndDoWithPlayer(table.concat(Split, " ", 2), SpawnNuke) then
+			Player:SendMessageFailure("Player \"" .. table.concat(Split, " ", 2) ..  "\" not found")
+		end
 	end
+	return true
+end
+
+function HandleGodCommand(Split, Player)
+	local EnableGod = function(OtherPlayer)
+		if GodModeList[OtherPlayer:GetUUID()] == nil then
+			OtherPlayer:SetInvulnerableTicks(6048000)
+			OtherPlayer:SendMessageSuccess("God mode has been enabled")
+			if Split[2] then
+				Player:SendMessageSuccess("Successfully enabled God mode for " .. OtherPlayer:GetName())
+			end
+			GodModeList[OtherPlayer:GetUUID()] = true
+		else
+			OtherPlayer:SetInvulnerableTicks(0)
+			OtherPlayer:SendMessageSuccess("God mode has been disabled")
+			if Split[2] then
+				Player:SendMessageSuccess("Successfully disabled God mode for " .. OtherPlayer:GetName())
+			end
+			GodModeList[OtherPlayer:GetUUID()] = nil
+		end
+	end
+	if Split[2] == nil then
+		EnableGod(Player)
+	elseif Player:HasPermission("es.god.other") then
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], EnableGod) then
+			Player:SendMessageFailure("Player \"" .. Split[2] ..  "\" not found")
+		end
+	end
+	return true
+end
+
+function HandleGamemodeCommand(Split, Player)
+	local ChangeGamemode = function(OtherPlayer)
+		if Split[1] == "/adventure" or Split[1] == "/gma" then
+			if Player:HasPermission("es.gm.adventure.other") then
+				OtherPlayer:SetGameMode(2)
+				OtherPlayer:SendMessageInfo("Gamemode set to adventure")
+				if Split[2] then
+					Player:SendMessageSuccess("Successfully set gamemode of player \"" .. OtherPlayer:GetName() .. "\" to adventure")
+				end
+			end
+		elseif Split[1] == "/creative" or Split[1] == "/gmc" then
+			if Player:HasPermission("es.gm.creative.other") then
+				OtherPlayer:SetGameMode(1)
+				OtherPlayer:SendMessageInfo("Gamemode set to creative")
+				if Split[2] then
+					Player:SendMessageSuccess("Successfully set gamemode of player \"" .. OtherPlayer:GetName() .. "\" to creative")
+				end
+			end
+		elseif Split[1] == "/spectator" or Split[1] == "/gmsp" then
+			if Player:HasPermission("es.gm.spectator.other") then
+				OtherPlayer:SetGameMode(3)
+				OtherPlayer:SendMessageInfo("Gamemode set to spectator")
+				if Split[2] then
+					Player:SendMessageSuccess("Successfully set gamemode of player \"" .. OtherPlayer:GetName() .. "\" to spectator")
+				end
+			end
+		elseif Split[1] == "/survival" or Split[1] == "/gms" then
+			if Player:HasPermission("es.gm.survival.other") then
+				OtherPlayer:SetGameMode(0)
+				OtherPlayer:SendMessageInfo("Gamemode set to survival")
+				if Split[2] then
+					Player:SendMessageSuccess("Successfully set gamemode of player \"" .. OtherPlayer:GetName() .. "\" to survival")
+				end
+			end
+		end
+	end
+	if Split[2] == nil then
+		ChangeGamemode(Player)
+	else
+		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], ChangeGamemode) then
+			Player:SendMessageFailure("Player \"" .. Split[2] ..  "\" not found")
+		end
+	end
+	return true
 end

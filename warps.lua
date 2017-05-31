@@ -1,101 +1,75 @@
-function HandleWarpCommand( Split, Player )
-	if #Split < 2 then
+function HandleWarpCommand(Split, Player )
+	if Split[2] == nil then
 		--No warp given, list warps available.
-		HandleListWarpCommand( Split, Player )
-		return true
-	end
-	local Tag = Split[2]
-	
-	if warps[Tag] == nil then 
-		Player:SendMessageFailure('Warp "' .. Tag .. '" is invalid.')
-		return true
-	end
-	local OnAllChunksAvaliable = function()
-		if (Player:GetWorld():GetName() ~= warps[Tag]["w"]) then
-			Player:MoveToWorld(cRoot:Get():GetWorld(warps[Tag]["w"]), true,
-				Vector3d(warps[Tag]["x"] + 0.5, warps[Tag]["y"], warps[Tag]["z"] + 0.5))
-			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
-			if change_gm_when_changing_world == true then
-				Player:SetGameMode(Player:GetWorld():GetGameMode())
-				return true
-			end
+		HandleListWarpCommand(Split, Player)
+	elseif Warps[table.concat(Split, " ", 2)] == nil then 
+		Player:SendMessageFailure("Warp \"" .. Split[2] .. "\" is invalid")
+	else
+		if Player:GetWorld():GetName() ~= Warps[Split[2]]["w"] then
+			Player:MoveToWorld(cRoot:Get():GetWorld(Warps[Split[2]]["w"]), true, Vector3d(Warps[Split[2]]["x"] + 0.5, Warps[Split[2]]["y"], Warps[Split[2]]["z"] + 0.5))
 		else
-			Player:TeleportToCoords( warps[Tag]["x"] + 0.5 , warps[Tag]["y"] , warps[Tag]["z"] + 0.5)
-			Player:SendMessageSuccess('Warped to "' .. Tag .. '".')
+			Player:TeleportToCoords(Warps[Split[2]]["x"] + 0.5 , Warps[Split[2]]["y"] , Warps[Split[2]]["z"] + 0.5)
+		end
+		Player:SendMessageSuccess("Successfully warped to \"" .. Split[2] .. "\"")
+		if change_gm_when_changing_world == true then
+			Player:SetGameMode(Player:GetWorld():GetGameMode())
 		end
 	end
-	cRoot:Get():GetWorld(warps[Tag]["w"]):ChunkStay({{warps[Tag]["x"]/16, warps[Tag]["z"]/16}}, OnChunkAvailable, OnAllChunksAvaliable)
 	return true
 end
 
-function HandleSetWarpCommand( Split, Player)
-	local Server = cRoot:Get():GetServer()
+function HandleSetWarpCommand(Split, Player)
 	local World = Player:GetWorld():GetName()
-	local pX = math.floor(Player:GetPosX())
-	local pY = math.floor(Player:GetPosY())
-	local pZ = math.floor(Player:GetPosZ())
-
-	if #Split < 2 then
-		Player:SendMessageInfo('Usage: '..Split[1]..' <warpname>')
+	local PosX = math.floor(Player:GetPosX())
+	local PosY = math.floor(Player:GetPosY())
+	local PosZ = math.floor(Player:GetPosZ())
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <name>")
 		return true
 	end
-	local Tag = Split[2]
-	
-	if warps[Tag] == nil then 
-		warps[Tag] = {}
+	if Warps[Split[2]] == nil then 
+		Warps[Split[2]] = {}
 	end
-	
-	if (WarpsINI:FindKey(Tag)<0) then
-		warps[Tag]["w"] = World
-		warps[Tag]["x"] = pX
-		warps[Tag]["y"] = pY
-		warps[Tag]["z"] = pZ
-	end
-
-	if (WarpsINI:FindKey(Tag)<0) then
-		WarpsINI:AddKeyName(Tag);
-		WarpsINI:SetValue( Tag , "w" , World)
-		WarpsINI:SetValue( Tag , "x" , pX)
-		WarpsINI:SetValue( Tag , "y" , pY)
-		WarpsINI:SetValue( Tag , "z" , pZ)
+	if WarpsINI:FindKey(Split[2])<0 then
+		Warps[Split[2]]["w"] = World
+		Warps[Split[2]]["x"] = PosX
+		Warps[Split[2]]["y"] = PosY
+		Warps[Split[2]]["z"] = PosZ
+		WarpsINI:AddKeyName(Split[2])
+		WarpsINI:SetValue(Split[2] , "w" , World)
+		WarpsINI:SetValue(Split[2] , "x" , PosX)
+		WarpsINI:SetValue(Split[2] , "y" , PosY)
+		WarpsINI:SetValue(Split[2] , "z" , PosZ)
 		WarpsINI:WriteFile("warps.ini");
-	
-		Player:SendMessageSuccess("Warp \"" .. Tag .. "\" set to World:'" .. World .. "' x:'" .. pX .. "' y:'" .. pY .. "' z:'" .. pZ .. "'")
+		Player:SendMessageSuccess("Warp \"" .. Split[2] .. "\" set to world:\"" .. World .. "\", X:" .. PosX .. ", Y:" .. PosY .. ", Z:" .. PosZ)
 	else
-		Player:SendMessageFailure('Warp "' .. Tag .. '" already exists')
+		Player:SendMessageFailure("Warp \"" .. Split[2] .. "\" already exists")
 	end
 	return true
 end
 
-function HandleDelWarpCommand( Split, Player)
-	local Server = cRoot:Get():GetServer()
-	
-	if #Split < 2 then
-		Player:SendMessageInfo('Usage: '..Split[1]..' <warp>')
+function HandleDelWarpCommand(Split, Player)
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <warp>")
 		return true
 	end
-	local Tag = Split[2]
-	warps[Tag] = nil
-	
-	if (WarpsINI:FindKey(Tag)>-1) then
-		WarpsINI:DeleteKey(Tag);
-		WarpsINI:WriteFile("warps.ini");
+	Warps[Split[2]] = nil
+	if WarpsINI:FindKey(Split[2])>-1 then
+		WarpsINI:DeleteKey(Split[2])
+		WarpsINI:WriteFile("warps.ini")
 	else
-		Player:SendMessageFailure("Warp \"" .. Tag .. "\" was not found.")
+		Player:SendMessageFailure("Warp \"" .. Split[2] .. "\" was not found")
 		return true
 	end
-	
-	Player:SendMessageSuccess("Warp \"" .. Tag .. "\" was removed.")
+	Player:SendMessageSuccess("Successfully removed warp \"" .. Split[2] .. "\"")
 	return true
 end
 
-function HandleListWarpCommand( Split, Player)
-	local warpStr = ""
-	local inc = 0
-	for k, v in pairs (warps) do
-		inc = inc + 1
-		warpStr = warpStr .. k .. ", "
+function HandleListWarpCommand(Split, Player)
+	local WarpName = ""
+	for k, v in pairs (Warps) do
+		WarpName = WarpName .. k .. ", "
 	end
-	Player:SendMessageInfo('Warps: ' ..  cChatColor.LightGreen ..  warpStr)
+	Player:SendMessageInfo("Warps: " .. cChatColor.LightGreen .. WarpName:sub(1, WarpName:len() - 2))
 	return true
 end
