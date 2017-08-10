@@ -134,12 +134,14 @@ function OnWorldTick(World, TimeDelta)
 	elseif PortalTimer[World:GetName()] == 20 then
 		local CheckPortal = function(Player)
 			local CheckPortalPos = Player:GetPosY() - 2
-			local Read, Line1, Line2, Line3, Line4 = World:GetSignLines(Player:GetPosX(), CheckPortalPos, Player:GetPosZ())
-			if Line1 == "[Portal]" then
-				if Line4 ~= "" then
-					Player:TeleportToCoords(Line2, Line3, Line4)
-				else
-					cPluginManager:Get():ExecuteCommand(Player, "/warp " .. Line2)
+			if CheckPortalPos >= 0 and CheckPortalPos <= 256 then
+				local Read, Line1, Line2, Line3, Line4 = World:GetSignLines(Player:GetPosX(), CheckPortalPos, Player:GetPosZ())
+				if Line1 == "[Portal]" then
+					if Line4 ~= "" then
+						Player:TeleportToCoords(Line2, Line3, Line4)
+					else
+						cPluginManager:Get():ExecuteCommand(Player, "/warp " .. Line2)
+					end
 				end
 			end
 		end
