@@ -76,7 +76,7 @@ g_PluginInfo =
 			Permission = "es.broadcast",
 			HelpString = "Broadcasts a message to all players",
 			Handler = HandleBroadcastCommand,
-			Alias = { "/say", "/bcast", "/bc", }
+			Alias = { "/bcast", "/bc", }
 		},
 		["/burn"] =
 		{
