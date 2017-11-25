@@ -96,12 +96,12 @@ function HandleLightningCommand(Split, Player)
 		local LookPos = GetPlayerLookPos(Player)
 		if Split[2] == nil then
 			if LookPos == nil then
-				Player:GetWorld():CastThunderbolt(Vector3i(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ()))
+				Player:GetWorld():CastThunderbolt(Vector3i(Player:GetPosition()))
 			else
 				Player:GetWorld():CastThunderbolt(Vector3i(LookPos.x, LookPos.y, LookPos.z))
 			end
 		else
-			OtherPlayer:GetWorld():CastThunderbolt(Vector3i(OtherPlayer:GetPosX(), OtherPlayer:GetPosY(), OtherPlayer:GetPosZ()))
+			OtherPlayer:GetWorld():CastThunderbolt(Vector3i(OtherPlayer:GetPosition()))
 			OtherPlayer:SendMessageInfo("A lightning hit you")
 			OtherPlayer:TakeDamage(dtLightning, nil, 5, 5, 0)
 		end
