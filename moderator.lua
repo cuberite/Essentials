@@ -96,12 +96,12 @@ function HandleLightningCommand(Split, Player)
 		local LookPos = GetPlayerLookPos(Player)
 		if Split[2] == nil then
 			if LookPos == nil then
-				Player:GetWorld():CastThunderbolt(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ())
+				Player:GetWorld():CastThunderbolt(Vector3i(Player:GetPosX(), Player:GetPosY(), Player:GetPosZ()))
 			else
-				Player:GetWorld():CastThunderbolt(LookPos.x, LookPos.y, LookPos.z)
+				Player:GetWorld():CastThunderbolt(Vector3i(LookPos.x, LookPos.y, LookPos.z))
 			end
 		else
-			OtherPlayer:GetWorld():CastThunderbolt(OtherPlayer:GetPosX(), OtherPlayer:GetPosY(), OtherPlayer:GetPosZ())
+			OtherPlayer:GetWorld():CastThunderbolt(Vector3i(OtherPlayer:GetPosX(), OtherPlayer:GetPosY(), OtherPlayer:GetPosZ()))
 			OtherPlayer:SendMessageInfo("A lightning hit you")
 			OtherPlayer:TakeDamage(dtLightning, nil, 5, 5, 0)
 		end
@@ -178,7 +178,7 @@ function HandleAntiOchCommand(Split, Player)
 			cRoot:Get():BroadcastChat("...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,")
 			cRoot:Get():BroadcastChat("who being naughty in My sight, shall snuff it.")
 		end
-		Player:GetWorld():SpawnPrimedTNT(LookPos.x, LookPos.y, LookPos.z, 35)
+		Player:GetWorld():SpawnPrimedTNT(Vector3d(LookPos.x, LookPos.y, LookPos.z), 35)
 	end
 	return true
 end

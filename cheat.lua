@@ -284,7 +284,7 @@ function HandleNukeCommand(Split, Player)
 		OtherPlayer:SendMessageInfo("May death rain upon them")
 		for x = -3, 3, 3 do
 			for z = -3, 3, 3 do
-				OtherPlayer:GetWorld():SpawnPrimedTNT(X + x, Y, Z + z, 52)
+				OtherPlayer:GetWorld():SpawnPrimedTNT(Vector3d(X + x, Y, Z + z), 52)
 			end
 		end
 		if Split[2] then
