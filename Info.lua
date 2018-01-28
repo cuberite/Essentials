@@ -223,6 +223,13 @@ g_PluginInfo =
 			Handler = HandleMuteCommand,
 			Alias = "/silence"
 		},
+		["/near"] =
+		{
+			Permission = "es.near",
+			HelpString = "Displays a list of nearby players",
+			Handler = HandleNearCommand,
+			Alias = "/nearby"
+		},
 		["/nuke"] =
 		{
 			Permission = "es.nuke",
