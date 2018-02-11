@@ -72,14 +72,14 @@ function HandleExtinguishCommand(Split, Player)
 		OtherPlayer:StopBurning()
 		Player:SendMessageSuccess("Successfully extinguished player \"" .. OtherPlayer:GetName() .. "\"")
 	end
-        if Split[2] == nil then
-                Player:SendMessageInfo("Usage: " .. Split[1] .. " <player>")
-        else
+	if Split[2] == nil then
+		Player:SendMessageInfo("Usage: " .. Split[1] .. " <player>")
+	else
 		if Split[2] == "" or not cRoot:Get():FindAndDoWithPlayer(Split[2], ExtPlayer) then
 			Player:SendMessageFailure("Player \"" .. Split[2] .. "\" not found")
 		end
-        end
-        return true
+	end
+	return true
 end
 
 function HandlePingCommand(Split, Player)
@@ -237,5 +237,47 @@ function HandleSocialSpyCommand(Split, Player)
 		end
 	end
 	ToggleSocialSpy(Player)
+	return true
+end
+
+function HandleNearCommand(Split, Player)
+	local PlayerTable = {}
+	Player:GetWorld():ForEachPlayer(
+		function(OtherPlayer)
+			local Distance = math.floor((Player:GetPosition() - OtherPlayer:GetPosition()):Length())
+			if tonumber(Split[2]) then
+				DistanceLimit = tonumber(Split[2])
+			else
+				DistanceLimit = 200
+			end
+			if Distance <= DistanceLimit then
+				if OtherPlayer:GetName() ~= Player:GetName() then
+					table.insert(PlayerTable,
+						{
+							Name = OtherPlayer:GetName(),
+							Distance = Distance,
+						}
+					)
+				end
+			end
+		end
+	)
+
+	table.sort(PlayerTable,
+		function (Player1, Player2)
+			return Player1.Distance < Player2.Distance
+		end
+	)
+
+	local String = {}
+	for k, v in ipairs(PlayerTable) do
+		table.insert(String, v.Name)
+		table.insert(String, " " .. cChatColor.Plain .. "(")
+		table.insert(String, v.Distance)
+		table.insert(String, "m), ")
+	end
+
+	local String = table.concat(String, "")
+	Player:SendMessageInfo("Players nearby: " .. cChatColor.Plain .. String:sub(1, String:len() - 2))
 	return true
 end
