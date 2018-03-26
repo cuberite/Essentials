@@ -52,6 +52,7 @@ When walking on top of the block, you will get teleported to the specified warp.
 |/locate | es.locate | Displays your current coordinates|
 |/more | es.more | Increases the item amount in the held stack to 64 items|
 |/mute | es.mute | Mutes a player|
+|/near | es.near | Displays a list of nearby players|
 |/nuke | es.nuke | Spawns a nuke above players|
 |/ping | es.ping | Displays a message if the server is alive|
 |/place | es.place | Teleports a player where you are looking|
@@ -127,6 +128,7 @@ When walking on top of the block, you will get teleported to the specified warp.
 | es.more |  | `/more` |  |
 | es.more.other | Increases the item amount in another player's held stack to 64 items |  | admins, mods |
 | es.mute |  | `/mute` |  |
+| es.near |  | `/near` |  |
 | es.nuke |  | `/nuke` |  |
 | es.ping |  | `/ping` |  |
 | es.place |  | `/place` |  |
