@@ -396,13 +396,6 @@ g_PluginInfo =
 			Handler = HandleTPHereCommand,
 			Alias = { "/bring", "/s", }
 		},
-		["/tps"] =
-		{
-			Permission = "es.tps",
-			HelpString = "Returns the tps (ticks per second) from the server",
-			Handler = HandleTPSCommand,
-			Alias = "/lag"
-		},
 		["/unjail"] =
 		{
 			Permission = "es.unjail",
@@ -481,18 +474,6 @@ g_PluginInfo =
 			},
 		},
 	},
-	
-	
-	
-	ConsoleCommands =
-	{		
-		["tps"] =
-		{
-			HelpString =  "Returns the tps (ticks per second) from the server",
-			Handler =  HandleConsoleTPS,
-			Alias = "lag",
-		},
-	},  
 	
 	
 	
