@@ -75,7 +75,6 @@ When walking on top of the block, you will get teleported to the specified warp.
 |/tpahere | es.tpa | Requests teleportation of another player to you|
 |/tpdeny | es.tpa | Denies teleportation request|
 |/tphere | es.tp | Teleports a player to you|
-|/tps | es.tps | Returns the tps (ticks per second) from the server|
 |/unjail | es.unjail | Unjails a player|
 |/unmute | es.unmute | Unmutes a player|
 |/vanish | es.vanish | Enables or disables player visibility|
@@ -146,7 +145,6 @@ When walking on top of the block, you will get teleported to the specified warp.
 | es.top |  | `/top` |  |
 | es.tp |  | `/tphere` |  |
 | es.tpa |  | `/tpdeny`, `/tpa`, `/tpaccept`, `/tpahere` |  |
-| es.tps |  | `/tps` |  |
 | es.unjail |  | `/unjail` |  |
 | es.unmute |  | `/unmute` |  |
 | es.vanish |  | `/vanish` |  |

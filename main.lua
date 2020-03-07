@@ -6,8 +6,6 @@ BackCoords = {}
 BackWorld = {}
 TpRequestTimeLimit = 0
 TeleportRequests = {}
-TpsCache = {}
-GlobalTps = {}
 Jailed = {}
 Muted = {}
 SocialSpyList = {}
@@ -27,7 +25,6 @@ function Initialize(Plugin)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_BREAKING_BLOCK, OnPlayerBreakingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_PLACING_BLOCK, OnPlayerPlacingBlock)
 	cPluginManager:AddHook(cPluginManager.HOOK_WORLD_TICK, OnWorldTick)
-	cPluginManager:AddHook(cPluginManager.HOOK_TICK, OnTick)
 	cPluginManager:AddHook(cPluginManager.HOOK_ENTITY_TELEPORT, OnEntityTeleport)
 	cPluginManager:AddHook(cPluginManager.HOOK_KILLED, OnKilled)
 	cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_JOINED, OnPlayerJoined)

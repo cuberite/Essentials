@@ -5,8 +5,8 @@
 g_PluginInfo =
 {
 	Name = "Essentials",
-	Version = "2",
-	Date = "2018-03-26",
+	Version = "3",
+	Date = "2020-02-26",
 	Description = [[This plugin aims to port commands from Bukkit's Essentials to Cuberite, but also to implement new commands. It provides non-vanilla commands that do not exist in Core.]],
 
 	AdditionalInfo =
@@ -396,13 +396,6 @@ g_PluginInfo =
 			Handler = HandleTPHereCommand,
 			Alias = { "/bring", "/s", }
 		},
-		["/tps"] =
-		{
-			Permission = "es.tps",
-			HelpString = "Returns the tps (ticks per second) from the server",
-			Handler = HandleTPSCommand,
-			Alias = "/lag"
-		},
 		["/unjail"] =
 		{
 			Permission = "es.unjail",
@@ -481,18 +474,6 @@ g_PluginInfo =
 			},
 		},
 	},
-	
-	
-	
-	ConsoleCommands =
-	{		
-		["tps"] =
-		{
-			HelpString =  "Returns the tps (ticks per second) from the server",
-			Handler =  HandleConsoleTPS,
-			Alias = "lag",
-		},
-	},  
 	
 	
 	

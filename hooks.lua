@@ -116,18 +116,6 @@ function OnChat(Player, Message)
 end
 
 function OnWorldTick(World, TimeDelta)
-	--Tps checking code--
-	local WorldTps = TpsCache[World:GetName()]
-	if WorldTps == nil then
-		WorldTps = {}
-		TpsCache[World:GetName()] = WorldTps
-	end
-	if #WorldTps >= 10 then
-		table.remove(WorldTps, 1)
-	end
-
-	table.insert(WorldTps, 1000 / TimeDelta)
-
 	--Check each 20 ticks if there's a sign above the player, if there is, teleport
 	if PortalTimer[World:GetName()] == nil then
 		PortalTimer[World:GetName()] = 0
@@ -148,14 +136,6 @@ function OnWorldTick(World, TimeDelta)
 	else
 		PortalTimer[World:GetName()] = PortalTimer[World:GetName()] + 1
 	end
-end
-
-
-function OnTick(TimeDelta)
-	if #GlobalTps >= 10 then
-		table.remove(GlobalTps, 1)
-	end
-	table.insert(GlobalTps, 1000 / TimeDelta)
 end
 
 function OnEntityChangingWorld(Entity, World)

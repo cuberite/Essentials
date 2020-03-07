@@ -183,22 +183,6 @@ function HandleAntiOchCommand(Split, Player)
 	return true
 end
 
-function HandleTPSCommand(Split, Player)
-	Player:SendMessageInfo("Global TPS: " .. GetAverageNum(GlobalTps))
-	for WorldName, WorldTps in pairs(TpsCache) do
-		Player:SendMessageInfo("World \"" .. WorldName .. "\": " .. GetAverageNum(WorldTps) .. " TPS");
-	end
-	return true
-end
-
-function HandleConsoleTPS(Split)
-	LOG("Global TPS: " .. GetAverageNum(GlobalTps))
-	for WorldName, WorldTps in pairs(TpsCache) do
-		LOG("World \"" .. WorldName .. "\": " .. GetAverageNum(WorldTps) .. " TPS");
-	end
-	return true
-end
-
 function HandleSkullCommand(Split, Player)
 	local UpdateHead = function(Head)
 		local Head = tolua.cast(Head, "cMobHeadEntity")
