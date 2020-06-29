@@ -12,7 +12,7 @@ function GetPlayerLookPos(Player)
 			end
 		end
 	}
-	cLineBlockTracer:Trace(World, Callbacks, Start.x, Start.y, Start.z, End.x, End.y, End.z)
+	cLineBlockTracer:Trace(World, Callbacks, Start, End)
 	return HitCoords
 end
 
