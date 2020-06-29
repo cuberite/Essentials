@@ -5,9 +5,9 @@ function GetPlayerLookPos(Player)
 	local HitCoords = nil
 	local Callbacks =
 	{
-		OnNextBlock = function(X, Y, Z, BlockType)
+		OnNextBlock = function(BlockPos, BlockType)
 			if BlockType ~= E_BLOCK_AIR then
-				HitCoords = {x = X, y = Y, z = Z}
+				HitCoords = BlockPos
 				return true
 			end
 		end
