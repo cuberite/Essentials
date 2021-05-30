@@ -84,10 +84,10 @@ function Initialize(Plugin)
 
 	cRoot:Get():ForEachPlayer(CheckPlayer)
 
-	LOG("Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
+	LOG("Initialised v." .. Plugin:GetVersion())
 	return true
 end
 
 function OnDisable()
-	LOG("Disabled " .. cPluginManager:GetCurrentPlugin():GetName() .. "!")
+	LOG("Disabling...")
 end
